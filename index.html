@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NRI Onboarding — PBM Call Script &amp; SOP</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f4;--bg3:#efefed;
+  --text:#1a1a1a;--text2:#6b7280;--text3:#9ca3af;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+  --info-bg:#e6f1fb;--info-text:#185fa5;--info-border:#378add;
+  --ok-bg:#eaf3de;--ok-text:#27500a;--ok-border:#639922;
+  --danger-bg:#fcebeb;--danger-text:#a32d2d;--danger-border:#f09595;
+  --r:8px;--rl:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+    --text:#f5f5f0;--text2:#a1a1aa;--text3:#71717a;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.2);
+    --info-bg:#0c2d4a;--info-text:#7bbcf5;
+    --ok-bg:#172d0a;--ok-text:#a3d977;
+    --danger-bg:#2d0a0a;--danger-text:#f09595;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg3);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh}
+.topbar{background:var(--bg);border-bottom:.5px solid var(--border);padding:14px 20px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-icon{width:36px;height:36px;border-radius:var(--r);background:var(--info-bg);color:var(--info-text);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.topbar h1{font-size:15px;font-weight:600}
+.topbar p{font-size:11px;color:var(--text2)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{padding:6px 13px;border-radius:var(--r);border:.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text2);display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .15s}
+.tab:hover{background:var(--bg2);color:var(--text)}
+.tab.active{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+.panel{display:none}.panel.active{display:block}
+.search-row{display:flex;gap:8px;margin-bottom:10px}
+.search-row input,.search-row select{padding:8px 12px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;outline:none}
+.search-row input{flex:1}
+.search-row input:focus,.search-row select:focus{border-color:var(--info-border)}
+.count{font-size:12px;color:var(--text2);margin-bottom:10px}
+.stage-grid{display:flex;flex-direction:column;gap:8px}
+.stage-card{border:.5px solid var(--border);border-radius:var(--rl);background:var(--bg);overflow:hidden}
+.stage-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
+.stage-hdr:hover{background:var(--bg2)}
+.s-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.s-info{flex:1;min-width:0}
+.s-title{font-size:14px;font-weight:500;margin-bottom:2px}
+.s-sub{font-size:11px;color:var(--text3);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-badge{font-size:11px;padding:3px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0;border:.5px solid transparent}
+.chevron{font-size:16px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.stage-body{padding:0 14px 16px;border-top:.5px solid var(--border);display:none}
+.stage-body.open{display:block}
+.info-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+@media(max-width:580px){.info-row{grid-template-columns:1fr}}
+.info-box{background:var(--bg2);border-radius:var(--r);padding:10px 12px}
+.info-lbl{font-size:10px;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.info-val{font-size:13px;line-height:1.55}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ef9f27;margin-left:5px;vertical-align:middle}
+.info-ta{width:100%;min-height:58px;padding:6px 8px;border-radius:var(--r);border:1.5px solid var(--info-border);background:var(--bg);color:var(--text);font-size:13px;line-height:1.55;font-family:inherit;resize:vertical;outline:none;margin-top:4px}
+.info-ta:focus{box-shadow:0 0 0 3px rgba(55,138,221,.15)}
+.fld-btns{display:flex;gap:5px;margin-top:6px}
+.sec-lbl{font-size:11px;font-weight:600;color:var(--text2);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+.script-actions{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.script-view{background:var(--bg2);border-left:3px solid var(--info-border);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;font-size:13px;line-height:1.75;font-style:italic;white-space:pre-wrap}
+.script-ta{width:100%;min-height:160px;padding:12px 14px;border-radius:var(--r);border:1.5px solid var(--info-border);background:var(--bg);color:var(--text);font-size:13px;line-height:1.75;font-family:inherit;resize:vertical;outline:none}
+.script-ta:focus{box-shadow:0 0 0 3px rgba(55,138,221,.15)}
+.img-upload{border:1.5px dashed var(--border2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;margin-top:10px}
+.img-upload:hover{border-color:var(--info-border);background:var(--info-bg)}
+.img-upload input{display:none}
+.edit-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.edit-img-wrap{position:relative}
+.edit-img-wrap img{width:100px;height:80px;object-fit:cover;border-radius:var(--r);border:.5px solid var(--border2);display:block}
+.edit-img-cap{width:100px;font-size:11px;padding:3px 4px;border:.5px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);margin-top:4px}
+.del-img{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#a32d2d;color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
+.script-with-imgs{display:grid;grid-template-columns:1fr 180px;gap:10px;align-items:start}
+@media(max-width:600px){.script-with-imgs{grid-template-columns:1fr}}
+.view-imgs{display:flex;flex-direction:column;gap:8px}
+.view-img-wrap img{width:100%;max-width:180px;border-radius:var(--r);border:.5px solid var(--border2);cursor:pointer;display:block}
+.view-img-wrap img:hover{opacity:.85}
+.view-img-cap{font-size:11px;color:var(--text2);margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:5px 11px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
+.btn:hover{background:var(--bg2);color:var(--text)}
+.btn-blue{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.btn-blue:hover{opacity:.85}
+.btn-green{background:var(--ok-bg);color:var(--ok-text);border-color:var(--ok-border)}
+.btn-red{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
+.tip{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:100px;margin:0 4px 4px 0;border:.5px solid transparent}
+.obj-row{border-bottom:.5px solid var(--border);padding:9px 0}
+.obj-row:last-child{border-bottom:none}
+.obj-q{font-size:13px;color:var(--text2);margin-bottom:4px;font-style:italic}
+.obj-a{font-size:13px;padding-left:14px}
+.prog-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin:8px 0 3px}
+.prog-fill{height:100%;border-radius:2px}
+.card-sec{background:var(--bg);border-radius:var(--rl);border:.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{text-align:left;padding:9px 12px;background:var(--bg2);font-size:12px;color:var(--text2);font-weight:600;border-bottom:.5px solid var(--border)}
+.dtable td{padding:10px 12px;border-bottom:.5px solid var(--border);vertical-align:top;line-height:1.5}
+.dtable tr:last-child td{border-bottom:none}
+.code-chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:var(--r);background:var(--info-bg);color:var(--info-text);font-family:monospace}
+.wa-block{background:var(--bg);border-radius:var(--rl);border:.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.wa-hdr{padding:10px 14px;background:var(--bg2);border-bottom:.5px solid var(--border);font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.wa-body{padding:14px;font-size:13px;line-height:1.75;white-space:pre-wrap}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border);cursor:pointer;user-select:none}
+.cl-item:last-child{border-bottom:none}
+.cl-item.done{opacity:.5;text-decoration:line-through}
+.cl-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cl-item.done .cl-circle{background:#3b6d11;border-color:#3b6d11;color:#fff}
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:90vw;max-height:85vh;border-radius:var(--rl)}
+.lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none}
+.lb-cap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.5);padding:6px 16px;border-radius:100px;max-width:80vw;text-align:center}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:var(--bg);font-size:13px;padding:8px 20px;border-radius:100px;z-index:9999;transition:transform .25s;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-close" onclick="closeLb()"><i class="ti ti-x"></i></button>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-cap" id="lb-cap"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-icon"><i class="ti ti-phone-call"></i></div>
+    <div>
+      <h1>NRI Onboarding &mdash; PBM Call Script &amp; SOP</h1>
+      <p>Stage-specific scripts for re-engaging customers who dropped off</p>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('stages')"><i class="ti ti-list" style="font-size:14px"></i> Stage scripts</button>
+    <button class="tab" onclick="switchTab('objections')"><i class="ti ti-shield" style="font-size:14px"></i> Objections</button>
+    <button class="tab" onclick="switchTab('crm')"><i class="ti ti-clipboard-list" style="font-size:14px"></i> CRM &amp; SLA</button>
+    <button class="tab" onclick="switchTab('whatsapp')"><i class="ti ti-brand-whatsapp" style="font-size:14px"></i> WhatsApp</button>
+    <button class="tab" onclick="switchTab('checklist')"><i class="ti ti-checkbox" style="font-size:14px"></i> Pre-call checklist</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <div id="panel-stages" class="panel active">
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Search stage name, keyword, or tech name..." oninput="filterStages()">
+      <select id="cat-filter" onchange="filterStages()">
+        <option value="">All categories</option>
+        <option value="Not Started">Not started</option>
+        <option value="Basic details">Basic details</option>
+        <option value="Persona Stage">Persona stage</option>
+        <option value="SIM Binding">SIM binding</option>
+        <option value="Digital Notary">Digital notary</option>
+        <option value="E-signing">E-signing</option>
+        <option value="Account opened">Account opened</option>
+      </select>
+    </div>
+    <div class="count" id="stage-count">Showing 31 stages</div>
+    <div class="stage-grid" id="stage-grid"></div>
+  </div>
+
+  <div id="panel-objections" class="panel">
+    <div class="card-sec" style="margin-top:4px">
+      <table class="dtable">
+        <thead><tr><th style="width:38%">Customer says</th><th>PBM response</th></tr></thead>
+        <tbody>
+          <tr><td style="font-style:italic;color:var(--text2)">"I'll do it later"</td><td>"Absolutely - when would be a good time? I'll set a reminder and call you back at that time."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"The app keeps crashing"</td><td>"I'll raise a tech ticket right away from my end. Alternatively, clearing the app cache or switching devices often resolves it quickly."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"I changed my mind about the NRI account"</td><td>"I understand - may I ask what changed? Often there's a specific concern I can address. Your data is saved for 30 days if you'd like to revisit."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"I don't trust the digital process"</td><td>"That's a completely valid concern. The process is RBI-regulated, uses bank-grade encryption, and your KYC is handled by a licensed notary. I'll personally walk you through each step so you're comfortable throughout."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"I'm not in India right now"</td><td>"That's exactly why this process is fully digital - you can complete it from anywhere in the world with just a smartphone and internet."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"It's too complicated"</td><td>"I hear you - let me simplify it. You're at step [X] out of 30. I'll personally guide you through each remaining step right now so it stays straightforward."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"Is it safe to do this online?"</td><td>"Absolutely - same bank-grade encryption as your net banking, RBI-regulated, KYC verified by a licensed digital notary."</td></tr>
+          <tr><td style="font-style:italic;color:var(--text2)">"Will FATCA cause me to be taxed in India?"</td><td>"Not at all - the FATCA declaration creates no new tax liability. It's purely a reporting requirement for the bank. Your CA can confirm this as well."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="panel-crm" class="panel">
+    <p class="sec-lbl" style="margin-top:4px">Call disposition codes</p>
+    <div class="card-sec">
+      <table class="dtable">
+        <thead><tr><th style="width:18%">Code</th><th style="width:44%">Meaning</th><th>Next action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="code-chip">C1</span></td><td>Completed onboarding live on this call</td><td>Mark as converted, log in CRM</td></tr>
+          <tr><td><span class="code-chip">C2</span></td><td>Customer committed to complete within 24 hours</td><td>Check CRM after 24h; call back if not done</td></tr>
+          <tr><td><span class="code-chip">C3</span></td><td>Callback scheduled</td><td>Call exactly on time</td></tr>
+          <tr><td><span class="code-chip">C4</span></td><td>Technical issue raised - ticket created</td><td>Follow up with tech within 2 hours</td></tr>
+          <tr><td><span class="code-chip">C5</span></td><td>Customer declined - noted reason</td><td>Re-attempt after 7 days</td></tr>
+          <tr><td><span class="code-chip">C6</span></td><td>No answer - voicemail left / WhatsApp sent</td><td>Retry within 4 hours</td></tr>
+          <tr><td><span class="code-chip">C7</span></td><td>Wrong number / not reachable</td><td>Escalate to data team</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sec-lbl">Follow-up SLA</p>
+    <div class="card-sec">
+      <table class="dtable">
+        <thead><tr><th style="width:30%">Outcome</th><th style="width:25%">SLA</th><th>Action required</th></tr></thead>
+        <tbody>
+          <tr><td>No answer</td><td>Within 4 hours</td><td>Retry call + send WhatsApp message</td></tr>
+          <tr><td>Callback scheduled</td><td>Exact scheduled time</td><td>Call precisely on time, no delays</td></tr>
+          <tr><td>Committed to complete</td><td>24 hours</td><td>Check if done; if not, call again</td></tr>
+          <tr><td>Technical issue</td><td>2 hours</td><td>Follow up with tech team, update customer</td></tr>
+          <tr><td>Declined</td><td>7 days</td><td>Re-attempt with revised offer if applicable</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="panel-whatsapp" class="panel">
+    <div class="wa-block">
+      <div class="wa-hdr"><span>Drop-off reminder</span><button class="btn" onclick="copyEl('wa1')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-body" id="wa1">Hi [Name], this is [PBM Name] from Aspora NRI Banking. I tried reaching you regarding your NRI account opening application. You are very close to completing the process - I am here to personally assist you with the remaining steps. You can resume your application here: [link]. Feel free to call me at [PBM number] if you need any assistance.</div>
+    </div>
+    <div class="wa-block">
+      <div class="wa-hdr"><span>Document checklist - stage 0-2 drop-offs</span><button class="btn" onclick="copyEl('wa2')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-body" id="wa2">Hi [Name], this is [PBM Name] from Aspora NRI Banking. To help move your NRI account opening forward, here is a quick checklist of what you will need:
+
+- Passport (valid)
+- Overseas address proof (utility bill or bank statement)
+- PAN card
+- Approximately 20 minutes
+
+Resume here: [link]
+
+I will personally assist you through each step once you are ready.</div>
+    </div>
+    <div class="wa-block">
+      <div class="wa-hdr"><span>Post-KYC encouragement - stage 16 drop-offs</span><button class="btn" onclick="copyEl('wa3')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-body" id="wa3">Hi [Name], this is [PBM Name] from Aspora NRI Banking. Your KYC has been successfully verified - well done on completing that. Just 3 steps remaining: SIM binding, e-signing, and MPIN setup. It takes less than 10 minutes and I can personally assist you through each one. Resume here: [link]</div>
+    </div>
+  </div>
+
+  <div id="panel-checklist" class="panel">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Tick off each item before dialling the customer.</p>
+    <div class="card-sec"><div style="padding:4px 16px" id="cl-wrap"></div></div>
+    <button class="btn" onclick="resetCl()" style="margin-top:12px"><i class="ti ti-refresh" style="font-size:14px"></i> Reset checklist</button>
+  </div>
+
+</div>
+
+<script>
+
+var STAGES = [
+  {num:0,cat:"Not Started",name:"Not started",tech:"not-started",
+   means:"Customer created a lead or expressed interest but never opened the app.",
+   reasons:"Forgot, unsure which documents to keep ready, or did not trust the digital process.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'll be assisting you with your NRI account opening process. I just wanted 2 minutes to walk you through how this works and help get your application moving from my end.\n\nThe entire process is digital - no branch visit needed, and it typically takes around 20-25 minutes from your phone. You'll just need your passport, an overseas address proof, and your PAN card handy.\n\nI'll personally coordinate each step with you so it stays straightforward. I can send you the application link right now - shall I do that?",
+   obj:[{q:"Is it safe to do this online?",a:"Absolutely - it runs on the same bank-grade infrastructure as your net banking. The process is RBI-regulated and your KYC is handled by a licensed digital notary. I'll be with you through each step."},{q:"I don't have my documents ready.",a:"No issue at all - I'll send you a quick checklist right now. Once you have them, just reach out and I'll personally walk you through the process from the start."}],
+   tips:["Send app link via WhatsApp","Share document checklist"]},
+
+  {num:1,cat:"Basic details",name:"Account type selection",tech:"nri_onboarding_account_type_selection_page",
+   means:"Customer opened the app but did not select an account type (NRE / NRO / FCNR).",
+   reasons:"Confused about the difference between NRE, NRO, and FCNR accounts.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up regarding your NRI account opening application - I'll just take 2 minutes to help move this forward from my side.\n\nI can see the process paused at the account type selection. This is one of the most common points of confusion, so I'll simplify it quickly.\n\nIf you want to park your foreign earnings and repatriate funds freely - NRE is the right fit. If you have income sources in India like rent or investments - NRO is more suitable. FCNR is for keeping savings in a foreign currency like GBP or USD.\n\nBased on your profile, I'd recommend [NRE/NRO]. I'll personally assist you through the selection right now - shall we proceed?",
+   obj:[{q:"Can I have both NRE and NRO?",a:"Yes, many customers hold both. We can open one now and add the other later, or I can help you set up both in the same session - whichever works better for you."}],
+   tips:["Clarify NRE vs NRO vs FCNR","Offer to guide in real-time"]},
+
+  {num:2,cat:"Basic details",name:"What you need page",tech:"nri_onboarding_what_you_need_page",
+   means:"Customer saw the document requirements list and dropped off.",
+   reasons:"Didn't have documents ready, found the list overwhelming, or unsure if overseas docs are acceptable.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm reaching out to help move your account opening process forward - I'll just take 2 minutes.\n\nI can see the process paused at the document checklist. I want to quickly simplify that for you - you only need three things: your passport, a proof of your overseas address such as a utility bill or bank statement, and your PAN card. No physical copies are needed - clear photos from your phone work perfectly.\n\nI'll personally guide you through each upload so there are no hiccups. Do you have those documents accessible right now?",
+   obj:[{q:"My overseas address proof is in a foreign language.",a:"That's completely fine - we accept translated documents, and I can guide you on which alternative proofs are accepted if needed."},{q:"I don't have a PAN card.",a:"No problem at all - I can assist you with applying for one, or we can use Form 60 as an alternative. I'll walk you through it."}],
+   tips:["Send document checklist","Offer alternative document guidance"]},
+
+  {num:3,cat:"Basic details",name:"Email page",tech:"nri_onboarding_email_page",
+   means:"Customer dropped off while entering or verifying their email address.",
+   reasons:"OTP not received, used wrong email, or email landed in spam folder.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up on your NRI account opening application - I'll just take 2 minutes to help resolve a quick step from my end.\n\nI can see the process stalled at the email verification stage. This is usually a straightforward fix - the OTP sometimes lands in the spam or promotions folder, or there's a brief delay.\n\nIf you can open the application now, I'll stay on the line and help you clear this step in under a minute.",
+   obj:[{q:"I didn't receive the OTP.",a:"Let's get that resent right away. Also worth checking your spam folder. If it still doesn't come through, I can update the email address on the application from my side."}],
+   tips:["Ask them to check spam folder","Offer to resend OTP"]},
+
+  {num:4,cat:"Basic details",name:"User basics page",tech:"nri_onboarding_user_basics_page",
+   means:"Customer dropped off while filling in basic personal details (name, DOB, mobile).",
+   reasons:"Unsure which name to use (as per passport), mobile number mismatch, or technical glitch.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your NRI account opening forward - just a quick 2-minute update from my side.\n\nI can see the process paused at the personal details section. A quick clarification that helps here: please enter your name exactly as it appears on your passport - including your middle name if it's listed there. This avoids any mismatch during KYC verification.\n\nAlso, the mobile number you enter should be the one registered with your Indian bank account, as it's used for authentication. If you can pull up the application now, I'll personally assist you through this section.",
+   obj:[],tips:["Name must match passport exactly","Mobile must be Indian registered number"]},
+
+  {num:5,cat:"Basic details",name:"Journey stepper intro",tech:"nri_journey_stepper_intro",
+   means:"Customer saw the onboarding journey overview screen and dropped off.",
+   reasons:"Got overwhelmed seeing the number of steps, or had second thoughts about time commitment.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the next steps on your NRI account opening - I'll just take 2 minutes.\n\nI can see the process paused after the journey overview screen. I completely understand - seeing all the steps at once can feel like a lot. In reality, most customers complete the full process in under 20 minutes, and your progress is saved automatically at every stage, so you can always pause and resume.\n\nYou've already cleared the first part. I'll personally walk you through what's remaining so it stays simple. Shall we continue from where you left off?",
+   obj:[],tips:["Reassure: progress is always saved","Most customers finish in under 20 min"]},
+
+  {num:6,cat:"Basic details",name:"Address page",tech:"nri_onboarding_address_page",
+   means:"Customer dropped off while entering their overseas or Indian address.",
+   reasons:"Confusion about which address to enter, postal code format issues, or address proof mismatch.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up on your account opening application - quick 2-minute update from my end.\n\nI can see the process stalled at the address section. A common point of confusion here is formatting - your overseas residential address should be entered exactly as it appears on your address proof document, including the postal code format used in that country.\n\nFor the Indian address, use your permanent address as per your existing records. If you're unsure about any field, I'll personally guide you through it right now - shall we open the application together?",
+   obj:[],tips:["Address must match proof doc exactly","Guide on international postal format"]},
+
+  {num:7,cat:"Basic details",name:"Marital status step",tech:"nri_marital_step",
+   means:"Customer dropped off at the marital status question.",
+   reasons:"Technical glitch or privacy concern about sharing marital details.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete your NRI account opening - just a 2-minute check-in from my side.\n\nI can see the process paused at the marital status field. I just want to clarify - this is a standard regulatory KYC requirement across all bank accounts. It has absolutely no bearing on your account features, eligibility, or any other aspect of your banking. The information is completely confidential.\n\nThis is a single selection - it'll take you 10 seconds. I'm here if you'd like to continue now.",
+   obj:[],tips:["KYC regulatory requirement only","No impact on account features"]},
+
+  {num:8,cat:"Basic details",name:"Occupation step",tech:"nri_occupation_step",
+   means:"Customer dropped off while selecting or entering their occupation details.",
+   reasons:"Unsure which occupation category applies - especially self-employed, freelancers, or between jobs.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your account opening forward - just a couple of minutes from my side.\n\nI can see the process paused at the occupation details. This is a standard KYC and source-of-funds compliance field - it doesn't affect your account in any way. Let me help you pick the right option quickly.\n\nIf you're employed by a company, select Salaried. If you run your own business or freelance, Self-employed is the right fit. If you're between roles, retired, or a homemaker, there are relevant options for those too. What's your current situation? I'll point you to the right selection.",
+   obj:[],tips:["Self-employed / freelancer = 'Self-employed'","Between jobs = use 'Others' category"]},
+
+  {num:9,cat:"Basic details",name:"Annual income step",tech:"nri_annual_income_step",
+   means:"Customer dropped off at the income declaration step.",
+   reasons:"Privacy concerns, unsure whether to declare foreign or Indian income, uncomfortable sharing financials.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Just a quick follow-up to help complete your account opening - I'll take 2 minutes.\n\nI can see the process paused at the annual income step. I want to clarify - this is a range-based declaration required for RBI KYC compliance. It is not an exact figure, it's fully confidential, and it has no impact on your account limits or any features.\n\nYou simply select the bracket that broadly reflects your total annual income - this can be a combined figure of your overseas and Indian earnings. I'm here if you'd like to continue now.",
+   obj:[],tips:["It's a bracket range, not exact figure","Combined overseas + India income is fine"]},
+
+  {num:10,cat:"Basic details",name:"Education step",tech:"nri_education_step",
+   means:"Customer dropped off at the education qualification step.",
+   reasons:"Unsure why education is being asked, minor technical issue.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Just a quick check-in to help move your account opening forward - 2 minutes from my side.\n\nI can see the process paused at the education qualification field. This is a standard SEBI and RBI KYC requirement applicable to all bank accounts - it's a single dropdown selection and takes about 10 seconds.\n\nYou're right at the end of the personal details section - one tap away from completing it. I can stay on the line while you do this right now if that helps.",
+   obj:[],tips:["SEBI/RBI KYC regulatory requirement","Takes 10 seconds - simplest field"]},
+
+  {num:11,cat:"Basic details",name:"Journey stepper after life",tech:"nri_journey_stepper_after_life",
+   means:"Customer completed basic details but did not proceed to the KYC / persona phase.",
+   reasons:"Needed a break, felt they'd done enough for the day, or unsure what comes next.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help coordinate the next steps on your account opening - just a 2-minute update.\n\nYou've successfully completed your personal details - which is the most detailed section of the entire process. The next phase is identity verification, which typically takes about 5 minutes. You'll just need your passport nearby and a well-lit space.\n\nI'll personally assist you through the verification process so it goes smoothly. Are you in a position to continue now, or would a specific time later today work better? I'll schedule accordingly from my end.",
+   obj:[],tips:["Biggest section is done - acknowledge it","Need: good lighting + passport nearby"]},
+
+  {num:12,cat:"Persona Stage",name:"Verification SDK page",tech:"nri_onboarding_verification_sdk_page",
+   means:"Customer reached the KYC verification step but dropped off without completing it.",
+   reasons:"Not in a suitable environment, technical issue with camera, or unsure of the process.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the verification step on your account opening - quick update from my side.\n\nYour application is at the identity verification stage. This is a secure, 3-5 minute process that confirms your identity - your passport and a brief camera-based check are all that's needed.\n\nFor this to go smoothly, you'll want to be in a well-lit, quiet space with your passport in hand. A WiFi connection is preferred. If now is a good time, I can stay on the line and assist you through it. If a specific time today works better, I'll set that up from my end.",
+   obj:[],tips:["WiFi preferred for stability","Good lighting + quiet room essential"]},
+
+  {num:13,cat:"Persona Stage",name:"Persona missing details page",tech:"nri_onboarding_persona_missing_details_page",
+   means:"KYC system flagged missing or mismatched information and customer did not complete the correction.",
+   reasons:"Confused about what was missing, or frustrated by the re-submission request.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up regarding your account opening - there's a small clarification needed at the verification stage and I'll help resolve it quickly from my side.\n\nOur system flagged a minor discrepancy during the verification - this is very common and straightforward to fix. It's typically a small difference between the name or date of birth entered on the form and what appears on the passport.\n\nI can tell you exactly what needs to be corrected. If you can open the application now, I'll personally guide you through the fix - it should take no more than 3 minutes.",
+   obj:[],tips:["Usually name or DOB mismatch","Guide them through the exact correction"]},
+
+  {num:14,cat:"Persona Stage",name:"Tax residency page",tech:"nri_tax_residency_page",
+   means:"Customer dropped off at the FATCA / CRS tax residency declaration step.",
+   reasons:"Confused about FATCA, worried about tax implications, or unsure of their tax residency status.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help progress your account opening - just a 2-minute update from my end.\n\nYour application paused at the tax residency declaration. This is a global regulatory requirement - FATCA and CRS compliance - that applies to all international bank accounts. It simply requires you to declare which country you are a tax resident of.\n\nThis declaration does not create any new tax liability whatsoever. It is purely a reporting requirement for the bank. I'll personally walk you through the section right now if you'd like to continue.",
+   obj:[{q:"Will this cause me to be taxed in India?",a:"Not at all - this declaration carries no tax implications for you. It only ensures the bank meets international reporting standards. Your CA or tax advisor can confirm this as well."}],
+   tips:["FATCA = reporting only, no new tax","Declare country where taxes are paid"]},
+
+  {num:15,cat:"Persona Stage",name:"Terms and conditions",tech:"nri_onboarding_terms_and_conditions",
+   means:"Customer saw T&Cs but dropped off without accepting.",
+   reasons:"Concerned about clauses, general hesitation, or wanted to consult someone first.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with a quick update on your account opening - your application is at the final step of the KYC phase.\n\nThe only remaining action is reviewing and accepting the terms and conditions. The key points cover standard account operation terms, NRE/NRO repatriation guidelines, and your digital consent for KYC.\n\nIf there is any specific clause you'd like me to explain in plain language before you proceed, I'm happy to do that right now. I'll personally ensure there are no surprises.",
+   obj:[],tips:["Offer to explain any clause in plain English","Key points: account operation, repatriation, KYC consent"]},
+
+  {num:16,cat:"Persona Stage",name:"RTL journey completed",tech:"RTL_journey_completed",
+   means:"Customer completed the persona/KYC stage but did not proceed to SIM binding.",
+   reasons:"Thought the process was complete, or confused about why SIM binding is needed.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your KYC has been successfully verified. Well done on completing that section.\n\nYour application is now in the final phase. The next step is SIM binding, which links your registered mobile number to your account for secure two-factor authentication. It's a 2-minute step and is required to activate your mobile banking access.\n\nYou'll need your registered Indian SIM active on your phone for this. I'll coordinate the remaining steps with you personally - shall we proceed now?",
+   obj:[],tips:["KYC done - acknowledge the milestone","SIM binding = 2FA for mobile banking"]},
+
+  {num:17,cat:"SIM Binding",name:"SIM registration screen",tech:"sim_registration_screen_loaded",
+   means:"Customer reached SIM binding but did not complete the registration step.",
+   reasons:"NRI does not have Indian SIM active, confused about which number, or travelling.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete the SIM binding step on your account opening - just a quick update from my side.\n\nThis step requires your registered Indian mobile number to be active on your phone at the time of binding. If you're currently abroad and that SIM isn't accessible, there's no need to worry - your application remains active and I'll help you schedule this step for when you have the number available.\n\nJust let me know what works best and I'll coordinate accordingly.",
+   obj:[],tips:["Application stays active for 30 days","Can complete when back in India or SIM is active"]},
+
+  {num:18,cat:"SIM Binding",name:"SIM verification success screen",tech:"sim_verification_success_screen_loaded",
+   means:"SIM was verified successfully, but the customer dropped off right after without proceeding.",
+   reasons:"Thought it was done, app crashed, or got distracted.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your SIM has been successfully verified. The next step is PAN verification, which takes about a minute.\n\nIf you can open the application now and tap Continue, I'll stay on the line and help you through to the end. You are very close to completing the process.",
+   obj:[],tips:["SIM done - just tap Continue","PAN verification is next, takes 1 min"]},
+
+  {num:19,cat:"SIM Binding",name:"PAN screen",tech:"pan_screen_loaded",
+   means:"Customer dropped off at the PAN card verification step.",
+   reasons:"PAN not linked to Aadhaar, PAN details mismatch, or PAN card not handy.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your account opening forward - just a 2-minute assist from my side.\n\nYour application paused at the PAN verification step. This is usually a quick one - you enter your PAN number and it gets auto-verified. One thing to check is that the name on your PAN matches exactly what you entered earlier in the form. If there's a discrepancy, I can help you correct it.\n\nIf you don't have your PAN card immediately accessible, DigiLocker or the Income Tax portal will show it in under a minute. Shall we try that together now?",
+   obj:[],tips:["DigiLocker or IT portal for PAN retrieval","Name mismatch is common - guide correction"]},
+
+  {num:20,cat:"Digital Notary",name:"Digital notarization intro",tech:"digital_notarization_intro_screen_loaded",
+   means:"Customer reached the digital notary step but did not start it.",
+   reasons:"Did not understand what a digital notary is, concerned about the video call, or not prepared.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the notarization step on your account opening - quick update from my side.\n\nYour application has progressed to digital notarization. This is a short video call - typically 5 to 7 minutes - with a licensed notary who verifies your passport and confirms your identity. The notary is professional, speaks English, and the session is completely guided.\n\nYou'll need your original passport, good lighting, and a quiet space. Slots are available today and I can help you schedule one right now. Shall we do that?",
+   obj:[],tips:["5-7 min video call with licensed notary","Original passport + good lighting needed"]},
+
+  {num:21,cat:"Digital Notary",name:"Notary live SDK open",tech:"notarylive_sdk_open",
+   means:"Customer opened the notary live session but dropped off during it - possibly got disconnected.",
+   reasons:"Technical issue, call dropped, passport not ready, or poor internet connectivity.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up regarding your notarization session - I can see it was interrupted, and I wanted to help you reschedule that from my side.\n\nThis happens occasionally and is easy to sort. To ensure the rescheduled session goes smoothly: a stable WiFi connection is preferred, your passport should be open to the photo page before the session begins, and you'll want to be in a well-lit space.\n\nI have notary slots available today. Shall I help you book one right now?",
+   obj:[],tips:["WiFi strongly preferred","Passport open to photo page before call"]},
+
+  {num:22,cat:"Digital Notary",name:"Notary live SDK close",tech:"notarylive_sdk_close",
+   means:"The notary session was completed or closed, but customer did not proceed to the next screen.",
+   reasons:"Thought the process was done, or app issue after session ended.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your notarization session has been recorded and is being processed. Well done on completing that.\n\nThe next step is the review and declaration screen - it's simply a summary of everything you've submitted, and the final confirmation before your application moves to processing. If you can open the application and tap Continue, I'll assist you through the remaining steps right now.",
+   obj:[],tips:["Session is recorded - just tap Continue","Review screen is next - no more data entry"]},
+
+  {num:23,cat:"Digital Notary",name:"Review and declaration screen",tech:"Onboarding_review_and_declaration_screen_loaded",
+   means:"Customer saw the final review summary but did not submit or declare.",
+   reasons:"Spotted an error to fix, nervous about final submission, or unsure what happens after.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your application is at the final review screen, which is the last step before submission.\n\nAll you need to do here is confirm your details are correct and submit. Once submitted, your application enters final processing and your account is typically activated within 24 to 48 hours.\n\nIf there's anything on the review screen you'd like to verify or correct before submitting, I can personally assist with that right now. Shall we go through it together?",
+   obj:[],tips:["Account activates in 24-48 hours post-submit","Can correct any detail before submitting"]},
+
+  {num:24,cat:"E-signing",name:"ZohoSign SDK open",tech:"zohosign_sdk_open",
+   means:"Customer reached the e-signing step but did not complete signing the account opening documents.",
+   reasons:"Unfamiliar with e-signing, wanted to read documents first, or technical issue.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update on your account opening - your application has reached the e-signature step.\n\nThis is where you digitally sign the account opening agreement. The digital signature is legally equivalent to a physical signature and the process is fully secure. The document will be displayed on your screen - you scroll through it and sign with your finger or stylus. It takes about 2 minutes.\n\nYou are very close to completing the process. I can stay on the line and assist you through this right now if you're available.",
+   obj:[],tips:["E-sign = legally equivalent to physical sig","Sign with finger or stylus on screen"]},
+
+  {num:25,cat:"E-signing",name:"ZohoSign SDK close",tech:"zohosign_sdk_close",
+   means:"E-signing session closed but the customer did not proceed further.",
+   reasons:"Signing completed but app did not auto-navigate, or customer confused about next steps.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your account opening documents have been successfully signed. Just one final step remaining: setting up your MPIN and biometric login for mobile banking access.\n\nThis takes about 2 minutes and is what activates secure access to your account. I'll personally assist you through this last step right now if you can open the application.",
+   obj:[],tips:["Documents signed - MPIN setup is last step","2 minutes left - nearly done"]},
+
+  {num:26,cat:"E-signing",name:"Welcome screen",tech:"welcome_screen_loaded",
+   means:"Customer saw the post-signing welcome screen but dropped off before setting up MPIN.",
+   reasons:"Thought the process was complete, or did not understand why MPIN setup is needed.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your account opening is at the final setup step.\n\nYou just need to create your MPIN, which is a 6-digit security PIN used to access your mobile banking application. Think of it as setting up the PIN for a new card - it takes under 2 minutes.\n\nI'll stay on the line and walk you through it right now if you'd like to complete this.",
+   obj:[],tips:["MPIN = 6-digit login PIN for mobile banking","Analogy: like setting up a debit card PIN"]},
+
+  {num:27,cat:"E-signing",name:"MPIN creation screen",tech:"mpin_creation_screen_loaded",
+   means:"Customer started creating their MPIN but did not complete it.",
+   reasons:"Unsure what MPIN to set, technical glitch, or OTP issue.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete the MPIN setup on your account - just a 2-minute step from my side.\n\nYour MPIN is simply a 6-digit PIN of your choice - avoid sequential numbers like 123456 or your year of birth, and keep it something you'll remember as it's required each time you log in.\n\nIf you received an error previously, it was likely a mismatch during confirmation. I'll stay on the line while you try again now.",
+   obj:[],tips:["Avoid sequential numbers or birth year","Must remember it - suggest noting it safely"]},
+
+  {num:28,cat:"E-signing",name:"MPIN confirmation screen",tech:"mpin_confirmation_screen_loaded",
+   means:"Customer entered their MPIN but did not confirm it on the confirmation screen.",
+   reasons:"Forgot the PIN they just entered, or minor app glitch.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. You're at the very last step of your account setup - just the MPIN confirmation remaining.\n\nAll you need to do is re-enter the same 6-digit PIN you just created to confirm it. If you've forgotten the PIN you set, you can reset it and create a new one - the process takes 30 seconds.\n\nI'll stay on the line to help you complete this right now.",
+   obj:[],tips:["Re-enter same PIN to confirm","Can reset and create new one if forgotten"]},
+
+  {num:29,cat:"E-signing",name:"Biometric setup screen",tech:"biometric_setup_screen_loaded",
+   means:"Customer reached biometric (fingerprint/Face ID) setup but did not enable it.",
+   reasons:"Privacy concerns about biometric data, thought it was optional, or technical issue.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to let you know your account setup is essentially complete - just the biometric setup screen remaining.\n\nThis step is entirely optional. It allows you to log into your mobile banking using your fingerprint or Face ID instead of entering your MPIN each time. Most customers find it more convenient, but it's completely your preference.\n\nRegardless of whether you enable it or skip it, your account will be fully activated. I can assist you either way - what would you prefer?",
+   obj:[],tips:["Biometric is optional - can always skip","Account activates regardless of choice"]},
+
+  {num:30,cat:"Account opened",name:"Account summary - initial funding",tech:"account_summary_screen_loaded",
+   means:"Customer completed ALL steps - account is open. This is the initial funding activation call.",
+   reasons:"N/A - welcome and funding call.",
+   script:"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Thank you for completing your onboarding journey - your NRI account is now fully set up.\n\nI'm calling to assist you with the initial funding of your account. To enable transactions, you'll need to make a first deposit - you're welcome to fund any amount you're comfortable with, and I can assist you through the transfer process right now if you'd like.\n\nA quick note on interest rates - the more you save, the higher the rate you earn. We offer up to 7% interest, and depositing 2,000 GBP or above unlocks our maximum rate of 6.5%. We're also launching Fixed Deposit options very soon with competitive industry rates, which will enable even higher returns.\n\nOn top of that, your account comes with one year of free remittance, a virtual debit card, and UPI access via your international number - all available as soon as your account is funded.\n\nThere's no minimum amount required - the right starting point is entirely up to you. Shall I walk you through the transfer process now?",
+   obj:[{q:"How much should I fund?",a:"We don't have a minimum requirement - any amount you're comfortable with works. That said, depositing 2,000 GBP or above unlocks our highest interest rate of 6.5%, and higher savings continue to earn more. I'm happy to help you think through what works for your situation."},{q:"What are the interest rates?",a:"Your rate depends on your balance. Up to 870 GBP, you earn 2.5%. From 870 to 4,348 GBP it's 3.25%, up to 8,696 GBP it's 3.5%, and from 8,696 to 21,739 GBP you unlock 6.5%. Above 21,739 GBP you earn the maximum of 7%."}],
+   tips:["Welcome call - funding activation, not recovery","Never mention a specific amount unprompted","2,000+ GBP unlocks 6.5% rate","Perks: 1-year free remittance, virtual debit card, UPI via international number"]}
+];
+
+var CAT = {
+  "Not Started":    {bg:"#e6f1fb",text:"#0c447c",border:"#378add"},
+  "Basic details":  {bg:"#eaf3de",text:"#27500a",border:"#639922"},
+  "Persona Stage":  {bg:"#eeedfe",text:"#26215c",border:"#7f77dd"},
+  "SIM Binding":    {bg:"#faeeda",text:"#633806",border:"#ba7517"},
+  "Digital Notary": {bg:"#fbeaf0",text:"#72243e",border:"#d4537e"},
+  "E-signing":      {bg:"#e1f5ee",text:"#085041",border:"#1d9e75"},
+  "Account opened": {bg:"#eaf3de",text:"#27500a",border:"#3b6d11"}
+};
+
+var CHECKLIST = [
+  "Pull the customer's drop-off stage from the MIS dashboard",
+  "Note the date and time of last activity",
+  "Check if the customer has previously called support",
+  "Have the NRI onboarding app link ready to share via WhatsApp or SMS",
+  "Plan to keep the call under 8 minutes unless completing live on the call",
+  "Be ready to log the call outcome in CRM within 15 minutes of hanging up"
+];
+
+var SKEY = 'nri_pbm_edits_v3';
+var edits = {};
+try { edits = JSON.parse(localStorage.getItem(SKEY) || '{}'); } catch(e) {}
+function saveEdits() { try { localStorage.setItem(SKEY, JSON.stringify(edits)); } catch(e) {} }
+
+var openSet = {};
+var editScript = {};
+var editField = {};
+var checks = {};
+
+function getStage(num) {
+  for (var i = 0; i < STAGES.length; i++) { if (STAGES[i].num === num) return STAGES[i]; }
+  return STAGES[0];
+}
+function getScript(num)  { var s=getStage(num); return (edits[num]&&edits[num].script!==undefined)?edits[num].script:s.script; }
+function getMeans(num)   { var s=getStage(num); return (edits[num]&&edits[num].means!==undefined)?edits[num].means:s.means; }
+function getReasons(num) { var s=getStage(num); return (edits[num]&&edits[num].reasons!==undefined)?edits[num].reasons:s.reasons; }
+function getImages(num)  { return (edits[num]&&edits[num].images)?edits[num].images:[]; }
+
+function esc(v) {
+  return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function infoBox(num, field, label, val) {
+  var key = num+'_'+field;
+  var isEdit = !!editField[key];
+  var isCustom = edits[num] && edits[num][field] !== undefined;
+  var h = '<div class="info-box">';
+  h += '<div class="info-lbl">';
+  h += '<span>' + label + (isCustom ? '<span class="dot"></span>' : '') + '</span>';
+  if (!isEdit) {
+    h += '<button class="btn" style="font-size:11px;padding:2px 7px" onclick="startFld(' + num + ',\'' + field + '\')">';
+    h += '<i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  }
+  h += '</div>';
+  if (isEdit) {
+    h += '<textarea class="info-ta" id="ita_' + num + '_' + field + '">' + esc(val) + '</textarea>';
+    h += '<div class="fld-btns">';
+    h += '<button class="btn btn-green" onclick="saveFld(' + num + ',\'' + field + '\')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button>';
+    h += '<button class="btn" onclick="cancelFld(' + num + ',\'' + field + '\')">Cancel</button>';
+    if (isCustom) h += '<button class="btn btn-red" onclick="resetFld(' + num + ',\'' + field + '\')">Reset</button>';
+    h += '</div>';
+  } else {
+    h += '<div class="info-val">' + esc(val) + '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function editImgsHtml(num) {
+  var imgs = getImages(num);
+  var h = '';
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    h += '<div class="edit-img-wrap" id="eimg_' + num + '_' + i + '">';
+    h += '<button class="del-img" onclick="delImg(' + num + ',' + i + ')"><i class="ti ti-x" style="font-size:10px"></i></button>';
+    h += '<img src="' + img.data + '" alt="">';
+    h += '<input class="edit-img-cap" type="text" placeholder="Caption" value="' + esc(img.caption||'') + '" oninput="updateCap(' + num + ',' + i + ',this.value)">';
+    h += '</div>';
+  }
+  return h;
+}
+
+function stageHtml(s) {
+  var c = CAT[s.cat] || CAT['Basic details'];
+  var pct = Math.round((s.num / 30) * 100);
+  var isOpen = !!openSet[s.num];
+  var numBg = s.num === 30 ? '#3b6d11' : c.bg;
+  var numTxt = s.num === 30 ? '#fff' : c.text;
+  var hasEdit = !!edits[s.num];
+  var h = '<div class="stage-card">';
+  h += '<div class="stage-hdr" onclick="toggleStage(' + s.num + ')">';
+  h += '<div class="s-num" style="background:' + numBg + ';color:' + numTxt + '">' + s.num + '</div>';
+  h += '<div class="s-info"><div class="s-title">' + esc(s.name) + (hasEdit ? '<span class="dot"></span>' : '') + '</div>';
+  h += '<div class="s-sub">' + esc(s.tech) + '</div></div>';
+  h += '<span class="s-badge" style="background:' + c.bg + ';color:' + c.text + ';border-color:' + c.border + '">' + esc(s.cat) + '</span>';
+  h += '<i class="ti ti-chevron-down chevron" style="' + (isOpen ? 'transform:rotate(180deg)' : '') + '"></i>';
+  h += '</div>';
+
+  if (isOpen) {
+    var script = getScript(s.num);
+    var means = getMeans(s.num);
+    var reasons = getReasons(s.num);
+    var images = getImages(s.num);
+    var isEditScript = !!editScript[s.num];
+
+    h += '<div class="stage-body open">';
+    h += '<div class="info-row">';
+    h += infoBox(s.num, 'means', 'What this means', means);
+    h += infoBox(s.num, 'reasons', 'Likely reasons for drop-off', reasons);
+    h += '</div>';
+
+    h += '<div class="sec-lbl">Call script</div>';
+    h += '<div class="script-actions">';
+    if (!isEditScript) {
+      h += '<button class="btn btn-blue" onclick="startScript(' + s.num + ')"><i class="ti ti-edit" style="font-size:13px"></i> Edit script</button>';
+      h += '<button class="btn" onclick="copyScript(' + s.num + ',this)"><i class="ti ti-copy" style="font-size:13px"></i> Copy</button>';
+      if (edits[s.num] && edits[s.num].script !== undefined) {
+        h += '<button class="btn btn-red" onclick="resetScript(' + s.num + ')"><i class="ti ti-rotate" style="font-size:13px"></i> Reset</button>';
+      }
+    } else {
+      h += '<button class="btn btn-green" onclick="saveScript(' + s.num + ')"><i class="ti ti-device-floppy" style="font-size:13px"></i> Save</button>';
+      h += '<button class="btn" onclick="cancelScript(' + s.num + ')"><i class="ti ti-x" style="font-size:13px"></i> Cancel</button>';
+    }
+    h += '</div>';
+
+    if (!isEditScript) {
+      if (images.length) {
+        h += '<div class="script-with-imgs">';
+        h += '<div class="script-view">' + esc(script) + '</div>';
+        h += '<div class="view-imgs">';
+        for (var vi = 0; vi < images.length; vi++) {
+          var vimg = images[vi];
+          h += '<div class="view-img-wrap"><img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
+          if (vimg.caption) h += '<div class="view-img-cap">' + esc(vimg.caption) + '</div>';
+          h += '</div>';
+        }
+        h += '</div></div>';
+      } else {
+        h += '<div class="script-view">' + esc(script) + '</div>';
+      }
+    } else {
+      h += '<textarea class="script-ta" id="sta_' + s.num + '">' + esc(script) + '</textarea>';
+      h += '<div class="sec-lbl" style="margin-top:12px">Attached images</div>';
+      h += '<div class="edit-imgs" id="ei_' + s.num + '">' + editImgsHtml(s.num) + '</div>';
+      h += '<div class="img-upload" onclick="document.getElementById(\'fu_' + s.num + '\').click()">';
+      h += '<input type="file" id="fu_' + s.num + '" accept="image/*" multiple onchange="handleImgs(' + s.num + ',this)">';
+      h += '<label style="font-size:13px;color:var(--text2);display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;pointer-events:none">';
+      h += '<i class="ti ti-upload" style="font-size:18px"></i>';
+      h += '<span>Click to upload images<br><small style="color:var(--text3)">PNG, JPG - shown alongside the script</small></span></label>';
+      h += '</div>';
+    }
+
+    if (s.tips && s.tips.length) {
+      h += '<div class="sec-lbl">Quick tips</div><div style="margin:6px 0 10px">';
+      for (var ti = 0; ti < s.tips.length; ti++) {
+        h += '<span class="tip" style="background:' + c.bg + ';color:' + c.text + ';border-color:' + c.border + '">';
+        h += '<i class="ti ti-bulb" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>' + esc(s.tips[ti]) + '</span>';
+      }
+      h += '</div>';
+    }
+
+    if (s.obj && s.obj.length) {
+      h += '<div class="sec-lbl">Objection handlers</div><div style="margin-bottom:8px">';
+      for (var oi = 0; oi < s.obj.length; oi++) {
+        var o = s.obj[oi];
+        h += '<div class="obj-row">';
+        h += '<div class="obj-q"><i class="ti ti-quote" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>' + esc(o.q) + '</div>';
+        h += '<div class="obj-a"><i class="ti ti-corner-down-right" style="font-size:12px;vertical-align:-1px;margin-right:4px;color:var(--text2)"></i>' + esc(o.a) + '</div>';
+        h += '</div>';
+      }
+      h += '</div>';
+    }
+
+    h += '<div class="sec-lbl">Journey progress</div>';
+    h += '<div class="prog-bar"><div class="prog-fill" style="width:' + pct + '%;background:' + c.border + '"></div></div>';
+    h += '<div style="font-size:11px;color:var(--text2)">Step ' + s.num + ' of 30 &mdash; ' + pct + '% through onboarding</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function renderStages(list) {
+  var el = document.getElementById('stage-grid');
+  document.getElementById('stage-count').textContent = 'Showing ' + list.length + ' stage' + (list.length !== 1 ? 's' : '');
+  var h = '';
+  for (var i = 0; i < list.length; i++) h += stageHtml(list[i]);
+  el.innerHTML = h;
+}
+
+function filterStages() {
+  var q = (document.getElementById('search-input').value||'').toLowerCase();
+  var cat = document.getElementById('cat-filter').value;
+  var out = [];
+  for (var i = 0; i < STAGES.length; i++) {
+    var s = STAGES[i];
+    var text = s.name + s.tech + s.means + s.reasons + getScript(s.num);
+    if (q && text.toLowerCase().indexOf(q) < 0) continue;
+    if (cat && s.cat !== cat) continue;
+    out.push(s);
+  }
+  renderStages(out);
+}
+
+function toggleStage(num) {
+  if (openSet[num]) delete openSet[num]; else openSet[num] = true;
+  filterStages();
+}
+
+function startScript(num) {
+  editScript[num] = true; filterStages();
+  setTimeout(function(){ var t=document.getElementById('sta_'+num); if(t){t.focus();} }, 60);
+}
+function cancelScript(num) { delete editScript[num]; filterStages(); }
+function saveScript(num) {
+  var t = document.getElementById('sta_'+num); if (!t) return;
+  if (!edits[num]) edits[num] = {};
+  edits[num].script = t.value;
+  saveEdits(); delete editScript[num]; toast('Script saved'); filterStages();
+}
+function resetScript(num) {
+  if (!confirm('Reset script to original?')) return;
+  if (edits[num]) delete edits[num].script;
+  saveEdits(); delete editScript[num]; toast('Script reset'); filterStages();
+}
+function copyScript(num, btn) {
+  navigator.clipboard.writeText(getScript(num)).then(function() {
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check" style="font-size:13px"></i> Copied!';
+    setTimeout(function(){ btn.innerHTML = orig; }, 1800);
+  });
+}
+
+function startFld(num, field) {
+  editField[num+'_'+field] = true; filterStages();
+  setTimeout(function(){ var t=document.getElementById('ita_'+num+'_'+field); if(t) t.focus(); }, 60);
+}
+function cancelFld(num, field) { delete editField[num+'_'+field]; filterStages(); }
+function saveFld(num, field) {
+  var t = document.getElementById('ita_'+num+'_'+field); if (!t) return;
+  if (!edits[num]) edits[num] = {};
+  edits[num][field] = t.value;
+  saveEdits(); delete editField[num+'_'+field]; toast('Saved'); filterStages();
+}
+function resetFld(num, field) {
+  if (!confirm('Reset to original?')) return;
+  if (edits[num]) delete edits[num][field];
+  saveEdits(); delete editField[num+'_'+field]; toast('Reset'); filterStages();
+}
+
+function handleImgs(num, input) {
+  var files = [].slice.call(input.files);
+  if (!files.length) return;
+  if (!edits[num]) edits[num] = {};
+  if (!edits[num].images) edits[num].images = [];
+  var done = 0;
+  files.forEach(function(f) {
+    var r = new FileReader();
+    r.onload = function(e) {
+      edits[num].images.push({data:e.target.result, caption:''});
+      done++;
+      if (done === files.length) {
+        saveEdits();
+        var el = document.getElementById('ei_'+num);
+        if (el) el.innerHTML = editImgsHtml(num);
+        toast(files.length + ' image' + (files.length>1?'s':'') + ' added');
+      }
+    };
+    r.readAsDataURL(f);
+  });
+  input.value = '';
+}
+function delImg(num, idx) {
+  if (edits[num] && edits[num].images) {
+    edits[num].images.splice(idx, 1);
+    saveEdits();
+    var el = document.getElementById('ei_'+num);
+    if (el) el.innerHTML = editImgsHtml(num);
+    toast('Image removed');
+  }
+}
+function updateCap(num, idx, val) {
+  if (edits[num] && edits[num].images && edits[num].images[idx]) {
+    edits[num].images[idx].caption = val; saveEdits();
+  }
+}
+
+function switchTab(id) {
+  var ids = ['stages','objections','crm','whatsapp','checklist'];
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  for (var i = 0; i < ids.length; i++) {
+    tabs[i].classList.toggle('active', ids[i] === id);
+    panels[i].classList.toggle('active', ids[i] === id);
+  }
+}
+
+function copyEl(id) {
+  var el = document.getElementById(id); if (!el) return;
+  var blk = el.closest('.wa-block');
+  var btn = blk ? blk.querySelector('.btn') : null;
+  navigator.clipboard.writeText(el.textContent.trim()).then(function() {
+    if (btn) { var orig=btn.innerHTML; btn.innerHTML='<i class="ti ti-check" style="font-size:12px"></i> Copied!'; setTimeout(function(){ btn.innerHTML=orig; },1800); }
+  });
+}
+
+function openLb(src, cap) {
+  document.getElementById('lb-img').src = src;
+  var capEl = document.getElementById('lb-cap');
+  capEl.textContent = cap||'';
+  capEl.style.display = cap ? 'block' : 'none';
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb() { document.getElementById('lb').classList.remove('open'); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+function renderCl() {
+  var html = '';
+  for (var i = 0; i < CHECKLIST.length; i++) {
+    var done = !!checks[i];
+    html += '<div class="cl-item' + (done?' done':'') + '" onclick="toggleCl(' + i + ')">';
+    html += '<div class="cl-circle">' + (done ? '<i class="ti ti-check" style="font-size:11px"></i>' : '') + '</div>';
+    html += '<span style="font-size:13px">' + esc(CHECKLIST[i]) + '</span></div>';
+  }
+  document.getElementById('cl-wrap').innerHTML = html;
+}
+function toggleCl(i) { if(checks[i]) delete checks[i]; else checks[i]=true; renderCl(); }
+function resetCl() { checks = {}; renderCl(); }
+
+renderStages(STAGES);
+renderCl();
+</script>
+</body>
+</html>
