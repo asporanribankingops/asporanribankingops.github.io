@@ -142,6 +142,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="switchTab('crm')"><i class="ti ti-clipboard-list" style="font-size:14px"></i> CRM &amp; SLA</button>
     <button class="tab" onclick="switchTab('whatsapp')"><i class="ti ti-brand-whatsapp" style="font-size:14px"></i> WhatsApp</button>
     <button class="tab" onclick="switchTab('checklist')"><i class="ti ti-checkbox" style="font-size:14px"></i> Pre-call checklist</button>
+    <button class="tab" onclick="switchTab('playbook')"><i class="ti ti-book" style="font-size:14px"></i> Support Playbook</button>
   </div>
 </div>
 
@@ -243,6 +244,605 @@ I will personally assist you through each step once you are ready.</div>
     <div class="card-sec"><div style="padding:4px 16px" id="cl-wrap"></div></div>
     <button class="btn" onclick="resetCl()" style="margin-top:12px"><i class="ti ti-refresh" style="font-size:14px"></i> Reset checklist</button>
   </div>
+
+  <!-- ── Support Agent Playbook Panel ─────────────────────────── -->
+  <div id="panel-playbook" class="panel">
+    <style>
+      .pb-search{width:100%;padding:9px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;outline:none;margin-bottom:16px}
+      .pb-search:focus{border-color:var(--info-border)}
+      .pb-toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+      .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
+      .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+      .pb-part{margin-bottom:32px}
+      .pb-part-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:.5px solid var(--border)}
+      .pb-scenario{border:.5px solid var(--border);border-radius:var(--rl);background:var(--bg);margin-bottom:10px;overflow:hidden}
+      .pb-scenario-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none}
+      .pb-scenario-hdr:hover{background:var(--bg2)}
+      .pb-scenario-icon{width:32px;height:32px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+      .pb-scenario-title{font-size:14px;font-weight:500;flex:1}
+      .pb-scenario-body{padding:16px;border-top:.5px solid var(--border);display:none}
+      .pb-scenario-body.open{display:block}
+      .pb-h3{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 8px}
+      .pb-h3:first-child{margin-top:0}
+      .pb-msgs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+      .pb-msg-chip{background:var(--bg2);border:.5px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--text2);font-style:italic}
+      .pb-steps{list-style:none;display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+      .pb-steps li{display:flex;gap:10px;font-size:13px}
+      .pb-steps li::before{content:attr(data-n);width:22px;height:22px;border-radius:50%;background:var(--info-bg);color:var(--info-text);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+      .pb-bullets{list-style:none;display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+      .pb-bullets li{font-size:13px;padding-left:14px;position:relative}
+      .pb-bullets li::before{content:'•';position:absolute;left:0;color:var(--info-text)}
+      .pb-warning{background:var(--danger-bg);border:.5px solid var(--danger-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--danger-text);margin-bottom:8px}
+      .pb-warning strong{display:block;margin-bottom:3px}
+      .pb-ok{background:var(--ok-bg);border:.5px solid var(--ok-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--ok-text);margin-bottom:8px}
+      .pb-template{background:var(--bg2);border-left:3px solid var(--info-border);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;font-size:13px;line-height:1.75;white-space:pre-wrap;margin-bottom:6px;position:relative}
+      .pb-copy-btn{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:11px;cursor:pointer}
+      .pb-copy-btn:hover{background:var(--info-bg);color:var(--info-text)}
+      .pb-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}
+      .pb-table th{text-align:left;padding:8px 12px;background:var(--bg2);font-size:11px;color:var(--text2);font-weight:700;border-bottom:.5px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
+      .pb-table td{padding:9px 12px;border-bottom:.5px solid var(--border);vertical-align:top;line-height:1.5}
+      .pb-table tr:last-child td{border-bottom:none}
+      .pb-dt{background:var(--info-bg);border:.5px solid var(--info-border);border-radius:var(--r);padding:12px 14px;font-size:13px;margin-bottom:8px}
+      .pb-dt strong{color:var(--info-text);display:block;margin-bottom:4px}
+      .pb-strikethrough{text-decoration:line-through;opacity:.5}
+      .pb-note{background:var(--bg2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--text2);margin-bottom:8px}
+      .pb-highlight{background:var(--ok-bg);color:var(--ok-text);padding:2px 6px;border-radius:4px;font-weight:600;font-size:12px}
+    </style>
+
+    <input class="pb-search" id="pb-search" placeholder="Search scenarios, keywords, templates…" oninput="pbSearch()" />
+
+    <div class="pb-toc">
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-partA')">A · Product Overview</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s1')">1 · Account Opening</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s2')">2 · KYC / Docs</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s3')">3 · FATCA / CRS</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s4')">4 · Login & Auth</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s6')">6 · Debit Card</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s7')">7 · NRO→NRE</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s10')">10 · Tax</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-s12')">12 · Beneficiary</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-partC')">C · Escalation</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-partD')">D · Do's &amp; Don'ts</button>
+      <button class="pb-toc-btn" onclick="pbScrollTo('pb-partE')">E · Quick Reference</button>
+    </div>
+
+    <div id="pb-all">
+
+      <!-- PART A -->
+      <div class="pb-part" id="pb-partA">
+        <div class="pb-part-title">Part A — Product Overview</div>
+
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">🏦</div>
+            <div class="pb-scenario-title">What is Aspora?</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <p style="font-size:13px;line-height:1.7">Aspora is a fintech platform helping NRIs open and manage NRE/NRO accounts digitally. <strong>Aspora is NOT a bank.</strong> Aspora partners with <strong>Shivalik Small Finance Bank (SSFB)</strong>, the regulated bank in India.</p>
+            <div class="info-row" style="margin-top:12px">
+              <div class="info-box"><div class="info-lbl">Aspora handles</div><div class="info-val">App experience, digital onboarding, customer support, value-added services</div></div>
+              <div class="info-box"><div class="info-lbl">SSFB handles</div><div class="info-val">Bank accounts, deposits, compliance approvals, cards, regulatory reporting</div></div>
+            </div>
+            <div class="pb-h3">Who are our customers?</div>
+            <p style="font-size:13px">NRIs in <strong>UK or UAE (Phase 1)</strong> — Indian citizens or PIO/OCI holders who earn abroad and need Indian bank accounts.</p>
+            <div class="pb-h3">Account Types</div>
+            <table class="pb-table">
+              <tr><th>Feature</th><th>NRE Account</th><th>NRO Account</th></tr>
+              <tr><td>Purpose</td><td>Park money earned abroad</td><td>Manage income earned in India</td></tr>
+              <tr><td>Interest tax</td><td>Tax-free in India</td><td>30% TDS deducted</td></tr>
+              <tr><td>Repatriation</td><td>Fully repatriable, no limit</td><td>Up to USD 1M/year</td></tr>
+              <tr><td>Typical use</td><td>Savings, remittances, FDs</td><td>Rent, dividends, pension, property income</td></tr>
+            </table>
+            <div class="pb-h3">Key Partners</div>
+            <table class="pb-table">
+              <tr><th>Partner</th><th>Role</th></tr>
+              <tr><td>Shivalik Small Finance Bank (SSFB)</td><td>Regulated banking partner</td></tr>
+              <tr><td>Persona SDK</td><td>Document verification &amp; liveness checks</td></tr>
+              <tr><td>NotaryLive</td><td>Remote Online Notarization (RON)</td></tr>
+              <tr><td>Zoho Sign</td><td>Digital signatures</td></tr>
+              <tr><td>PSE (UK fulfillment)</td><td>Welcome pack printing &amp; dispatch</td></tr>
+              <tr><td>NSDL</td><td>PAN validation</td></tr>
+              <tr><td>UAEPass</td><td>UAE government digital identity</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART B -->
+      <div class="pb-part">
+        <div class="pb-part-title">Part B — Handling Guides by Scenario</div>
+
+        <!-- S1 -->
+        <div class="pb-scenario" id="pb-s1">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">📋</div>
+            <div class="pb-scenario-title">Scenario 1 — Account Opening Queries</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-h3">Common customer messages</div>
+            <div class="pb-msgs"><span class="pb-msg-chip">"How do I open an account?"</span><span class="pb-msg-chip">"What documents do I need?"</span><span class="pb-msg-chip">"How long does it take?"</span><span class="pb-msg-chip">"I'm in the UK/UAE, can I open an account?"</span></div>
+            <div class="pb-h3">Handling steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Confirm the customer is an NRI in UK or UAE</li>
+              <li data-n="2">Explain the 6-step digital process (takes under 2 minutes on phone)</li>
+              <li data-n="3">Share the document checklist</li>
+              <li data-n="4">Set expectation: account activation within 24–48 hours after compliance approval</li>
+            </ol>
+            <div class="pb-h3">Document checklist</div>
+            <ul class="pb-bullets">
+              <li>Indian PAN card (must be active)</li>
+              <li>Valid passport (at least 3 months validity remaining)</li>
+              <li>Proof of non-residency: UK → visa/BRP/share code | UAE → Emirates ID</li>
+              <li>Overseas address proof: driving license, utility bill (≤2 months) or bank/credit card statement (≤3 months)</li>
+              <li>Selfie for biometric verification</li>
+            </ul>
+            <div class="pb-h3">Escalation triggers</div>
+            <div class="pb-warning"><strong>Country not UK/UAE</strong>Inform Phase 1 only supports UK and UAE. Log as a feature request.</div>
+            <div class="pb-warning"><strong>PAN deactivated/failed</strong>Advise customer to contact NSDL to resolve PAN status first.</div>
+            <div class="pb-warning"><strong>Minor applicant</strong>Not supported. Politely inform.</div>
+            <div class="pb-h3">Response template</div>
+            <div class="pb-template" id="pbt-s1">Hi [Name], thanks for reaching out! Opening an NRE/NRO account with Aspora is fully digital and takes just a few minutes. Here's what you'll need handy before you start:
+
+1. Your Indian PAN card
+2. Valid passport
+3. Proof of residency in [UK/UAE] (visa, BRP, Emirates ID)
+4. Overseas address proof (driving license or utility bill dated within the last 2 months)
+5. A selfie
+
+Once you submit everything, our banking partner Shivalik Small Finance Bank reviews your application and you'll typically be approved within 24–48 hours. Let me know if you have any questions!<button class="pb-copy-btn" onclick="pbCopy('pbt-s1',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="pb-scenario" id="pb-s2">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">🔍</div>
+            <div class="pb-scenario-title">Scenario 2 — KYC Discrepancy / Document Issues</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"My KYC was flagged / rejected"</span><span class="pb-msg-chip">"I got an email saying there's a discrepancy"</span><span class="pb-msg-chip">"What document should I re-upload?"</span><span class="pb-msg-chip">"How many attempts do I get?"</span></div>
+            <div class="pb-h3">Handling steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Look up application ID using registered phone/email</li>
+              <li data-n="2">Check discrepancy type (information issue vs. document issue)</li>
+              <li data-n="3">Explain specifically what needs fixing</li>
+              <li data-n="4">Guide through the correction process</li>
+              <li data-n="5">Remind: <strong>30 days window, max 3 attempts</strong></li>
+            </ol>
+            <div class="pb-h3">Common discrepancy types</div>
+            <table class="pb-table">
+              <tr><th>Discrepancy</th><th>What to tell the customer</th></tr>
+              <tr><td>Name mismatch</td><td>"Your name on [doc A] doesn't match [doc B]. Please upload a document where the name matches exactly, or share a government-issued name change certificate."</td></tr>
+              <tr><td>Address mismatch</td><td>"The address on your form doesn't match the document. Please verify and provide the correct document."</td></tr>
+              <tr><td>Blurry/unclear upload</td><td>"The image of your [document] is not clear enough. Please retake in good lighting and re-upload."</td></tr>
+              <tr><td>Expired document</td><td>"Your [document] has expired. Please upload a current, valid version."</td></tr>
+              <tr><td>Address proof too old</td><td>"Your address proof must be dated within the last 2 months (utility bill) or 3 months (bank statement)."</td></tr>
+              <tr><td>Invalid TIN format</td><td>"The TIN you entered doesn't match the expected format for [country]. Please double-check and re-enter."</td></tr>
+            </table>
+            <div class="pb-h3">Escalation triggers</div>
+            <div class="pb-warning"><strong>All 3 attempts used, issue persists</strong>Escalate to compliance team.</div>
+            <div class="pb-warning"><strong>30-day window about to expire</strong>Flag urgently to compliance.</div>
+            <div class="pb-warning"><strong>Application REJECTED (not just flagged)</strong>Usually AML/sanctions related. Do NOT attempt to resolve. Escalate to compliance immediately.</div>
+            <div class="pb-h3">Response template — Discrepancy</div>
+            <div class="pb-template" id="pbt-s2a">Hi [Name], I can see that your application has been flagged for a discrepancy. Here's what needs attention:
+
+Issue: [Specific issue, e.g., "The name on your PAN card doesn't match the name on your passport"]
+
+How to fix it: [Specific action, e.g., "Please re-upload your passport ensuring the name page is clearly visible, or provide a name change certificate if applicable"]
+
+You can submit your correction through the app or by replying to the email you received. You have up to 3 attempts to resolve this, and the application stays open for 30 days from the first flag.
+
+Let me know if you need help with anything else!<button class="pb-copy-btn" onclick="pbCopy('pbt-s2a',this)">Copy</button></div>
+            <div class="pb-h3">Response template — Rejection</div>
+            <div class="pb-template" id="pbt-s2b">Hi [Name], I'm sorry to inform you that your account application could not be approved after review by our banking partner's compliance team. Unfortunately, I'm unable to share the specific reason due to regulatory requirements.
+
+If you believe this is an error, I can escalate this to our compliance team for a second review. Would you like me to do that?<button class="pb-copy-btn" onclick="pbCopy('pbt-s2b',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="pb-scenario" id="pb-s3">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">🌍</div>
+            <div class="pb-scenario-title">Scenario 3 — FATCA / CRS Questions</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"What is FATCA?"</span><span class="pb-msg-chip">"I don't know what to answer"</span><span class="pb-msg-chip">"What does US person mean?"</span><span class="pb-msg-chip">"I moved countries — do I need to update?"</span></div>
+            <div class="pb-h3">Key rules agents must know</div>
+            <ul class="pb-bullets">
+              <li>FATCA = US law; CRS = global standard. Both require banks to identify where customers pay taxes.</li>
+              <li>"US person" = US citizen, green card holder, or someone meeting the substantial presence test</li>
+              <li>If customer says yes to US person → they need US TIN (SSN or ITIN)</li>
+              <li>Customers MUST update declaration within <strong>30 days</strong> if tax status changes</li>
+              <li>Aspora does NOT provide tax advice. Always direct to a qualified tax advisor.</li>
+            </ul>
+            <div class="pb-warning"><strong>Never do this:</strong>Do not tell a customer whether they are or aren't a "US person" — that's tax advice. Do not suggest answers to FATCA/CRS questions. Do not skip or dismiss FATCA concerns — it's legally mandatory.</div>
+            <div class="pb-h3">Response template — General FATCA</div>
+            <div class="pb-template" id="pbt-s3a">Hi [Name], great question! FATCA and CRS are international regulations that require all banks globally to identify where their customers pay taxes. This helps prevent tax evasion across borders.
+
+It's not specific to Aspora — any bank you open an account with will ask the same questions. Our app makes it simple with a guided questionnaire (about 6 minutes). You just need to know which country you pay taxes in and your Tax Identification Number (TIN).
+
+If you're unsure about any answers, we'd recommend checking with a tax advisor to make sure your declaration is accurate.<button class="pb-copy-btn" onclick="pbCopy('pbt-s3a',this)">Copy</button></div>
+            <div class="pb-h3">Response template — US person question</div>
+            <div class="pb-template" id="pbt-s3b">A "US person" under FATCA means someone who is a US citizen, a US green card holder, or meets the IRS "substantial presence test" for US tax purposes.
+
+If you're unsure whether you qualify, we'd strongly recommend consulting a tax advisor, as this has important implications for tax reporting. We're not able to make this determination for you, but we're happy to help with any other questions about the process!<button class="pb-copy-btn" onclick="pbCopy('pbt-s3b',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S4 -->
+        <div class="pb-scenario" id="pb-s4">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">🔐</div>
+            <div class="pb-scenario-title">Scenario 4 — Login &amp; Authentication Issues</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"I forgot my MPIN"</span><span class="pb-msg-chip">"I'm locked out"</span><span class="pb-msg-chip">"I changed my phone"</span><span class="pb-msg-chip">"I can't receive OTP"</span><span class="pb-msg-chip">"I changed my phone number"</span></div>
+            <div class="pb-h3">Decision tree</div>
+            <div class="pb-dt"><strong>Forgot MPIN</strong>Tap "Forgot MPIN?" → Verify via PAN + DOB → Set new 6-digit MPIN</div>
+            <div class="pb-dt"><strong>Locked out — 3 wrong attempts</strong>15-minute cooldown. Tell customer to wait.</div>
+            <div class="pb-dt"><strong>Locked out — 5 wrong attempts</strong>24-hour lockout OR reset MPIN immediately via identity verification</div>
+            <div class="pb-dt"><strong>Changed phone (same number)</strong>Log in → system detects new device → Verify via PAN+DOB → Set new MPIN</div>
+            <div class="pb-dt"><strong>Changed phone AND number</strong>Complex case — take query and inform customer they will receive a callback from the bank</div>
+            <div class="pb-dt"><strong>Can't receive OTP (Indian SIM inactive)</strong>Check international roaming → Try email OTP fallback → If neither works, escalate to tech team</div>
+            <div class="pb-h3">Response template — Forgot MPIN</div>
+            <div class="pb-template" id="pbt-s4a">Hi [Name], no worries! You can reset your MPIN directly from the login screen. Just tap "Forgot MPIN?" and you'll be asked to verify your identity using either your PAN + date of birth, or a quick selfie. Once verified, you can set a new 6-digit MPIN right away.<button class="pb-copy-btn" onclick="pbCopy('pbt-s4a',this)">Copy</button></div>
+            <div class="pb-h3">Response template — Locked out</div>
+            <div class="pb-template" id="pbt-s4b">Hi [Name], it looks like your account has been temporarily locked after multiple incorrect MPIN entries. This is a security feature to protect your account.
+
+If you've had 3 incorrect attempts, there's a 15-minute cooldown — you can try again after that. If you've had 5 incorrect attempts, you can either wait 24 hours or reset your MPIN immediately by tapping "Forgot MPIN?" and verifying your identity.<button class="pb-copy-btn" onclick="pbCopy('pbt-s4b',this)">Copy</button></div>
+            <div class="pb-h3">Response template — Device change</div>
+            <div class="pb-template" id="pbt-s4c">Hi [Name], when you switch to a new phone, your MPIN doesn't carry over — this is a security measure to protect your account. Here's what to do:
+
+1. Open the Aspora app on your new phone
+2. Enter your registered phone number
+3. The system will detect it's a new device and ask you to verify your identity
+4. Verify using your PAN + date of birth
+5. Set a new 6-digit MPIN
+
+Your account data and balance are completely safe — nothing is lost during a device switch!<button class="pb-copy-btn" onclick="pbCopy('pbt-s4c',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S6 -->
+        <div class="pb-scenario" id="pb-s6">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">💳</div>
+            <div class="pb-scenario-title">Scenario 6 — Debit Card &amp; Payments</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"When will I get my card?"</span><span class="pb-msg-chip">"How do I activate my card?"</span><span class="pb-msg-chip">"My card is not working"</span><span class="pb-msg-chip">"I lost my card"</span><span class="pb-msg-chip">"Can I use my card abroad?"</span></div>
+            <div class="pb-h3">Key facts</div>
+            <ul class="pb-bullets">
+              <li>Virtual card issued instantly on account activation (one per account)</li>
+              <li>Physical card is optional: x INR card fee + delivery (y INR domestic / z INR international)</li>
+              <li>Current cards are RuPay — <strong>domestic India only</strong>. International support planned Q3 2026.</li>
+              <li>Card details auto-hide after 30 seconds (biometric needed to view again)</li>
+            </ul>
+            <div class="pb-h3">Default limits</div>
+            <table class="pb-table">
+              <tr><th>Channel</th><th>Limit</th></tr>
+              <tr><td>ATM withdrawal</td><td>₹20,000/transaction, ₹50,000/day</td></tr>
+              <tr><td>POS (merchant)</td><td>₹2,00,000/transaction</td></tr>
+              <tr><td>Online shopping</td><td>₹1,00,000/transaction</td></tr>
+              <tr><td>Tap-to-Pay</td><td>₹5,000/transaction</td></tr>
+            </table>
+            <div class="pb-h3">Decision tree — Card not working at ATM</div>
+            <ul class="pb-bullets">
+              <li>Check if ATM channel is enabled in app</li>
+              <li>Check if daily ATM limit is exhausted</li>
+              <li>Check if card is activated (physical) — virtual cards don't work at ATMs</li>
+              <li>If all checks pass → escalate to tech team</li>
+            </ul>
+            <div class="pb-h3">Lost or stolen card</div>
+            <ol class="pb-steps"><li data-n="1">Block card immediately (permanent block)</li><li data-n="2">Review recent transactions for unauthorized activity</li><li data-n="3">Order replacement (200 + 100 INR)</li><li data-n="4">If unauthorized transactions found → escalate to fraud/compliance</li></ol>
+            <div class="pb-h3">Response template — International card</div>
+            <div class="pb-template" id="pbt-s6a">Hi [Name], currently the debit card we issue is a RuPay card, which works at all domestic ATMs, POS machines, and online merchants within India. Unfortunately, international transactions are not supported yet.
+
+We're working on adding international card support, which is expected by Q2 2026. In the meantime, if you need to move funds to your overseas account, you can use the outward remittance feature in the app. Let me know if I can help with that!<button class="pb-copy-btn" onclick="pbCopy('pbt-s6a',this)">Copy</button></div>
+            <div class="pb-h3">Response template — Lost card</div>
+            <div class="pb-template" id="pbt-s6b">Hi [Name], I'm sorry to hear that. Let me help you secure your account right away.
+
+I've blocked your card to prevent any unauthorized use. Here's what happens next:
+1. Your card is now permanently blocked and cannot be reused
+2. I'll review your recent transactions — please let me know if you spot anything you didn't authorize
+3. I can order a replacement card for you (200 INR card fee + 100 INR delivery)
+
+Would you like me to go ahead and order the replacement?<button class="pb-copy-btn" onclick="pbCopy('pbt-s6b',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S7 -->
+        <div class="pb-scenario" id="pb-s7">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">↔️</div>
+            <div class="pb-scenario-title">Scenario 7 — NRO to NRE Transfers</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"How do I move money from NRO to NRE?"</span><span class="pb-msg-chip">"What is Form 15CA / 15CB?"</span><span class="pb-msg-chip">"My transfer got rejected"</span></div>
+            <div class="pb-h3">Key rules</div>
+            <ul class="pb-bullets">
+              <li>Annual limit: <strong>USD 1 million per financial year</strong> (April–March) — aggregate across ALL NRO accounts at ALL banks</li>
+              <li>Tax clearance is mandatory before transfer</li>
+              <li>If total FY transfers above ₹5 lakh: Form 15CB from CA required</li>
+            </ul>
+            <div class="pb-h3">Step-by-step process</div>
+            <ol class="pb-steps">
+              <li data-n="1">Customer checks remaining FY limit</li>
+              <li data-n="2">Gathers: passport, visa, PAN, NRO statement, source-of-funds proof</li>
+              <li data-n="3">Gets Form 15CB from CA (if transfers above ₹5 lakh in FY) — costs ₹500–1,500</li>
+              <li data-n="4">Files Form 15CA on incometax.gov.in (Part A ≤5 lakh, Part C + 15CB >5 lakh)</li>
+              <li data-n="5">Submits 15CA acknowledgement + 15CB + proofs to bank</li>
+              <li data-n="6">Bank debits NRO (principal + TDS + charges ₹250–1,000 + GST)</li>
+              <li data-n="7">NRE credited: same-day (intra-bank) or 1–3 working days</li>
+            </ol>
+            <div class="pb-h3">Common rejection reasons</div>
+            <table class="pb-table">
+              <tr><th>Reason</th><th>What to tell customer</th></tr>
+              <tr><td>Wrong Form 15CA part</td><td>"For transfers above ₹5 lakh in a FY, you need Part C of Form 15CA along with Form 15CB from your CA."</td></tr>
+              <tr><td>Unpaid TDS on past NRO interest</td><td>"All past TDS must be cleared before processing. Your CA can certify this via Form 15CB."</td></tr>
+              <tr><td>OTP not received</td><td>"If your Indian SIM isn't active, enable international roaming or request email-based OTP from the IT portal."</td></tr>
+            </table>
+            <div class="pb-h3">Response template</div>
+            <div class="pb-template" id="pbt-s7">Hi [Name], moving funds from your NRO to NRE account is possible and here's the process:
+
+1. Check your limit: The RBI allows up to USD 1 million per financial year (April–March) across all your NRO accounts at any bank
+2. Gather documents: Passport, PAN, latest NRO statement, and proof of how the funds were earned
+3. Tax clearance: If your total NRO-to-NRE transfers this year exceed ₹5 lakh, you'll need a CA to issue Form 15CB (typically ₹500–1,500)
+4. File Form 15CA on the Income Tax portal (incometax.gov.in)
+5. Submit to us: Share the 15CA acknowledgement, 15CB (if applicable), and supporting documents
+
+Once processed, funds typically credit your NRE account within 1–3 working days. Bank charges are ₹250–1,000 + GST. Let me know if you have questions!<button class="pb-copy-btn" onclick="pbCopy('pbt-s7',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S10 -->
+        <div class="pb-scenario" id="pb-s10">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">🧾</div>
+            <div class="pb-scenario-title">Scenario 10 — Tax-Related Questions</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"How much tax on NRO interest?"</span><span class="pb-msg-chip">"What is DTAA?"</span><span class="pb-msg-chip">"How do I reduce TDS?"</span><span class="pb-msg-chip">"Do I need to file tax returns in India?"</span></div>
+            <div class="pb-warning"><strong>Critical rule: We do NOT provide tax advice.</strong>Always recommend consulting a CA or tax advisor. You may only share factual information about how taxation works.</div>
+            <div class="pb-h3">Factual information agents CAN share</div>
+            <ul class="pb-bullets">
+              <li>NRE interest: Tax-free in India (savings and FD)</li>
+              <li>NRO interest: 30% TDS (+ surcharge and cess) deducted automatically</li>
+              <li>DTAA can reduce TDS rate (e.g., India-UK DTAA reduces interest TDS to 15%)</li>
+              <li>To claim DTAA: Tax Residency Certificate (TRC) + Form 10F required</li>
+              <li>For lower TDS upfront: apply via Form 13 on incometax.gov.in (takes 15–30 days)</li>
+              <li>Customer can claim TDS refund when filing Indian ITR</li>
+            </ul>
+            <div class="pb-warning"><strong>Agents must NOT:</strong>Tell customers whether they should file ITR · Calculate tax liability · Advise whether DTAA applies to their specific situation · Fill in or advise on Form 15CA/15CB · Interpret tax treaty provisions</div>
+            <div class="pb-h3">Response template — TDS on NRO</div>
+            <div class="pb-template" id="pbt-s10a">Hi [Name], interest earned on NRO accounts is subject to TDS at 30% (plus applicable surcharge and cess). This is automatically deducted by the bank before the interest is credited to your account.
+
+If you're a tax resident of a country with a DTAA with India — like the UK — you may be eligible for a reduced TDS rate. To claim this, you'd need to provide a Tax Residency Certificate from your country's tax authority (e.g., HMRC for the UK) along with Form 10F.
+
+Alternatively, you can apply for a Lower TDS Certificate (via Form 13 on the Income Tax portal) to get TDS deducted at a lower rate upfront.
+
+I'd recommend consulting a Chartered Accountant for guidance specific to your situation. Let me know if there's anything else I can help with!<button class="pb-copy-btn" onclick="pbCopy('pbt-s10a',this)">Copy</button></div>
+            <div class="pb-h3">Response template — DTAA</div>
+            <div class="pb-template" id="pbt-s10b">Hi [Name], DTAA stands for Double Taxation Avoidance Agreement. It's a treaty between India and another country (like the UK) that prevents you from being taxed on the same income in both countries.
+
+For example, under the India-UK DTAA, the TDS rate on NRO interest income can be reduced from 30% to 15%. To claim this benefit, you'd need to submit a Tax Residency Certificate (TRC) from HMRC and a Form 10F to the bank.
+
+DTAA doesn't eliminate tax entirely — it ensures you don't pay double tax. For the specifics of how it applies to your situation, a tax advisor would be the best person to consult.<button class="pb-copy-btn" onclick="pbCopy('pbt-s10b',this)">Copy</button></div>
+          </div>
+        </div>
+
+        <!-- S12 -->
+        <div class="pb-scenario" id="pb-s12">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">👤</div>
+            <div class="pb-scenario-title">Scenario 12 — Beneficiary Management</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"How do I add a beneficiary?"</span><span class="pb-msg-chip">"Why can't I send more than ₹50,000?"</span><span class="pb-msg-chip">"How do I add an international beneficiary?"</span></div>
+            <div class="pb-h3">Key rules</div>
+            <ul class="pb-bullets">
+              <li>New domestic beneficiary: verified via penny drop (5–10 seconds)</li>
+              <li><strong>24-hour cooling period</strong> on new beneficiaries: max ₹50,000/day, 2 transactions</li>
+              <li>After 24 hours: full limits apply (up to ₹30 lakh/day total third-party transfers)</li>
+              <li>International beneficiary screened against OFAC/UN sanctions lists</li>
+              <li>Maximum 30 transactions per day across all modes</li>
+            </ul>
+            <div class="pb-note">International beneficiary feature coming soon. Direct customers to wait for the announcement.</div>
+            <div class="pb-h3">International beneficiary requirements</div>
+            <table class="pb-table">
+              <tr><th>Country</th><th>Required fields</th></tr>
+              <tr><td>UK</td><td>Name, address, Sort Code or IBAN, account number, BIC/SWIFT</td></tr>
+              <tr><td>UAE</td><td>Name, address, IBAN (23 chars, starts with AE), BIC/SWIFT</td></tr>
+              <tr><td>USA</td><td>Name, address, ABA routing number, account number, BIC/SWIFT</td></tr>
+            </table>
+            <div class="pb-h3">Response template — Cooling period</div>
+            <div class="pb-template" id="pbt-s12">Hi [Name], the transfer limit you're seeing is part of our security measures. When you add a new beneficiary, there's a 24-hour cooling period during which transfers are limited to ₹50,000 per day (maximum 2 transactions). This protects you against unauthorized transfers.
+
+After 24 hours, your full transfer limits will automatically apply. In the meantime, if this is urgent and you need to send a larger amount, please let me know and I can explore options.<button class="pb-copy-btn" onclick="pbCopy('pbt-s12',this)">Copy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART C -->
+      <div class="pb-part" id="pb-partC">
+        <div class="pb-part-title">Part C — Escalation</div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">⬆️</div>
+            <div class="pb-scenario-title">Escalation Do's and Don'ts</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-h3">Do</div>
+            <ul class="pb-bullets">
+              <li>Always include the customer's application/account ID in escalations</li>
+              <li>Document what you've already tried before escalating</li>
+              <li>Set expectations with the customer on when they'll hear back</li>
+              <li>Follow up on escalations if SLA is breached</li>
+            </ul>
+            <div class="pb-h3">Don't</div>
+            <ul class="pb-bullets">
+              <li>Don't escalate without first trying to resolve at your level</li>
+              <li>Don't tell the customer "someone will get back to you" without giving a timeframe</li>
+              <li>Don't escalate KYC rejections as "discrepancies" — they are handled differently</li>
+              <li>Don't escalate tax advice questions — these are out of scope for all levels. Direct to a CA.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART D -->
+      <div class="pb-part" id="pb-partD">
+        <div class="pb-part-title">Part D — Do's and Don'ts for All Agents</div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">✅</div>
+            <div class="pb-scenario-title">Always Do</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <ul class="pb-bullets">
+              <li>Verify identity before sharing any account-specific information</li>
+              <li>Use the customer's name in responses</li>
+              <li>Set clear expectations on timelines ("within 24 hours" is better than "soon")</li>
+              <li>Log every interaction with resolution status</li>
+              <li>Recommend both NRE and NRO when customers ask about account types</li>
+              <li>Remind customers about the 30-day FATCA update obligation if they mention moving countries</li>
+              <li>Check for pending transactions before processing any account changes</li>
+              <li>Use response templates as a starting point but personalize them</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">🚫</div>
+            <div class="pb-scenario-title">Never Do</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <ul class="pb-bullets">
+              <li><strong>Never provide tax advice</strong> — no DTAA guidance, purpose codes, ITR advice, or Form 15CA/15CB. Always direct to a CA.</li>
+              <li>Never share internal system details (vendor names, API details, internal processes) with customers</li>
+              <li>Never promise specific timelines for compliance approvals</li>
+              <li>Never attempt to override AML/sanctions rejections</li>
+              <li>Never enter or handle customer passwords, PINs, or OTPs</li>
+              <li>Never share one customer's information with another, even if they claim to be family</li>
+              <li>Never tell a customer they were flagged for sanctions/AML — say "could not be approved after compliance review"</li>
+              <li>Never process account changes without proper identity verification</li>
+              <li>Never rush a compliance review even if the customer is upset</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART E -->
+      <div class="pb-part" id="pb-partE">
+        <div class="pb-part-title">Part E — Quick Reference</div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">⚡</div>
+            <div class="pb-scenario-title">Key Numbers at a Glance</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-note" style="margin-bottom:12px">⚠️ <em>Suyash to get back with updated and final values post confirmation with bank</em></div>
+            <table class="pb-table">
+              <tr><th>Item</th><th>Value</th></tr>
+              <tr><td>NRO repatriation limit</td><td>USD 1 million per financial year</td></tr>
+              <tr><td>NRE repatriation limit</td><td>Unlimited</td></tr>
+              <tr><td>NRO TDS rate</td><td>30% + surcharge + cess</td></tr>
+              <tr><td>DTAA rate (India-UK) for interest</td><td>15%</td></tr>
+              <tr><td>KYC correction window</td><td>30 days, max 3 attempts</td></tr>
+              <tr><td>FATCA update obligation</td><td>Within 30 days of change</td></tr>
+              <tr><td>MPIN lockout (3 wrong)</td><td>15-minute cooldown</td></tr>
+              <tr><td>MPIN lockout (5 wrong)</td><td>24-hour lockout or immediate reset</td></tr>
+              <tr><td>New beneficiary cooling period</td><td>24 hours, max ₹50,000/day, 2 transactions</td></tr>
+              <tr><td>Daily transaction limit</td><td>30 transactions</td></tr>
+              <tr><td>Daily third-party transfer cap</td><td>₹30,00,000</td></tr>
+              <tr><td>Minimum remittance amount</td><td>₹1,000</td></tr>
+              <tr><td>Remittance AML review threshold</td><td>₹25,00,000</td></tr>
+              <tr><td>Welcome pack dispatch (before 10:59 AM UK)</td><td>Same business day</td></tr>
+              <tr><td>Welcome pack delivery (UK)</td><td>1–2 business days</td></tr>
+              <tr><td>Welcome pack delivery (UAE)</td><td>2–3 business days</td></tr>
+              <tr><td>Physical card activation deadline</td><td>30 days from receipt</td></tr>
+              <tr><td>Form 15CB threshold</td><td>Total FY transfers above ₹5 lakh</td></tr>
+              <tr><td>Lower TDS Certificate processing</td><td>15–30 days</td></tr>
+              <tr><td>FEMA violation penalty</td><td>Up to ₹2 lakh + ₹5,000/day</td></tr>
+              <tr><td>DICGC deposit insurance</td><td>Up to ₹5 lakh per depositor per bank</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">📞</div>
+            <div class="pb-scenario-title">Support Contact Channels</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Channel</th><th>Availability</th></tr>
+              <tr><td>In-app chat</td><td>24x7</td></tr>
+              <tr><td>Email</td><td>Business hours</td></tr>
+              <tr><td>Phone</td><td>Business hours</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="pb-scenario">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">📖</div>
+            <div class="pb-scenario-title">Glossary of Key Terms</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Term</th><th>Meaning</th></tr>
+              <tr><td>NRE</td><td>Non-Resident External account (for foreign earnings)</td></tr>
+              <tr><td>NRO</td><td>Non-Resident Ordinary account (for Indian income)</td></tr>
+              <tr><td>NRI</td><td>Non-Resident Indian</td></tr>
+              <tr><td>PIO</td><td>Person of Indian Origin</td></tr>
+              <tr><td>OCI</td><td>Overseas Citizen of India</td></tr>
+              <tr><td>FEMA</td><td>Foreign Exchange Management Act</td></tr>
+              <tr><td>FATCA</td><td>Foreign Account Tax Compliance Act (US law)</td></tr>
+              <tr><td>CRS</td><td>Common Reporting Standard (global tax reporting)</td></tr>
+              <tr><td>TDS</td><td>Tax Deducted at Source</td></tr>
+              <tr><td>DTAA</td><td>Double Taxation Avoidance Agreement</td></tr>
+              <tr><td>TRC</td><td>Tax Residency Certificate</td></tr>
+              <tr><td>TIN</td><td>Tax Identification Number</td></tr>
+              <tr><td>PAN</td><td>Permanent Account Number (Indian tax ID)</td></tr>
+              <tr><td>MPIN</td><td>Mobile Personal Identification Number (6-digit login PIN)</td></tr>
+              <tr><td>KYC</td><td>Know Your Customer</td></tr>
+              <tr><td>AML</td><td>Anti-Money Laundering</td></tr>
+              <tr><td>PEP</td><td>Politically Exposed Person</td></tr>
+              <tr><td>RON</td><td>Remote Online Notarization</td></tr>
+              <tr><td>SWIFT</td><td>Society for Worldwide Interbank Financial Telecommunication</td></tr>
+              <tr><td>MT103</td><td>SWIFT message type for single customer credit transfers</td></tr>
+              <tr><td>NEFT</td><td>National Electronic Funds Transfer</td></tr>
+              <tr><td>RTGS</td><td>Real Time Gross Settlement</td></tr>
+              <tr><td>IMPS</td><td>Immediate Payment Service</td></tr>
+              <tr><td>UPI</td><td>Unified Payments Interface</td></tr>
+              <tr><td>SSFB</td><td>Shivalik Small Finance Bank</td></tr>
+              <tr><td>DICGC</td><td>Deposit Insurance and Credit Guarantee Corporation</td></tr>
+              <tr><td>CBDT</td><td>Central Board of Direct Taxes</td></tr>
+              <tr><td>FIU</td><td>Financial Intelligence Unit</td></tr>
+              <tr><td>AD Bank</td><td>Authorized Dealer bank (licensed to deal in forex)</td></tr>
+              <tr><td>CA</td><td>Chartered Accountant</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- #pb-all -->
+  </div><!-- #panel-playbook -->
 
 </div>
 
@@ -730,13 +1330,43 @@ function updateCap(num, idx, val) {
 }
 
 function switchTab(id) {
-  var ids = ['stages','objections','crm','whatsapp','checklist'];
+  var ids = ['stages','objections','crm','whatsapp','checklist','playbook'];
   var tabs = document.querySelectorAll('.tab');
   var panels = document.querySelectorAll('.panel');
   for (var i = 0; i < ids.length; i++) {
     tabs[i].classList.toggle('active', ids[i] === id);
     panels[i].classList.toggle('active', ids[i] === id);
   }
+}
+
+function pbToggle(hdr) {
+  var body = hdr.nextElementSibling;
+  var chevron = hdr.querySelector('.chevron');
+  var open = body.classList.toggle('open');
+  if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function pbScrollTo(id) {
+  var el = document.getElementById(id);
+  if (el) { switchTab('playbook'); setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 50); }
+}
+
+function pbCopy(id, btn) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var text = el.childNodes[0] ? el.childNodes[0].textContent.trim() : el.textContent.trim();
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent; btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.textContent = orig; }, 1800);
+  });
+}
+
+function pbSearch() {
+  var q = document.getElementById('pb-search').value.toLowerCase();
+  var scenarios = document.querySelectorAll('#panel-playbook .pb-scenario');
+  scenarios.forEach(function(s) {
+    s.style.display = (!q || s.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
 }
 
 function copyEl(id) {
