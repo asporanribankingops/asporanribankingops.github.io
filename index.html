@@ -275,9 +275,13 @@ I will personally assist you through each step once you are ready.</div>
       .pb-warning{background:var(--danger-bg);border:.5px solid var(--danger-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--danger-text);margin-bottom:8px}
       .pb-warning strong{display:block;margin-bottom:3px}
       .pb-ok{background:var(--ok-bg);border:.5px solid var(--ok-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--ok-text);margin-bottom:8px}
-      .pb-template{background:var(--bg2);border-left:3px solid var(--info-border);border-radius:0 var(--r) var(--r) 0;padding:12px 14px;font-size:13px;line-height:1.75;white-space:pre-wrap;margin-bottom:6px;position:relative}
-      .pb-copy-btn{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:11px;cursor:pointer}
-      .pb-copy-btn:hover{background:var(--info-bg);color:var(--info-text)}
+      .pb-template{background:var(--bg2);border-left:3px solid var(--info-border);border-radius:0 var(--r) var(--r) 0;padding:12px 14px 40px;font-size:13px;line-height:1.75;white-space:pre-wrap;margin-bottom:6px;position:relative}
+      .pb-template textarea{width:100%;min-height:140px;padding:0;border:none;background:transparent;color:var(--text);font-size:13px;line-height:1.75;font-family:inherit;resize:vertical;outline:none;white-space:pre-wrap}
+      .pb-tpl-actions{position:absolute;bottom:8px;right:8px;display:flex;gap:5px}
+      .pb-copy-btn,.pb-edit-btn,.pb-save-btn,.pb-cancel-btn,.pb-reset-btn{padding:4px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:11px;cursor:pointer;white-space:nowrap}
+      .pb-copy-btn:hover,.pb-edit-btn:hover{background:var(--info-bg);color:var(--info-text)}
+      .pb-save-btn{background:var(--ok-bg);color:var(--ok-text);border-color:var(--ok-border)}
+      .pb-reset-btn{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
       .pb-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}
       .pb-table th{text-align:left;padding:8px 12px;background:var(--bg2);font-size:11px;color:var(--text2);font-weight:700;border-bottom:.5px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
       .pb-table td{padding:9px 12px;border-bottom:.5px solid var(--border);vertical-align:top;line-height:1.5}
@@ -1367,6 +1371,92 @@ function pbSearch() {
   scenarios.forEach(function(s) {
     s.style.display = (!q || s.textContent.toLowerCase().includes(q)) ? '' : 'none';
   });
+}
+
+// ── Playbook template edit/save/reset ───────────────────────
+(function initPbTemplates() {
+  document.querySelectorAll('.pb-template').forEach(function(el) {
+    var id = el.id; if (!id) return;
+    // extract original text (everything except child buttons)
+    var orig = Array.from(el.childNodes)
+      .filter(function(n){ return n.nodeType === 3; })
+      .map(function(n){ return n.textContent; }).join('').trim();
+    el._origText = orig;
+    // load saved value
+    var saved = localStorage.getItem('pb_tpl_' + id);
+    var current = saved || orig;
+    // rebuild element
+    el.innerHTML = '';
+    var span = document.createElement('span');
+    span.className = 'pb-tpl-text'; span.textContent = current;
+    el.appendChild(span);
+    var actions = document.createElement('div');
+    actions.className = 'pb-tpl-actions';
+    actions.innerHTML =
+      '<button class="pb-copy-btn" onclick="pbCopyTpl(\'' + id + '\',this)">Copy</button>' +
+      '<button class="pb-edit-btn" onclick="pbEditTpl(\'' + id + '\')">Edit</button>';
+    el.appendChild(actions);
+  });
+})();
+
+function pbCopyTpl(id, btn) {
+  var el = document.getElementById(id); if (!el) return;
+  var span = el.querySelector('.pb-tpl-text');
+  var ta = el.querySelector('textarea');
+  var text = (ta ? ta.value : span ? span.textContent : '').trim();
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = btn.textContent; btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.textContent = orig; }, 1800);
+  });
+}
+
+function pbEditTpl(id) {
+  var el = document.getElementById(id); if (!el) return;
+  var span = el.querySelector('.pb-tpl-text');
+  var current = span ? span.textContent : '';
+  span.style.display = 'none';
+  var ta = document.createElement('textarea');
+  ta.value = current; ta.rows = current.split('\n').length + 2;
+  el.insertBefore(ta, el.querySelector('.pb-tpl-actions'));
+  var actions = el.querySelector('.pb-tpl-actions');
+  actions.innerHTML =
+    '<button class="pb-save-btn" onclick="pbSaveTpl(\'' + id + '\')">Save</button>' +
+    '<button class="pb-cancel-btn" onclick="pbCancelTpl(\'' + id + '\')">Cancel</button>' +
+    '<button class="pb-reset-btn" onclick="pbResetTpl(\'' + id + '\')">Reset</button>' +
+    '<button class="pb-copy-btn" onclick="pbCopyTpl(\'' + id + '\',this)">Copy</button>';
+}
+
+function pbSaveTpl(id) {
+  var el = document.getElementById(id); if (!el) return;
+  var ta = el.querySelector('textarea');
+  var val = ta ? ta.value : '';
+  localStorage.setItem('pb_tpl_' + id, val);
+  _pbExitEdit(id, val);
+  toast('Saved');
+}
+
+function pbCancelTpl(id) {
+  var el = document.getElementById(id); if (!el) return;
+  var span = el.querySelector('.pb-tpl-text');
+  _pbExitEdit(id, span ? span.textContent : el._origText);
+}
+
+function pbResetTpl(id) {
+  var el = document.getElementById(id); if (!el) return;
+  localStorage.removeItem('pb_tpl_' + id);
+  _pbExitEdit(id, el._origText);
+  toast('Reset to original');
+}
+
+function _pbExitEdit(id, text) {
+  var el = document.getElementById(id); if (!el) return;
+  var ta = el.querySelector('textarea'); if (ta) ta.remove();
+  var span = el.querySelector('.pb-tpl-text');
+  if (span) { span.textContent = text; span.style.display = ''; }
+  var actions = el.querySelector('.pb-tpl-actions');
+  actions.innerHTML =
+    '<button class="pb-copy-btn" onclick="pbCopyTpl(\'' + id + '\',this)">Copy</button>' +
+    '<button class="pb-edit-btn" onclick="pbEditTpl(\'' + id + '\')">Edit</button>';
 }
 
 function copyEl(id) {
