@@ -779,6 +779,62 @@ function resetCl() { checks = {}; renderCl(); }
 
 renderStages(STAGES);
 renderCl();
+
+// ── Audit Log ────────────────────────────────────────────────
+(function() {
+  const REPO = 'monishantharaju-del/nri-rm-sop';
+  const el = document.getElementById('audit-log-entries');
+  if (!el) return;
+
+  fetch(`https://api.github.com/repos/${REPO}/commits?per_page=30`)
+    .then(r => r.json())
+    .then(commits => {
+      if (!Array.isArray(commits) || commits.length === 0) {
+        el.innerHTML = '<p style="color:var(--text3);font-size:.85rem">No changes recorded yet.</p>';
+        return;
+      }
+      el.innerHTML = commits.map((c, i) => {
+        const author = c.commit.author.name || c.author?.login || 'Unknown';
+        const login  = c.author?.login ? `@${c.author.login}` : '';
+        const date   = new Date(c.commit.author.date);
+        const msg    = c.commit.message.split('\n')[0];
+        const sha    = c.sha.slice(0, 7);
+        const url    = c.html_url;
+        const dateStr = date.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+        const timeStr = date.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+        return `
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border);${i===0?'':''}">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">
+              ${i === 0 ? '✏️' : '📝'}
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:.9rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${msg}</div>
+              <div style="font-size:.8rem;color:var(--text2);margin-top:3px">
+                <strong>${author}</strong>${login ? ` (${login})` : ''} &nbsp;·&nbsp; ${dateStr} at ${timeStr}
+              </div>
+            </div>
+            <a href="${url}" target="_blank" style="font-size:.75rem;color:var(--info-text);text-decoration:none;font-family:monospace;flex-shrink:0;padding-top:2px">${sha}</a>
+          </div>`;
+      }).join('');
+    })
+    .catch(() => {
+      el.innerHTML = '<p style="color:var(--text3);font-size:.85rem">Could not load audit log.</p>';
+    });
+})();
 </script>
+
+<!-- Audit Log Panel -->
+<div style="max-width:860px;margin:48px auto 64px;padding:0 20px">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <span style="font-size:1.1rem">🔍</span>
+      <h2 style="font-size:1rem;font-weight:700;color:var(--text)">Audit Log</h2>
+      <span style="font-size:.75rem;color:var(--text3);margin-left:auto">Auto-updated from GitHub</span>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-bottom:16px">Every content change is recorded with author, timestamp, and commit details.</p>
+    <div id="audit-log-entries" style="color:var(--text3);font-size:.85rem">Loading…</div>
+  </div>
+</div>
+
 </body>
 </html>
