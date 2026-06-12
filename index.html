@@ -204,6 +204,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <body>
 
 <!-- Settings modal -->
+<!-- New Page creation modal -->
+<div class="modal-overlay" id="cp-create-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="max-width:420px">
+    <h2>📄 Create New Page</h2>
+    <label class="modal-label">Page name</label>
+    <input class="modal-input" id="cp-new-name" type="text" placeholder="e.g. Product FAQs" onkeydown="if(event.key==='Enter')cpCreateConfirm()">
+    <label class="modal-label" style="margin-top:14px">Choose a colour</label>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="cp-colour-swatches"></div>
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="btn" style="flex:1" onclick="document.getElementById('cp-create-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-blue" style="flex:2" onclick="cpCreateConfirm()"><i class="ti ti-plus"></i> Create page</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settings-modal">
   <div class="modal-box">
     <h2>🔑 GitHub Sync Setup</h2>
@@ -452,7 +467,10 @@ I will personally assist you through each step once you are ready.</div>
       .cp-section-content{width:100%;min-height:100px;font-size:14px;line-height:1.7;color:var(--text1);background:transparent;border:none;outline:none;resize:vertical;font-family:inherit}
       .cp-section-content:focus{background:var(--bg2);border-radius:6px;padding:10px;border:.5px solid var(--border2)}
       .cp-page-title-input{font-size:22px;font-weight:700;border:none;outline:none;background:transparent;color:var(--text1);width:100%}
-      .cp-page-title-input:focus{background:var(--bg2);border-radius:6px;padding:4px 10px}
+      .cp-page-title-input:focus{background:rgba(255,255,255,.5);border-radius:6px;padding:4px 10px}
+      .cp-col-swatch{transition:transform .15s,border-color .15s}
+      .cp-col-swatch.selected{border-color:#fff !important;box-shadow:0 0 0 3px #333;transform:scale(1.15)}
+      .cp-col-swatch:hover{transform:scale(1.1)}
       .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
       .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
       .pb-part{margin-bottom:32px}
@@ -3845,29 +3863,62 @@ var CP_KEY = 'custom_pages_v1';
 function cpLoad() { try { return JSON.parse(localStorage.getItem(CP_KEY)) || []; } catch(e) { return []; } }
 function cpSave(arr) { localStorage.setItem(CP_KEY, JSON.stringify(arr)); ghMarkPending(); }
 
+var CP_COLOURS = [
+  {label:'Blue',    bg:'#dbeafe', border:'#3b82f6', text:'#1d4ed8'},
+  {label:'Green',   bg:'#dcfce7', border:'#22c55e', text:'#15803d'},
+  {label:'Purple',  bg:'#ede9fe', border:'#8b5cf6', text:'#6d28d9'},
+  {label:'Orange',  bg:'#ffedd5', border:'#f97316', text:'#c2410c'},
+  {label:'Pink',    bg:'#fce7f3', border:'#ec4899', text:'#be185d'},
+  {label:'Teal',    bg:'#ccfbf1', border:'#14b8a6', text:'#0f766e'},
+  {label:'Red',     bg:'#fee2e2', border:'#ef4444', text:'#b91c1c'},
+  {label:'Amber',   bg:'#fef9c3', border:'#eab308', text:'#a16207'},
+];
+
 function cpAddPage() {
+  document.getElementById('cp-create-modal').classList.add('open');
+  document.getElementById('cp-new-name').value = '';
+  document.getElementById('cp-new-name').focus();
+  // reset colour selection
+  document.querySelectorAll('.cp-col-swatch').forEach(function(s,i){ s.classList.toggle('selected', i===0); });
+}
+function cpCreateConfirm() {
+  var name = document.getElementById('cp-new-name').value.trim() || 'New Page';
+  var selSwatch = document.querySelector('.cp-col-swatch.selected');
+  var ci = selSwatch ? +selSwatch.dataset.ci : 0;
+  var col = CP_COLOURS[ci];
   var arr = cpLoad();
   var id = 'cp_' + Date.now();
-  arr.push({ id: id, title: 'New Page', sections: [] });
+  arr.push({ id: id, title: name, colour: ci, sections: [] });
   cpSave(arr);
+  document.getElementById('cp-create-modal').classList.remove('open');
   cpRender();
   switchTab(id);
 }
+function cpSelectColour(ci) {
+  document.querySelectorAll('.cp-col-swatch').forEach(function(s){ s.classList.remove('selected'); });
+  document.querySelector('.cp-col-swatch[data-ci="' + ci + '"]').classList.add('selected');
+}
 
 function cpRender() {
-  // Render tab buttons
   var arr = cpLoad();
+  // Render tab buttons with colour
   var btns = document.getElementById('custom-tabs-btns');
   if (btns) {
     btns.innerHTML = arr.map(function(p) {
-      return '<button class="tab" data-tab="' + p.id + '" onclick="switchTab(\'' + p.id + '\')" style="position:relative">' +
-        '<i class="ti ti-file-text" style="font-size:14px"></i> ' + esc(p.title) + '</button>';
+      var col = CP_COLOURS[p.colour || 0];
+      return '<button class="tab" data-tab="' + p.id + '" onclick="switchTab(\'' + p.id + '\')" ' +
+        'style="border-color:' + col.border + ';color:' + col.text + '">' +
+        '<span style="width:8px;height:8px;border-radius:50%;background:' + col.border + ';display:inline-block;margin-right:5px"></span>' +
+        esc(p.title) +
+        '<button onclick="event.stopPropagation();cpDeletePageById(\'' + p.id + '\')" style="margin-left:6px;background:none;border:none;cursor:pointer;color:' + col.text + ';opacity:.6;font-size:13px;padding:0 2px" title="Delete page">×</button>' +
+        '</button>';
     }).join('');
   }
   // Render panels
   var container = document.getElementById('custom-pages-panels');
   if (!container) return;
   container.innerHTML = arr.map(function(page, pi) {
+    var col = CP_COLOURS[page.colour || 0];
     var secs = page.sections || [];
     var secsHtml = secs.map(function(sec, si) {
       var imgs = (sec.images || []).map(function(img, ii) {
@@ -3879,7 +3930,7 @@ function cpRender() {
       return '<div class="cp-section">' +
         '<div class="cp-section-hdr">' +
           '<input class="cp-section-title" value="' + esc(sec.title) + '" placeholder="Section title" oninput="cpUpdateSecTitle(' + pi + ',' + si + ',this.value)">' +
-          '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border)" onclick="cpDelSec(' + pi + ',' + si + ')"><i class="ti ti-trash" style="font-size:12px"></i></button>' +
+          '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border)" onclick="cpDelSec(' + pi + ',' + si + ')"><i class="ti ti-trash" style="font-size:12px"></i> Delete section</button>' +
         '</div>' +
         '<div class="cp-section-body">' +
           '<textarea class="cp-section-content" placeholder="Write content, scripts, notes, instructions…" oninput="cpUpdateSecContent(' + pi + ',' + si + ',this.value)">' + esc(sec.content || '') + '</textarea>' +
@@ -3894,12 +3945,14 @@ function cpRender() {
     }).join('');
 
     return '<div id="panel-' + page.id + '" class="panel">' +
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">' +
-        '<input class="cp-page-title-input" value="' + esc(page.title) + '" placeholder="Page title" oninput="cpUpdateTitle(' + pi + ',this.value)">' +
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;padding:14px 18px;background:' + col.bg + ';border-radius:10px;border:.5px solid ' + col.border + '">' +
+        '<span style="width:14px;height:14px;border-radius:50%;background:' + col.border + ';flex-shrink:0"></span>' +
+        '<input class="cp-page-title-input" value="' + esc(page.title) + '" placeholder="Page title" oninput="cpUpdateTitle(' + pi + ',this.value)" style="color:' + col.text + '">' +
+        '<button class="btn btn-sm" onclick="cpChangeColour(' + pi + ')" style="white-space:nowrap;border-color:' + col.border + ';color:' + col.text + ';background:' + col.bg + '"><i class="ti ti-palette" style="font-size:12px"></i> Colour</button>' +
         '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border);white-space:nowrap" onclick="cpDeletePage(' + pi + ')"><i class="ti ti-trash" style="font-size:12px"></i> Delete page</button>' +
       '</div>' +
       secsHtml +
-      '<button class="pbm-add-btn" onclick="cpAddSection(' + pi + ')"><i class="ti ti-plus" style="font-size:12px"></i> Add section</button>' +
+      '<button class="pbm-add-btn" style="margin-top:12px" onclick="cpAddSection(' + pi + ')"><i class="ti ti-plus" style="font-size:12px"></i> Add section</button>' +
     '</div>';
   }).join('');
 }
@@ -3907,9 +3960,19 @@ function cpRender() {
 function cpUpdateTitle(pi, val) {
   var arr = cpLoad(); if (!arr[pi]) return;
   arr[pi].title = val; cpSave(arr);
-  // update tab button label live
-  var btn = document.querySelector('[data-tab="' + arr[pi].id + '"]');
-  if (btn) btn.innerHTML = '<i class="ti ti-file-text" style="font-size:14px"></i> ' + esc(val);
+  cpRender(); // re-render tabs to update button label
+}
+function cpChangeColour(pi) {
+  // cycle through colours
+  var arr = cpLoad(); if (!arr[pi]) return;
+  arr[pi].colour = ((arr[pi].colour || 0) + 1) % CP_COLOURS.length;
+  cpSave(arr); cpRender(); switchTab(arr[pi].id);
+}
+function cpDeletePageById(id) {
+  var arr = cpLoad();
+  var pi = arr.findIndex(function(p){ return p.id === id; });
+  if (pi === -1) return;
+  cpDeletePage(pi);
 }
 function cpUpdateSecTitle(pi, si, val) {
   var arr = cpLoad(); if (!arr[pi] || !arr[pi].sections[si]) return;
@@ -3970,7 +4033,17 @@ function cpAddImgs(pi, si, input) {
   input.value = '';
 }
 
-(function cpInit() { cpRender(); })();
+(function cpInit() {
+  // Build colour swatches in modal
+  var sw = document.getElementById('cp-colour-swatches');
+  if (sw) {
+    sw.innerHTML = CP_COLOURS.map(function(c, i) {
+      return '<div class="cp-col-swatch' + (i===0?' selected':'') + '" data-ci="' + i + '" onclick="cpSelectColour(' + i + ')" ' +
+        'style="width:32px;height:32px;border-radius:50%;background:' + c.border + ';cursor:pointer;border:3px solid transparent" title="' + c.label + '"></div>';
+    }).join('');
+  }
+  cpRender();
+})();
 
 // ── Stage Custom Sections ─────────────────────────────────────
 var CS_KEY = 'stages_custom_sections';
