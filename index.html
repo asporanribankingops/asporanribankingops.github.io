@@ -129,15 +129,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .lb img{max-width:90vw;max-height:85vh;border-radius:var(--rl)}
 .lb-close{position:fixed;top:20px;right:24px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none}
 .lb-cap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.5);padding:6px 16px;border-radius:100px;max-width:80vw;text-align:center}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:32px;cursor:pointer;background:rgba(0,0,0,.35);border:none;width:48px;height:64px;border-radius:8px;display:flex;align-items:center;justify-content:center;z-index:1000;transition:background .15s;user-select:none}
+.lb-nav:hover{background:rgba(0,0,0,.65)}
+.lb-nav.lb-prev{left:16px}
+.lb-nav.lb-next{right:16px}
+.lb-nav:disabled{opacity:.2;cursor:default}
+.lb-counter{position:fixed;top:18px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.4);padding:4px 14px;border-radius:100px}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:var(--bg);font-size:13px;padding:8px 20px;border-radius:100px;z-index:9999;transition:transform .25s;white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<div class="lb" id="lb" onclick="closeLb()">
+<div class="lb" id="lb">
   <button class="lb-close" onclick="closeLb()"><i class="ti ti-x"></i></button>
-  <img id="lb-img" src="" alt="">
+  <button class="lb-nav lb-prev" id="lb-prev" onclick="lbNav(-1)">&#8592;</button>
+  <img id="lb-img" src="" alt="" onclick="lbNav(1)">
+  <button class="lb-nav lb-next" id="lb-next" onclick="lbNav(1)">&#8594;</button>
+  <div class="lb-counter" id="lb-counter"></div>
   <div class="lb-cap" id="lb-cap"></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -2273,34 +2282,15 @@ function stageHtml(s) {
       if (images.length) {
         h += '<div class="script-with-imgs">';
         h += '<div class="script-view">' + esc(script) + '</div>';
-        if (images.length === 1) {
-          var vimg = images[0];
-          h += '<div class="view-imgs"><div class="view-img-wrap"><img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
+        var imgSetId = 'imgs_' + s.num;
+        h += '<div class="view-imgs" id="' + imgSetId + '">';
+        for (var vi = 0; vi < images.length; vi++) {
+          var vimg = images[vi];
+          h += '<div class="view-img-wrap"><img src="' + esc(vimg.data) + '" alt="' + esc(vimg.caption||'') + '" onclick="openLbSet(\'' + imgSetId + '\',' + vi + ')">';
           if (vimg.caption) h += '<div class="view-img-cap">' + esc(vimg.caption) + '</div>';
-          h += '</div></div>';
-        } else {
-          var cid = 'car_' + s.num;
-          h += '<div class="img-carousel" id="' + cid + '" data-idx="0">';
-          h += '<div class="img-carousel-track">';
-          for (var vi = 0; vi < images.length; vi++) {
-            var vimg = images[vi];
-            h += '<img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" style="display:' + (vi===0?'block':'none') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
-          }
-          h += '</div>';
-          h += '<div class="img-carousel-nav">';
-          h += '<button class="img-carousel-btn" onclick="carNav(\'' + cid + '\',-1)" disabled>&#8592;</button>';
-          h += '<span class="img-carousel-counter">1 / ' + images.length + '</span>';
-          h += '<button class="img-carousel-btn" onclick="carNav(\'' + cid + '\',1)"' + (images.length<=1?' disabled':'') + '>&#8594;</button>';
-          h += '</div>';
-          h += '<div class="img-carousel-dots">';
-          for (var di = 0; di < images.length; di++) {
-            h += '<div class="img-carousel-dot' + (di===0?' active':'') + '" onclick="carGoto(\'' + cid + '\',' + di + ')"></div>';
-          }
-          h += '</div>';
-          if (images[0].caption) h += '<div class="view-img-cap" id="' + cid + '_cap">' + esc(images[0].caption) + '</div>';
           h += '</div>';
         }
-        h += '</div>';
+        h += '</div></div>';
       } else {
         h += '<div class="script-view">' + esc(script) + '</div>';
       }
@@ -2854,15 +2844,60 @@ function carGoto(cid, target) {
   carNav(cid, target - current);
 }
 
+var _lbImgs = [];
+var _lbIdx = 0;
+
+function openLbSet(setId, idx) {
+  var container = document.getElementById(setId);
+  if (!container) return;
+  var imgs = container.querySelectorAll('.view-img-wrap img');
+  _lbImgs = Array.from(imgs).map(function(img) {
+    return { src: img.src, cap: img.alt || '' };
+  });
+  _lbIdx = idx || 0;
+  _lbShow();
+}
+
 function openLb(src, cap) {
-  document.getElementById('lb-img').src = src;
+  _lbImgs = [{ src: src, cap: cap || '' }];
+  _lbIdx = 0;
+  _lbShow();
+}
+
+function _lbShow() {
+  var entry = _lbImgs[_lbIdx];
+  document.getElementById('lb-img').src = entry.src;
   var capEl = document.getElementById('lb-cap');
-  capEl.textContent = cap||'';
-  capEl.style.display = cap ? 'block' : 'none';
+  capEl.textContent = entry.cap;
+  capEl.style.display = entry.cap ? 'block' : 'none';
+  var counter = document.getElementById('lb-counter');
+  if (_lbImgs.length > 1) {
+    counter.textContent = (_lbIdx + 1) + ' / ' + _lbImgs.length;
+    counter.style.display = 'block';
+  } else {
+    counter.style.display = 'none';
+  }
+  document.getElementById('lb-prev').disabled = _lbIdx === 0;
+  document.getElementById('lb-next').disabled = _lbIdx === _lbImgs.length - 1;
+  document.getElementById('lb-prev').style.display = _lbImgs.length > 1 ? 'flex' : 'none';
+  document.getElementById('lb-next').style.display = _lbImgs.length > 1 ? 'flex' : 'none';
   document.getElementById('lb').classList.add('open');
 }
+
+function lbNav(dir) {
+  _lbIdx = Math.max(0, Math.min(_lbImgs.length - 1, _lbIdx + dir));
+  _lbShow();
+}
+
 function closeLb() { document.getElementById('lb').classList.remove('open'); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+document.getElementById('lb').addEventListener('click', function(e) {
+  if (e.target === this) closeLb();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft') lbNav(-1);
+});
 
 function toast(msg) {
   var t = document.getElementById('toast');
