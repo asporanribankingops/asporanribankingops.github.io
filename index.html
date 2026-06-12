@@ -265,7 +265,10 @@ I will personally assist you through each step once you are ready.</div>
       .pb-sec-save{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--ok-border);background:var(--ok-bg);color:var(--ok-text);font-size:12px;cursor:pointer;font-weight:600}
       .pb-sec-cancel{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;cursor:pointer}
       .pb-sec-reset{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--danger-border);background:var(--danger-bg);color:var(--danger-text);font-size:12px;cursor:pointer}
+      .pb-sec-delete{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--danger-border);background:var(--danger-bg);color:var(--danger-text);font-size:12px;cursor:pointer}
       .pb-sec-hint{font-size:11px;color:var(--info-text);margin-left:auto;align-self:center}
+      .pbm-add-btn{display:flex;align-items:center;gap:6px;margin:10px 0 4px;padding:8px 16px;border-radius:var(--r);border:.5px dashed var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;width:100%;transition:all .15s}
+      .pbm-add-btn:hover{border-color:var(--info-border);background:var(--info-bg);color:var(--info-text)}
       .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
       .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
       .pb-part{margin-bottom:32px}
@@ -2528,36 +2531,48 @@ var PB_SEC_SELECTORS = [
   '.info-box .info-val'
 ];
 
+// ── Init a single card with Edit/Save/Cancel/Reset + localStorage restore ──
+function pbInitCard(card) {
+  var hdr = card.querySelector('.pb-scenario-hdr');
+  var body = card.querySelector('.pb-scenario-body');
+  if (!hdr || !body) return;
+  if (hdr.querySelector('.pb-sec-edit-btn')) return; // already initialised
+
+  var editBtn = document.createElement('button');
+  editBtn.className = 'pb-sec-edit-btn';
+  editBtn.innerHTML = '<i class="ti ti-pencil" style="font-size:11px"></i> Edit';
+  editBtn.onclick = function(e) { e.stopPropagation(); pbSecEdit(card); };
+  hdr.appendChild(editBtn);
+
+  var actions = document.createElement('div');
+  actions.className = 'pb-sec-actions';
+  actions.innerHTML =
+    '<button class="pb-sec-save" onclick="pbSecSave(this.closest(\'.pb-scenario\'))">💾 Save</button>' +
+    '<button class="pb-sec-cancel" onclick="pbSecCancel(this.closest(\'.pb-scenario\'))">Cancel</button>' +
+    '<button class="pb-sec-reset" onclick="pbSecReset(this.closest(\'.pb-scenario\'))">↩ Reset</button>' +
+    '<button class="pb-sec-delete" onclick="pbSecDelete(this.closest(\'.pb-scenario\'))">🗑 Delete</button>' +
+    '<span class="pb-sec-hint">Click any text to edit</span>';
+  card.appendChild(actions);
+
+  var id = card.id;
+  if (id) {
+    var saved = localStorage.getItem('pb_sec_' + id);
+    if (saved) body.innerHTML = saved;
+  }
+}
+
 // Inject Edit button + actions bar into every scenario header
 (function pbInitSections() {
-  document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario, #pbm-all .pb-scenario').forEach(function(card) {
-    var hdr = card.querySelector('.pb-scenario-hdr');
-    var body = card.querySelector('.pb-scenario-body');
-    if (!hdr || !body) return;
+  document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario, #pbm-all .pb-scenario').forEach(pbInitCard);
 
-    // Edit button inside header
-    var editBtn = document.createElement('button');
-    editBtn.className = 'pb-sec-edit-btn';
-    editBtn.innerHTML = '<i class="ti ti-pencil" style="font-size:11px"></i> Edit';
-    editBtn.onclick = function(e) { e.stopPropagation(); pbSecEdit(card); };
-    hdr.appendChild(editBtn);
-
-    // Actions bar below body
-    var actions = document.createElement('div');
-    actions.className = 'pb-sec-actions';
-    actions.innerHTML =
-      '<button class="pb-sec-save" onclick="pbSecSave(this.closest(\'.pb-scenario\'))">💾 Save</button>' +
-      '<button class="pb-sec-cancel" onclick="pbSecCancel(this.closest(\'.pb-scenario\'))">Cancel</button>' +
-      '<button class="pb-sec-reset" onclick="pbSecReset(this.closest(\'.pb-scenario\'))">↩ Reset</button>' +
-      '<span class="pb-sec-hint">Click any text to edit</span>';
-    card.appendChild(actions);
-
-    // Restore saved content
-    var id = card.id;
-    if (id) {
-      var saved = localStorage.getItem('pb_sec_' + id);
-      if (saved) body.innerHTML = saved;
-    }
+  // Add "+ Add Section" buttons to each pb-part inside Opening Framework
+  document.querySelectorAll('#panel-pbmframework .pb-part').forEach(function(part) {
+    var btn = document.createElement('button');
+    btn.className = 'pbm-add-btn';
+    btn.innerHTML = '<i class="ti ti-plus" style="font-size:12px"></i> Add Section';
+    var partId = part.id || '';
+    btn.onclick = function() { pbmAddSection(part); };
+    part.appendChild(btn);
   });
 })();
 
@@ -2617,6 +2632,71 @@ function pbSecReset(card) {
   card.querySelector('.pb-sec-edit-btn').style.display = '';
   location.reload();
 }
+
+function pbSecDelete(card) {
+  if (!confirm('Delete this section? This cannot be undone.')) return;
+  var id = card.id;
+  if (id) {
+    localStorage.removeItem('pb_sec_' + id);
+    localStorage.removeItem('pb_sec_new_' + id);
+    localStorage.removeItem('pbm_new_' + id);
+  }
+  card.remove();
+  // persist deletion so it stays gone on reload
+  if (id) localStorage.setItem('pb_deleted_' + id, '1');
+}
+
+function pbmAddSection(part) {
+  var uid = 'pbm-new-' + Date.now();
+  var card = document.createElement('div');
+  card.className = 'pb-scenario';
+  card.id = uid;
+  card.innerHTML =
+    '<div class="pb-scenario-hdr" onclick="pbToggle(this)">' +
+      '<div class="pb-scenario-icon" style="background:var(--info-bg)">✦</div>' +
+      '<div class="pb-scenario-title">New Section — click Edit to rename</div>' +
+      '<i class="ti ti-chevron-down chevron"></i>' +
+    '</div>' +
+    '<div class="pb-scenario-body open">' +
+      '<p style="font-size:13px;color:var(--text2)">Click <strong>Edit</strong> to add your content here.</p>' +
+    '</div>';
+  // insert before the "+ Add Section" button
+  var addBtn = part.querySelector('.pbm-add-btn');
+  part.insertBefore(card, addBtn);
+  pbInitCard(card);
+  // auto-open in edit mode
+  pbSecEdit(card);
+  // persist the new card HTML so it survives reload
+  localStorage.setItem('pbm_new_card_' + uid, part.id || part.dataset.part || uid);
+}
+
+// Restore dynamically-added cards on page load
+(function restoreNewCards() {
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (!key || key.indexOf('pbm_new_card_') !== 0) continue;
+    var uid = key.replace('pbm_new_card_', '');
+    var partId = localStorage.getItem(key);
+    var part = document.getElementById(partId);
+    if (!part || document.getElementById(uid)) continue;
+    var card = document.createElement('div');
+    card.className = 'pb-scenario';
+    card.id = uid;
+    var savedBody = localStorage.getItem('pb_sec_' + uid);
+    card.innerHTML =
+      '<div class="pb-scenario-hdr" onclick="pbToggle(this)">' +
+        '<div class="pb-scenario-icon" style="background:var(--info-bg)">✦</div>' +
+        '<div class="pb-scenario-title">New Section — click Edit to rename</div>' +
+        '<i class="ti ti-chevron-down chevron"></i>' +
+      '</div>' +
+      '<div class="pb-scenario-body' + (savedBody ? '' : ' open') + '">' +
+        '<p style="font-size:13px;color:var(--text2)">Click <strong>Edit</strong> to add your content here.</p>' +
+      '</div>';
+    var addBtn = part.querySelector('.pbm-add-btn');
+    part.insertBefore(card, addBtn);
+    pbInitCard(card);
+  }
+})();
 
 // ── Playbook template edit/save/reset ───────────────────────
 (function initPbTemplates() {
