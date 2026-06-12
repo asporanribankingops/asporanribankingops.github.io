@@ -33,28 +33,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .topbar h1{font-size:15px;font-weight:600}
 .topbar p{font-size:11px;color:var(--text2)}
 .tabs{display:flex;gap:4px;flex-wrap:wrap}
-.tab{padding:6px 13px;border-radius:var(--r);border:.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text2);display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .15s}
-.tab:hover{background:var(--bg2);color:var(--text)}
-/* per-tab active colours */
-.tab[data-tab="stages"].active    {background:#e6f1fb;color:#185fa5;border-color:#378add}
-.tab[data-tab="objections"].active{background:#fff3e6;color:#a05a00;border-color:#f0a050}
-.tab[data-tab="crm"].active       {background:#f0ebfb;color:#5a1fa5;border-color:#9b6de0}
-.tab[data-tab="whatsapp"].active  {background:#e6f9ee;color:#1a6e3a;border-color:#40b869}
-.tab[data-tab="checklist"].active {background:#e6f7f7;color:#1a6060;border-color:#3aadad}
-.tab[data-tab="playbook"].active  {background:#fef6e6;color:#8a5a00;border-color:#e0b040}
-.tab[data-tab="kycsop"].active    {background:#fdecea;color:#a52020;border-color:#e06060}
+/* ── Tab colours (always visible, stronger when active) ── */
+.tab{padding:6px 13px;border-radius:var(--r);border:1.5px solid var(--border);font-size:13px;cursor:pointer;background:var(--bg);color:var(--text2);display:flex;align-items:center;gap:6px;white-space:nowrap;transition:all .15s;font-weight:500}
+.tab::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0;opacity:.5;transition:opacity .15s}
+.tab:hover{color:var(--text);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.tab.active{font-weight:600}
+.tab.active::before{opacity:1}
+
+.tab[data-tab="stages"]      ::before{background:#378add}
+.tab[data-tab="objections"]  ::before{background:#f0a050}
+.tab[data-tab="crm"]         ::before{background:#9b6de0}
+.tab[data-tab="whatsapp"]    ::before{background:#40b869}
+.tab[data-tab="checklist"]   ::before{background:#3aadad}
+.tab[data-tab="playbook"]    ::before{background:#e0b040}
+.tab[data-tab="kycsop"]      ::before{background:#e06060}
+.tab[data-tab="pbmframework"]::before{background:#70b840}
+.tab[data-tab="auditlog"]    ::before{background:#8888aa}
+
+.tab[data-tab="stages"].active      {background:#e6f1fb;color:#185fa5;border-color:#378add}
+.tab[data-tab="objections"].active  {background:#fff3e6;color:#a05a00;border-color:#f0a050}
+.tab[data-tab="crm"].active         {background:#f0ebfb;color:#5a1fa5;border-color:#9b6de0}
+.tab[data-tab="whatsapp"].active    {background:#e6f9ee;color:#1a6e3a;border-color:#40b869}
+.tab[data-tab="checklist"].active   {background:#e6f7f7;color:#1a6060;border-color:#3aadad}
+.tab[data-tab="playbook"].active    {background:#fef6e6;color:#8a5a00;border-color:#e0b040}
+.tab[data-tab="kycsop"].active      {background:#fdecea;color:#a52020;border-color:#e06060}
 .tab[data-tab="pbmframework"].active{background:#eef6e6;color:#2a6a10;border-color:#70b840}
-/* panel accent bars */
-.panel-stages    {border-top:3px solid #378add}
-.panel-objections{border-top:3px solid #f0a050}
-.panel-crm       {border-top:3px solid #9b6de0}
-.panel-whatsapp  {border-top:3px solid #40b869}
-.panel-checklist {border-top:3px solid #3aadad}
-.panel-playbook  {border-top:3px solid #e0b040}
-.panel-kycsop    {border-top:3px solid #e06060}
+.tab[data-tab="auditlog"].active    {background:#f0f0f8;color:#44447a;border-color:#8888aa}
+
+/* ── Panel colour headers ── */
+.panel-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:16px;border-left:4px solid}
+.panel-banner-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.panel-banner-title{font-size:15px;font-weight:700;margin-bottom:1px}
+.panel-banner-sub{font-size:11px;opacity:.7}
+
+.panel-stages      {border-top:3px solid #378add}
+.panel-objections  {border-top:3px solid #f0a050}
+.panel-crm         {border-top:3px solid #9b6de0}
+.panel-whatsapp    {border-top:3px solid #40b869}
+.panel-checklist   {border-top:3px solid #3aadad}
+.panel-playbook    {border-top:3px solid #e0b040}
+.panel-kycsop      {border-top:3px solid #e06060}
 .panel-pbmframework{border-top:3px solid #70b840}
-.panel-auditlog   {border-top:3px solid #8888aa}
-.tab[data-tab="auditlog"].active{background:#f0f0f8;color:#44447a;border-color:#8888aa}
+.panel-auditlog    {border-top:3px solid #8888aa}
 .audit-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:.5px solid var(--border)}
 .audit-row:last-child{border-bottom:none}
 .audit-avatar{width:34px;height:34px;border-radius:50%;background:var(--info-bg);color:var(--info-text);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
@@ -247,6 +267,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="main">
 
   <div id="panel-stages" class="panel panel-stages active">
+    <div class="panel-banner" style="background:#e6f1fb;border-color:#378add;color:#185fa5"><div class="panel-banner-icon" style="background:#378add;color:#fff">📋</div><div><div class="panel-banner-title">Stage Scripts</div><div class="panel-banner-sub">30 drop-off stages · call scripts · objection handlers</div></div></div>
     <div class="search-row">
       <input type="text" id="search-input" placeholder="Search stage name, keyword, or tech name..." oninput="filterStages()">
       <select id="cat-filter" onchange="filterStages()">
@@ -265,6 +286,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="panel-objections" class="panel panel-objections">
+    <div class="panel-banner" style="background:#fff3e6;border-color:#f0a050;color:#a05a00"><div class="panel-banner-icon" style="background:#f0a050;color:#fff">🛡</div><div><div class="panel-banner-title">Objection Handlers</div><div class="panel-banner-sub">Common objections · ready-to-use PBM responses</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <span class="sec-lbl" style="margin:0">All Objections</span>
       <div style="display:flex;gap:6px" id="obj-panel-actions">
@@ -289,6 +311,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="panel-crm" class="panel panel-crm">
+    <div class="panel-banner" style="background:#f0ebfb;border-color:#9b6de0;color:#5a1fa5"><div class="panel-banner-icon" style="background:#9b6de0;color:#fff">📊</div><div><div class="panel-banner-title">CRM & SLA</div><div class="panel-banner-sub">Disposition codes · follow-up SLAs · escalation timelines</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <p class="sec-lbl" style="margin:0">Call disposition codes</p>
       <div style="display:flex;gap:6px" id="crm-codes-actions">
@@ -330,6 +353,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="panel-whatsapp" class="panel panel-whatsapp">
+    <div class="panel-banner" style="background:#e6f9ee;border-color:#40b869;color:#1a6e3a"><div class="panel-banner-icon" style="background:#40b869;color:#fff">💬</div><div><div class="panel-banner-title">WhatsApp Templates</div><div class="panel-banner-sub">Drop-off reminders · document checklists · post-KYC nudges</div></div></div>
     <div class="wa-block">
       <div class="wa-hdr"><span>Drop-off reminder</span><div style="display:flex;gap:6px"><button class="btn" onclick="copyEl('wa1')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button><button class="btn btn-blue" style="font-size:11px;padding:2px 8px" id="wa1-edit-btn" onclick="waEdit('wa1')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button></div></div>
       <div class="wa-body" id="wa1">Hi [Name], this is [PBM Name] from Aspora NRI Banking. I tried reaching you regarding your NRI account opening application. You are very close to completing the process - I am here to personally assist you with the remaining steps. You can resume your application here: [link]. Feel free to call me at [PBM number] if you need any assistance.</div>
@@ -359,6 +383,7 @@ I will personally assist you through each step once you are ready.</div>
   </div>
 
   <div id="panel-checklist" class="panel panel-checklist">
+    <div class="panel-banner" style="background:#e6f7f7;border-color:#3aadad;color:#1a6060"><div class="panel-banner-icon" style="background:#3aadad;color:#fff">✅</div><div><div class="panel-banner-title">Pre-call Checklist</div><div class="panel-banner-sub">Tick off every item before dialling the customer</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <p style="font-size:13px;color:var(--text2);margin:0">Tick off each item before dialling the customer.</p>
       <div style="display:flex;gap:6px" id="cl-panel-actions">
@@ -371,6 +396,7 @@ I will personally assist you through each step once you are ready.</div>
 
   <!-- ── Support Agent Playbook Panel ─────────────────────────── -->
   <div id="panel-playbook" class="panel panel-playbook">
+    <div class="panel-banner" style="background:#fef6e6;border-color:#e0b040;color:#8a5a00"><div class="panel-banner-icon" style="background:#e0b040;color:#fff">📖</div><div><div class="panel-banner-title">Support Playbook</div><div class="panel-banner-sub">NRE/NRO agent guide · scenario handling · escalation · quick reference</div></div></div>
     <style>
       .pb-search{width:100%;padding:9px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;outline:none;margin-bottom:16px}
       .pb-search:focus{border-color:var(--info-border)}
@@ -990,6 +1016,7 @@ After 24 hours, your full transfer limits will automatically apply. In the meant
 
   <!-- ── KYC Ops SOP Panel ─────────────────────────────────── -->
   <div id="panel-kycsop" class="panel panel-kycsop">
+    <div class="panel-banner" style="background:#fdecea;border-color:#e06060;color:#a52020"><div class="panel-banner-icon" style="background:#e06060;color:#fff">🔍</div><div><div class="panel-banner-title">KYC Ops SOP</div><div class="panel-banner-sub">19 issue categories · owner matrix · POCs · escalation paths</div></div></div>
 
     <input class="pb-search" id="kyc-search" placeholder="Search issues, owners, steps…" oninput="kycSearch()" />
 
@@ -1635,6 +1662,7 @@ After 24 hours, your full transfer limits will automatically apply. In the meant
 
   <!-- ── PBM Opening Framework Panel ──────────────────────── -->
   <div id="panel-pbmframework" class="panel panel-pbmframework">
+    <div class="panel-banner" style="background:#eef6e6;border-color:#70b840;color:#2a6a10"><div class="panel-banner-icon" style="background:#70b840;color:#fff">📞</div><div><div class="panel-banner-title">Opening Framework</div><div class="panel-banner-sub">PBM call opening · principles · scenario scripts · tone guidelines</div></div></div>
 
     <input class="pb-search" id="pbm-search" placeholder="Search principles, scenarios, guidelines…" oninput="pbmSearch()" />
 
@@ -3759,6 +3787,7 @@ switchTab = function(id) {
 </script>
 
   <div id="panel-auditlog" class="panel panel-auditlog">
+    <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
       <div>
         <div style="font-size:15px;font-weight:600">Audit Log</div>
