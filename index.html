@@ -143,6 +143,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="switchTab('whatsapp')"><i class="ti ti-brand-whatsapp" style="font-size:14px"></i> WhatsApp</button>
     <button class="tab" onclick="switchTab('checklist')"><i class="ti ti-checkbox" style="font-size:14px"></i> Pre-call checklist</button>
     <button class="tab" onclick="switchTab('playbook')"><i class="ti ti-book" style="font-size:14px"></i> Support Playbook</button>
+    <button class="tab" onclick="switchTab('kycsop')"><i class="ti ti-file-check" style="font-size:14px"></i> KYC Ops SOP</button>
   </div>
 </div>
 
@@ -861,6 +862,651 @@ After 24 hours, your full transfer limits will automatically apply. In the meant
     </div><!-- #pb-all -->
   </div><!-- #panel-playbook -->
 
+  <!-- ── KYC Ops SOP Panel ─────────────────────────────────── -->
+  <div id="panel-kycsop" class="panel">
+
+    <input class="pb-search" id="kyc-search" placeholder="Search issues, owners, steps…" oninput="kycSearch()" />
+
+    <div class="pb-toc">
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-overview')">Overview</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-matrix')">Owner Matrix</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-pocs')">POCs</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-issues')">Issue Categories</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-workflow')">Workflow</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-checklist')">Checklist</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-escalation')">Escalation</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-freq')">Issue Frequency</button>
+      <button class="pb-toc-btn" onclick="kycScroll('kyc-links')">Links</button>
+    </div>
+
+    <div id="kyc-all">
+
+      <!-- OVERVIEW -->
+      <div class="pb-part" id="kyc-overview">
+        <div class="pb-part-title">Overview</div>
+        <div class="pb-scenario" id="kyc-s-overview">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">📋</div>
+            <div class="pb-scenario-title">NRI Account Issues Ops Handling SOP</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body open">
+            <p style="font-size:13px;line-height:1.7">This document categorizes all known KYC rejection/pendency issues raised by the bank during account opening, along with standardized next steps, ownership, and resolution workflows. Use this as the primary reference when triaging KYC feedback.</p>
+            <div class="pb-h3">Issue Type Summary</div>
+            <div class="pb-ok">1: <strong>Document issues</strong> — Inform Sangamithra to get correct docs. Post OPS validation, assign task to On-Call to make the changes in AOF/CRM as required.</div>
+            <div class="pb-ok">2: <strong>Data / document corrections</strong> — Assign task to On-Call to make the required changes.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OWNER MATRIX -->
+      <div class="pb-part" id="kyc-matrix">
+        <div class="pb-part-title">Quick Reference — Issue → Owner Matrix</div>
+        <div class="pb-scenario" id="kyc-s-matrix">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">🗂️</div>
+            <div class="pb-scenario-title">Owner Matrix</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Issue Category</th><th>Primary Owner</th><th>Escalation Path</th></tr>
+              <tr><td>Document re-collection (passport, POA, bank stmt)</td><td>Sanghamitra / Prateeksha (CX)</td><td>→ User</td></tr>
+              <tr><td>AOF / Custodian Certificate corrections</td><td>Banking On-Call (Praveen / Prithvi Yadav)</td><td>Monish / Richa</td></tr>
+              <tr><td>CBS / CRM / Finacle data fixes</td><td>Banking On-Call</td><td>Monish / Richa</td></tr>
+              <tr><td>Visa verification (share code / right-to-reside)</td><td>Sanghamitra / Prateeksha → On-Call (Praveen / Prithvi Yadav)</td><td>Bank Partner</td></tr>
+              <tr><td>Selfie re-capture</td><td>CX (Sanghamitra / Prateeksha)</td><td>Persona Integration</td></tr>
+              <tr><td>Credit / Debit freeze removal</td><td>Bank (raised internally)</td><td>Richa / Aastha</td></tr>
+              <tr><td>Shivalik CBS pendency</td><td>Bank (raised internally)</td><td>Bank Partner</td></tr>
+              <tr><td>Tech / Platform issues</td><td>Richa / Suyash</td><td>Engineering</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- POCs -->
+      <div class="pb-part" id="kyc-pocs">
+        <div class="pb-part-title">Points of Contact</div>
+        <div class="pb-scenario" id="kyc-s-pocs">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">👥</div>
+            <div class="pb-scenario-title">Team POCs</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Team</th><th>Contact Person</th><th>Email</th></tr>
+              <tr><td>CX</td><td>1: Sanghamitra Das<br>2: Prateeksha</td><td>1: sanghamitra.das@aspora.com<br>2: pratiksha.das@aspora.com</td></tr>
+              <tr><td>KYC OPS</td><td>1: Monish Antharaju<br>2: Akshita Birla</td><td>1: monish.antharaju@aspora.com<br>2: akshita.birla@aspora.com</td></tr>
+              <tr><td>Product</td><td>1: Richa<br>2: Suyash<br>3: Chandra<br>4: Saloni Tomar</td><td>1: richa.r@aspora.com<br>2: suyash@aspora.com<br>3: Chandra.Erukulla@aspora.com<br>4: saloni.tomar@aspora.com</td></tr>
+              <tr><td>NRI Banking On-Call</td><td>1: Praveen<br>2: Prithvi Yadav</td><td>1: praveen@aspora.com<br>2: prithvi.yadav@aspora.com</td></tr>
+              <tr><td>Shivalik Bank Ops (external)</td><td>1: Muralidharan Ramakrishnan<br>2: Rajesh Sakharam Chindarkar</td><td>1: muralidharan@shivalikbank.com<br>2: rajesh.chindarkar@shivalikbank.com</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISSUE CATEGORIES -->
+      <div class="pb-part" id="kyc-issues">
+        <div class="pb-part-title">Issue Categories &amp; Resolution Procedures</div>
+
+        <!-- 1 -->
+        <div class="pb-scenario" id="kyc-s1">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">1</div>
+            <div class="pb-scenario-title">Document Quality — Unclear Passport Copy</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-h3">Bank Feedback Examples</div>
+            <div class="pb-msgs"><span class="pb-msg-chip">"Applicant face is not clearly visible on Passport"</span><span class="pb-msg-chip">"Passport expiry date not visible"</span><span class="pb-msg-chip">"Passport number not clearly visible"</span><span class="pb-msg-chip">"Passport 1st page missing"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">User uploaded a blurry, cropped, or incomplete scan of their passport.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>Sanghamitra / Prateeksha (CX)</strong> → Contact user and request a clear, full-page scan of passport front page (face + details + expiry date must all be legible).</li>
+              <li data-n="2">Validate the document internally — KYC OPS team to review.</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → Replace passport image → Trigger re-notarisation.</li>
+              <li data-n="4">Re-submit to bank KYC queue.</li>
+            </ol>
+            <div class="pb-note">SLA: Collect document within 2 business days; re-submit within 1 business day of receipt.</div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="pb-scenario" id="kyc-s2">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">2</div>
+            <div class="pb-scenario-title">Document Validity — Expired or Unacceptable Address Proof (POA)</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Utility bill should not be older than 3 months"</span><span class="pb-msg-chip">"Broadband bill cannot be accepted"</span><span class="pb-msg-chip">"Bank statement must include at least one customer-initiated transaction"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">POA is either expired (&gt;3 months), lacks required transaction activity, or is not an accepted document type.</p>
+            <div class="pb-h3">Accepted POA Types</div>
+            <div class="pb-ok">Utility bill (electricity, water, gas, property tax receipt) or Bank statement — all dated within last 3 months and notarized.</div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>Sanghamitra</strong> → Request latest POA (within last 3 months). Must be accepted type (NO broadband bills). Bank statements must show ≥1 debit/credit transaction. Name must match passport exactly.</li>
+              <li data-n="2">Verify document meets all criteria before sending for notarisation.</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → Recreate AOF and share re-notarisation link, or reset full journey.</li>
+              <li data-n="4">Ops to check in with bank based on scenario.</li>
+            </ol>
+            <div class="pb-note">SLA: Collect document within 3 business days; re-notarisation within 1 business day.</div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="pb-scenario" id="kyc-s3">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">3</div>
+            <div class="pb-scenario-title">Document Validity — Visa Validity Insufficient</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Visa needs to be valid for more than 3 months from date of account opening"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">User's visa is expiring within 3 months of the account opening date.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Check with user on visa renewal status.</li>
+              <li data-n="2">If being renewed, wait for updated visa before proceeding.</li>
+              <li data-n="3">If cannot be renewed in time, escalate to management for decision on whether to proceed or close the application.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="pb-scenario" id="kyc-s4">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">4</div>
+            <div class="pb-scenario-title">Data Mismatch — Incorrect DOB in AOF / CRM / CBS</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Incorrect DOB captured in AOF/CRM/CBS. Captured 01/01/0001 instead of [correct date]"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">OCR failure or manual data entry error during AOF creation; incorrect date propagated to CBS.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>OPS</strong> → Verify DOB from passport and escalate to Banking On-Call.</li>
+              <li data-n="2">Correct DOB in AOF / CRM then move the queue for bank to verify.</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → Update DOB in AOF/CRM.</li>
+              <li data-n="4">Re-submit for KYC review.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="pb-scenario" id="kyc-s5">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">5</div>
+            <div class="pb-scenario-title">Data Mismatch — Incorrect Passport Number in CBS / AOF / Custodian Certificate</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Incorrect passport number captured in CBS and AOF and custodian certificate"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">OCR misread or manual keying error for passport number.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">OPS → Cross-verify passport number against the clear passport copy on file.</li>
+              <li data-n="2">Update the correct passport number in MIS Sheet (for on-call reference).</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → Correct in AOF, CRM, and custodian certificate.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="pb-scenario" id="kyc-s6">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">6</div>
+            <div class="pb-scenario-title">Data Mismatch — Incorrect Visa Issue / Expiry Date in CBS / AOF / CRM</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Incorrect visa issue date and expiry date captured in CBS/AOF/CRM"</span><span class="pb-msg-chip">"For PR cases visa expiry date should be within 31/12/2099"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Visa dates not correctly extracted from share code or manually entered incorrectly. PR cases have special rule: expiry = 31/12/2099.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Obtain Right to Reside visa number (starting with "S") from user if not available.</li>
+              <li data-n="2">OPS → Verify visa details via share code validation: <a href="https://www.gov.uk/check-immigration-status" target="_blank" style="color:var(--info-text)">gov.uk/check-immigration-status</a></li>
+              <li data-n="3">Update correct visa dates in MIS.</li>
+              <li data-n="4"><strong>Banking On-Call</strong> → Correct AOF.</li>
+            </ol>
+            <div class="pb-warning"><strong>Special Rule — Permanent Residents (PR/ILR):</strong>Set visa expiry date to <strong>31/12/2099</strong>.</div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="pb-scenario" id="kyc-s7">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">7</div>
+            <div class="pb-scenario-title">Data Mismatch — Name Mismatch Between Passport and Address Proof</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Name mismatch between passport and address proof"</span><span class="pb-msg-chip">"Space required between FirstName-SecondName"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Name on POA does not exactly match passport (abbreviated name, missing middle name, or missing space between parts).</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Request new address proof where name matches <strong>exactly</strong> as per passport (full name, correct spelling, proper spacing).</li>
+              <li data-n="2">OPS → Validate name consistency across passport and new POA, escalate to On-Call.</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → If name spacing is wrong in AOF/CRM/CBS (e.g., "MONISHANTHARAJU" → "MONISH ANTHARAJU"), make corrections.</li>
+              <li data-n="4">Rectify custodian certificate if name is also wrong there.</li>
+              <li data-n="5">If share code is also needed, CX → collect from user.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="pb-scenario" id="kyc-s8">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">8</div>
+            <div class="pb-scenario-title">Data Mismatch — Name Mismatch with NSDL (PAN Verification Failure)</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Customer Name is not matching with NSDL site. Hence, scanned copy of PAN card required"</span></div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Request scanned copy of user's PAN card.</li>
+              <li data-n="2">OPS → Cross-verify name on PAN with name in CRM/AOF.</li>
+              <li data-n="3">If genuine mismatch, user may need to update PAN details with NSDL.</li>
+              <li data-n="4"><strong>Banking On-Call</strong> → Update name in CRM/AOF/CBS to match PAN if PAN name is authoritative.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="pb-scenario" id="kyc-s9">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">9</div>
+            <div class="pb-scenario-title">Address Issues — Overseas Address Not / Partially Captured in CBS / AOF</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Overseas address completely not updated in CRM &amp; AOF and CBS"</span><span class="pb-msg-chip">"Partially overseas address captured in CBS"</span><span class="pb-msg-chip">"Pin code / Zip code wrong in AOF, CRM &amp; CBS"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">OCR or system integration issues causing partial address capture, spurious words, or incorrect postal codes propagating across CRM → AOF → CBS.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Verify the correct full address from the user's POA document.</li>
+              <li data-n="2">OPS → Verify and escalate to On-Call.</li>
+              <li data-n="3"><strong>Banking On-Call</strong> → Correct AOF and push case for bank review.</li>
+              <li data-n="4">Double-check postal/zip code accuracy.</li>
+              <li data-n="5">If address has extra words or duplication, flag for on-call correction.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="pb-scenario" id="kyc-s10">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">10</div>
+            <div class="pb-scenario-title">Address Issues — Indian Address Incorrect in CBS / CRM / AOF</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Indian address incorrectly captured in CBS, CRM &amp; AOF"</span><span class="pb-msg-chip">"City name should be captured as 'Cuttack' for Indian address in CBS"</span></div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">OPS → Verify correct Indian address from user records and escalate to Banking On-Call.</li>
+              <li data-n="2"><strong>Banking On-Call</strong> → Correct in AOF/CRM and bank for CBS.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="pb-scenario" id="kyc-s11">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">11</div>
+            <div class="pb-scenario-title">Form Data — Account Type Not Captured on AOF</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Account type not captured on AOF/CRM"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">AOF generation missed the account type field.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>OPS</strong> → Verify the error and escalate to Banking On-Call to update account type in CRM and AOF.</li>
+              <li data-n="2">Re-submit for KYC review.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="pb-scenario" id="kyc-s12">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">12</div>
+            <div class="pb-scenario-title">Form Data — Nominee Details Inconsistency</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Nominee opted 'No' in AOF but nominee details filled &amp; nomination updated in CRM but not in Finacle"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Mismatch between AOF nominee flag and actual nominee data in CRM; data not synced to Finacle/CBS.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Clarify with the user whether they want a nominee or not.</li>
+              <li data-n="2"><strong>Banking On-Call</strong> → Align AOF, CRM, and Finacle: If nominee = Yes → ensure details in all systems. If nominee = No → remove nominee details from CRM and Finacle.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="pb-scenario" id="kyc-s13">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">13</div>
+            <div class="pb-scenario-title">Form Data — Education / Occupation Mismatch</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Education cannot be 'other'"</span><span class="pb-msg-chip">"If employment status is employed then occupation should be salaried"</span></div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Confirm user's correct education level and occupation.</li>
+              <li data-n="2"><strong>OPS → Banking On-Call</strong> → Update CRM, AOF, and CBS with correct values.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="pb-scenario" id="kyc-s14">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">14</div>
+            <div class="pb-scenario-title">Form Data — Address Proof Document Type / Number Errors</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Incorrect type of address proof mentioned on AOF and custodian certificate"</span><span class="pb-msg-chip">"Utility bill unique ID wrong updated in Finacle"</span><span class="pb-msg-chip">"Address proof document number not updated in custodian certificate"</span></div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Verify the correct document type and ID/number from the actual POA on file.</li>
+              <li data-n="2"><strong>Banking On-Call</strong> → Correct in AOF, custodian certificate, and Finacle.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="pb-scenario" id="kyc-s15">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">15</div>
+            <div class="pb-scenario-title">Share Code / Visa Verification Failure</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Unable to verify the provided share code"</span><span class="pb-msg-chip">"Error displays 'There is a problem with this share code'"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Share code may be expired, invalid, or incorrectly transcribed.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">CX → Contact user to generate and provide a <strong>new, valid share code</strong>.</li>
+              <li data-n="2">Verify share code format (alphanumeric, typically 9 characters).</li>
+              <li data-n="3">Note: code, valid-from date, valid-until date.</li>
+              <li data-n="4">OPS → Validate share code and escalate to Banking On-Call.</li>
+              <li data-n="5"><strong>Banking On-Call</strong> → Update visa details in CRM/AOF/CBS based on verified data.</li>
+            </ol>
+            <div class="pb-warning"><strong>Tip:</strong> Share codes expire. Always confirm the "valid until" date is in the future before submitting. Work visa is also accepted — only visa validity needs to be verified.</div>
+          </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="pb-scenario" id="kyc-s16">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">16</div>
+            <div class="pb-scenario-title">Selfie Issues — Inappropriate or Unclear Selfie</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Customer selfie should be completely dressed up, avoid inappropriate or revealing outfits"</span><span class="pb-msg-chip">"Kindly capture selfie in proper manner"</span></div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>Banking On-Call</strong> → Check if a suitable selfie is available in Persona.</li>
+              <li data-n="2">If valid selfie exists in Persona, use that instead.</li>
+              <li data-n="3">If not, CX → Request user to retake selfie (appropriate attire, clear face, good lighting).</li>
+              <li data-n="4"><strong>Banking On-Call</strong> → Re-upload and trigger re-notarisation.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="pb-scenario" id="kyc-s17">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">17</div>
+            <div class="pb-scenario-title">System / Bank Issues — Credit Freeze / Debit Freeze</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Credit freeze removed however nominee issue not fixed in CBS"</span><span class="pb-msg-chip">"Debit freeze — No action until self-funding/welcome delivery"</span></div>
+            <div class="pb-h3">Freeze Types</div>
+            <div class="pb-dt"><strong>Credit Freeze</strong>Active until user completes full onboarding and KYC clear status confirmed by bank. User <em>can</em> add initial funds once KYC is clear (welcome letter delivery not required to fund).</div>
+            <div class="pb-dt"><strong>Debit Freeze</strong>Once KYC is clear, welcome letter is sent. Upon confirmation of delivery, debit freeze is removed.</div>
+            <div class="pb-dt"><strong>Active Status</strong>Once both credit and debit freeze removed, account becomes fully active.</div>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Raise issue to bank to clear the freeze.</li>
+              <li data-n="2"><strong>Debit Freeze:</strong> No action from ops until user completes self-funding or welcome delivery.</li>
+              <li data-n="3"><strong>Credit Freeze:</strong> Confirm all related pendencies (nominee, address) resolved before requesting removal.</li>
+              <li data-n="4">Track freeze status and follow up weekly if unresolved.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="pb-scenario" id="kyc-s18">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">18</div>
+            <div class="pb-scenario-title">System / Bank Issues — Mother's Name Not Updated in CBS (Shivalik Pendency)</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Kindly update the mother's name on the CBS once issue fixed (Shivalik Pendency)"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Internal bank system (Shivalik) issue preventing mother's name from being updated in CBS. <strong>Not a user action item.</strong></p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1">Raise to bank — this is an internal bank pendency.</li>
+              <li data-n="2">Track and follow up with bank weekly.</li>
+              <li data-n="3">No user documents required.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="pb-scenario" id="kyc-s19">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">19</div>
+            <div class="pb-scenario-title">System Issues — Case Not Available in KYC Open Tray</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-msgs"><span class="pb-msg-chip">"Case not available in KYC Open tray"</span></div>
+            <div class="pb-h3">Root Cause</div>
+            <p style="font-size:13px">Application may not have been properly submitted to the bank's KYC queue, or there is a system routing issue.</p>
+            <div class="pb-h3">Next Steps</div>
+            <ol class="pb-steps">
+              <li data-n="1"><strong>Banking On-Call</strong> → Investigate why the case is not appearing in the KYC open queue.</li>
+              <li data-n="2">Check if the application was successfully transmitted.</li>
+              <li data-n="3">Re-submit if needed.</li>
+              <li data-n="4">Escalate to bank operations if issue persists.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKFLOW -->
+      <div class="pb-part" id="kyc-workflow">
+        <div class="pb-part-title">General Workflow &amp; Roles</div>
+
+        <div class="pb-scenario" id="kyc-s-flow">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">🔄</div>
+            <div class="pb-scenario-title">General Workflow for Resolving Any KYC Issue</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div style="background:var(--bg2);border-radius:var(--r);padding:16px;font-family:monospace;font-size:12px;line-height:1.9;margin-bottom:12px">
+              Bank raises KYC feedback<br>
+              ↓<br>
+              Ops team categorizes issue using this SOP<br>
+              ↓<br>
+              ┌─────────────────────┬──────────────────────┐<br>
+              │ User action needed? │ System/Data fix?     │<br>
+              └────────┬────────────┴──────────┬───────────┘<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+              CX contacts user&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Banking On-Call corrects<br>
+              for documents&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CRM → AOF → CBS<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+              Validate docs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Validate fixes<br>
+              internally&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;across systems<br>
+              └──────────────────────┴──────────────────────┘<br>
+              ↓<br>
+              Re-notarise if needed → Re-submit to bank KYC queue<br>
+              ↓<br>
+              Track until "KYC Clear"
+            </div>
+            <div class="pb-h3">Documents Required to Submit to Bank</div>
+            <ul class="pb-bullets">
+              <li><strong>Initial Funding via UPI:</strong> User must submit bank statement reflecting the transaction. Statement must specify account type as NRO/NRE.</li>
+              <li><strong>Welcome Letter Delivery Status:</strong> Sent to bank automatically (currently automated).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="kyc-s-roles">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">👤</div>
+            <div class="pb-scenario-title">Key Roles &amp; Responsibilities</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Role</th><th>Responsibility</th></tr>
+              <tr><td><strong>CX</strong></td><td>Primary contact for collecting documents from users (passport, POA, bank statements, PAN, share codes, education details). Validates documents before forwarding.</td></tr>
+              <tr><td><strong>Banking On-Call</strong></td><td>Corrects data in CRM, AOF, CBS, Finacle, and custodian certificates. Triggers re-notarisation. Handles AOF recreation and journey resets.</td></tr>
+              <tr><td><strong>OPS</strong></td><td>Leads banking on-call coordination.</td></tr>
+              <tr><td><strong>Product</strong></td><td>Supports bank liaison. Handles visa verification escalations. Conveys tech readiness to bank. Raises issues with Persona. Handles platform/integration issues.</td></tr>
+              <tr><td><strong>Bank Partner</strong></td><td>Resolves internal pendencies (Shivalik issues, freeze removal, KYC queue issues).</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="pb-part" id="kyc-checklist">
+        <div class="pb-part-title">Validation Checklist</div>
+        <div class="pb-scenario" id="kyc-s-checklist">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">✅</div>
+            <div class="pb-scenario-title">Common Validation Checklist — Before Re-submission</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body" id="kyc-checklist-body">
+            <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Click each item to mark it done. Resets on page reload.</p>
+            <div id="kyc-cl-wrap"></div>
+            <button class="btn" onclick="kycResetCl()" style="margin-top:10px"><i class="ti ti-refresh" style="font-size:13px"></i> Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCALATION -->
+      <div class="pb-part" id="kyc-escalation">
+        <div class="pb-part-title">Escalation Matrix</div>
+        <div class="pb-scenario" id="kyc-s-esc">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">⬆️</div>
+            <div class="pb-scenario-title">Escalation Scenarios</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Scenario</th><th>Escalate To</th></tr>
+              <tr><td>User not responding to document requests for &gt;5 business days</td><td>Ops / Product</td></tr>
+              <tr><td>Bank not clearing internal pendency for 2 days</td><td>Shivalik's OPS Team</td></tr>
+              <tr><td>Repeated OCR failures for same field</td><td>Product</td></tr>
+              <tr><td>Case stuck in KYC queue with no feedback</td><td>Bank Operations</td></tr>
+              <tr><td>Visa expiring and user unable to renew</td><td>Aspora OPS + Bank OPS Management for application closure decision</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FREQUENCY -->
+      <div class="pb-part" id="kyc-freq">
+        <div class="pb-part-title">Summary of Issue Frequency</div>
+        <div class="pb-scenario" id="kyc-s-freq">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">📊</div>
+            <div class="pb-scenario-title">Issue Frequency from Current Data</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Issue Type</th><th>Approx. Count</th><th>Priority</th></tr>
+              <tr><td>KYC Clear (no issues)</td><td>~50+ cases</td><td>No action</td></tr>
+              <tr><td>Incorrect visa dates in CBS/AOF/CRM</td><td>~15 cases</td><td><span style="color:var(--danger-text);font-weight:600">High</span></td></tr>
+              <tr><td>Overseas address partially/not captured</td><td>~10 cases</td><td><span style="color:var(--danger-text);font-weight:600">High</span></td></tr>
+              <tr><td>Unclear/missing passport copy</td><td>~8 cases</td><td><span style="color:var(--danger-text);font-weight:600">High</span></td></tr>
+              <tr><td>Name mismatch (passport vs. POA)</td><td>~6 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Incorrect DOB in CBS</td><td>~5 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Incorrect passport number</td><td>~5 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Account type not captured on AOF</td><td>~5 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Invalid/expired share code</td><td>~5 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Selfie quality issues</td><td>~4 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>POA older than 3 months</td><td>~3 cases</td><td><span style="color:#d97706;font-weight:600">Medium</span></td></tr>
+              <tr><td>Mother's name CBS pendency (Shivalik)</td><td>~3 cases</td><td>Low (bank-side)</td></tr>
+              <tr><td>Credit/Debit freeze</td><td>~3 cases</td><td>Low (bank-side)</td></tr>
+              <tr><td>PAN/NSDL name mismatch</td><td>~2 cases</td><td>Low</td></tr>
+              <tr><td>Education/Occupation errors</td><td>~2 cases</td><td>Low</td></tr>
+              <tr><td>Case not in KYC open tray</td><td>~2 cases</td><td>Low</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKS -->
+      <div class="pb-part" id="kyc-links">
+        <div class="pb-part-title">Stakeholder Dependencies &amp; Links</div>
+        <div class="pb-scenario" id="kyc-s-deps">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">🔗</div>
+            <div class="pb-scenario-title">Team Dependencies</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <table class="pb-table">
+              <tr><th>Action</th><th>Stakeholder</th><th>Dependency</th><th>Required to Remove Dependency</th></tr>
+              <tr><td>Data / Document Correction</td><td>OPS</td><td>Tech - On Call</td><td>Enable KYC team to do required data changes — special role-based access</td></tr>
+              <tr><td>Additional Document collection (PAN card, different POA etc)</td><td>OPS</td><td>CX</td><td>Build RFI flow similar to remittance</td></tr>
+              <tr><td>Queue Management</td><td>Bank</td><td>Tech - On Call</td><td>Fix assignment of KYC queue and Discrepant re-open queue logic (currently broken)</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="pb-scenario" id="kyc-s-links">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">🌐</div>
+            <div class="pb-scenario-title">Additional Links</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <ul class="pb-bullets">
+              <li><a href="https://horus.vance.finance/nre-nro/" target="_blank" style="color:var(--info-text)">Horus — NRE/NRO Dashboard</a></li>
+              <li><a href="https://www.gov.uk/check-immigration-status" target="_blank" style="color:var(--info-text)">Share Code Validation — gov.uk/check-immigration-status</a></li>
+              <li>Docket Hub — Welcome letter delivery status check (contact Monish/Richa for login credentials)</li>
+              <li><a href="https://www.figma.com/design/dPo1C3lopkfJ5hHGyriYbf/NRE-NRO?node-id=25460-25465" target="_blank" style="color:var(--info-text)">Figma — NRE/NRO Design File</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- #kyc-all -->
+  </div><!-- #panel-kycsop -->
+
 </div>
 
 <script>
@@ -1347,7 +1993,7 @@ function updateCap(num, idx, val) {
 }
 
 function switchTab(id) {
-  var ids = ['stages','objections','crm','whatsapp','checklist','playbook'];
+  var ids = ['stages','objections','crm','whatsapp','checklist','playbook','kycsop'];
   var tabs = document.querySelectorAll('.tab');
   var panels = document.querySelectorAll('.panel');
   for (var i = 0; i < ids.length; i++) {
@@ -1386,6 +2032,47 @@ function pbSearch() {
   });
 }
 
+// ── KYC SOP helpers ─────────────────────────────────────────
+function kycSearch() {
+  var q = document.getElementById('kyc-search').value.toLowerCase();
+  document.querySelectorAll('#kyc-all .pb-scenario').forEach(function(s) {
+    s.style.display = (!q || s.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+function kycScroll(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  switchTab('kycsop');
+  setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 50);
+}
+
+var KYC_CHECKLIST = [
+  'Passport: Clear copy with visible face, passport number, issue date, and expiry date',
+  'POA: Dated within last 3 months, accepted type, name matches passport exactly, notarized',
+  'Visa: Valid for >3 months from account opening date; share code is valid and not expired',
+  'AOF Data: Account type, education, occupation, nominee status — all captured correctly',
+  'Name Consistency: Same across passport, POA, AOF, CRM, CBS, custodian certificate, and NSDL/PAN',
+  'DOB: Matches passport across CRM, AOF, and CBS',
+  'Address: Full overseas and Indian addresses correctly captured (no truncation, no extra words)',
+  'Passport Number: Consistent across AOF, CBS, CRM, and custodian certificate',
+  'Visa Dates: Correct issue and expiry dates in CRM, AOF, and CBS (PR cases: expiry = 31/12/2099)',
+  'Selfie: Clear, appropriate attire, matches user identity'
+];
+var kycChecks = {};
+function renderKycCl() {
+  var wrap = document.getElementById('kyc-cl-wrap'); if (!wrap) return;
+  wrap.innerHTML = KYC_CHECKLIST.map(function(item, i) {
+    var done = !!kycChecks[i];
+    return '<div class="cl-item' + (done?' done':'') + '" onclick="toggleKycCl(' + i + ')">' +
+      '<div class="cl-circle">' + (done ? '<i class="ti ti-check" style="font-size:11px"></i>' : '') + '</div>' +
+      '<span style="font-size:13px">' + item + '</span></div>';
+  }).join('');
+}
+function toggleKycCl(i) { if(kycChecks[i]) delete kycChecks[i]; else kycChecks[i]=true; renderKycCl(); }
+function kycResetCl() { kycChecks = {}; renderKycCl(); }
+renderKycCl();
+
 // ── Per-section edit mode ────────────────────────────────────
 var PB_SEC_SELECTORS = [
   '.pb-scenario-title',
@@ -1406,7 +2093,7 @@ var PB_SEC_SELECTORS = [
 
 // Inject Edit button + actions bar into every scenario header
 (function pbInitSections() {
-  document.querySelectorAll('#pb-all .pb-scenario').forEach(function(card) {
+  document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario').forEach(function(card) {
     var hdr = card.querySelector('.pb-scenario-hdr');
     var body = card.querySelector('.pb-scenario-body');
     if (!hdr || !body) return;
