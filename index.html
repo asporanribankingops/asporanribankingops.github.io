@@ -286,6 +286,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
     <div class="count" id="stage-count">Showing 31 stages</div>
     <div class="stage-grid" id="stage-grid"></div>
+    <div id="stages-custom-sections"></div>
+    <button class="pbm-add-btn" style="margin:18px 0 8px" onclick="stagesAddSection()"><i class="ti ti-plus" style="font-size:12px"></i> Add new section</button>
   </div>
 
   <div id="panel-objections" class="panel panel-objections">
@@ -420,6 +422,18 @@ I will personally assist you through each step once you are ready.</div>
       .pb-sec-hint{font-size:11px;color:var(--info-text);margin-left:auto;align-self:center}
       .pbm-add-btn{display:flex;align-items:center;gap:6px;margin:10px 0 4px;padding:8px 16px;border-radius:var(--r);border:.5px dashed var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;width:100%;transition:all .15s}
       .pbm-add-btn:hover{border-color:var(--info-border);background:var(--info-bg);color:var(--info-text)}
+      .cs-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--r);margin-bottom:18px;overflow:hidden}
+      .cs-card-hdr{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:.5px solid var(--border)}
+      .cs-card-title{font-size:15px;font-weight:600;flex:1;color:var(--text1);background:transparent;border:none;outline:none}
+      .cs-card-title:focus{background:var(--bg2);border-radius:4px;padding:2px 6px}
+      .cs-card-body{padding:16px}
+      .cs-content{width:100%;min-height:80px;font-size:14px;line-height:1.6;color:var(--text1);background:transparent;border:none;outline:none;resize:vertical;font-family:inherit}
+      .cs-content:focus{background:var(--bg2);border-radius:6px;padding:8px;border:.5px solid var(--border2)}
+      .cs-imgs{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+      .cs-img-wrap{position:relative;width:140px;height:100px;border-radius:8px;overflow:hidden;cursor:pointer}
+      .cs-img-wrap img{width:100%;height:100%;object-fit:cover}
+      .cs-img-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+      .cs-actions{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:.5px solid var(--border)}
       .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
       .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
       .pb-part{margin-bottom:32px}
@@ -3696,6 +3710,7 @@ async function ghBakeAndPush(silent) {
     'wa_wa',       // wa1, wa2, wa3
     'st_',         // static tables
     'pb_sec_',     // playbook/kyc/pbm section edits
+    'stages_custom_sections', // stage tab custom sections
     'pbm_new_card_', // new pbm cards
     'pb_deleted_', // deleted cards
     'pb_tpl_',     // template edits
@@ -3801,6 +3816,105 @@ async function ghBakeAndPush(silent) {
     ghUpdateBadge(false);
   }
 }
+
+// ── Stage Custom Sections ─────────────────────────────────────
+var CS_KEY = 'stages_custom_sections';
+function csLoad() { try { return JSON.parse(localStorage.getItem(CS_KEY)) || []; } catch(e) { return []; } }
+function csSave(arr) { localStorage.setItem(CS_KEY, JSON.stringify(arr)); ghMarkPending(); }
+
+function stagesAddSection() {
+  var arr = csLoad();
+  arr.push({ id: Date.now(), title: 'New Section', content: '', images: [] });
+  csSave(arr);
+  csRender();
+}
+
+function csRender() {
+  var arr = csLoad();
+  var container = document.getElementById('stages-custom-sections');
+  if (!container) return;
+  if (!arr.length) { container.innerHTML = ''; return; }
+  var html = '';
+  arr.forEach(function(sec, idx) {
+    html += '<div class="cs-card" id="cs-card-' + sec.id + '">';
+    html += '<div class="cs-card-hdr">';
+    html += '<input class="cs-card-title" value="' + esc(sec.title) + '" placeholder="Section title" oninput="csUpdateTitle(' + idx + ', this.value)">';
+    html += '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border)" onclick="csDelete(' + idx + ')"><i class="ti ti-trash" style="font-size:12px"></i> Delete</button>';
+    html += '</div>';
+    html += '<div class="cs-card-body">';
+    html += '<textarea class="cs-content" placeholder="Add content, notes, scripts, or any information…" oninput="csUpdateContent(' + idx + ', this.value)">' + esc(sec.content) + '</textarea>';
+    if (sec.images && sec.images.length) {
+      html += '<div class="cs-imgs">';
+      sec.images.forEach(function(img, ii) {
+        html += '<div class="cs-img-wrap"><img src="' + esc(img.url || img.data) + '" onclick="openLbSet(\'cs-imgs-' + sec.id + '\',' + ii + ')">';
+        html += '<button class="cs-img-del" onclick="csDelImg(' + idx + ',' + ii + ')"><i class="ti ti-x" style="font-size:9px"></i></button></div>';
+      });
+      html += '</div>';
+      // Hidden container for lightbox
+      html += '<div id="cs-imgs-' + sec.id + '" style="display:none">';
+      sec.images.forEach(function(img) {
+        html += '<div class="view-img-wrap"><img src="' + esc(img.url || img.data) + '" alt=""></div>';
+      });
+      html += '</div>';
+    }
+    html += '<div class="cs-actions">';
+    html += '<label class="btn btn-sm btn-blue" style="cursor:pointer"><i class="ti ti-photo-plus" style="font-size:12px"></i> Add image<input type="file" accept="image/*" multiple style="display:none" onchange="csAddImgs(' + idx + ', this)"></label>';
+    html += '</div>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function csUpdateTitle(idx, val) {
+  var arr = csLoad(); if (!arr[idx]) return;
+  arr[idx].title = val; csSave(arr);
+}
+function csUpdateContent(idx, val) {
+  var arr = csLoad(); if (!arr[idx]) return;
+  arr[idx].content = val; csSave(arr);
+}
+function csDelete(idx) {
+  if (!confirm('Delete this section?')) return;
+  var arr = csLoad(); arr.splice(idx, 1); csSave(arr); csRender();
+}
+function csDelImg(idx, ii) {
+  var arr = csLoad(); if (!arr[idx]) return;
+  arr[idx].images.splice(ii, 1); csSave(arr); csRender();
+}
+function csAddImgs(idx, input) {
+  var files = [].slice.call(input.files);
+  if (!files.length) return;
+  var token = ghGetToken();
+  if (!token) { alert('Please set your GitHub token first (click the Synced badge).'); return; }
+  ghUpdateBadge('saving');
+  toast('Uploading ' + files.length + ' image' + (files.length > 1 ? 's' : '') + '…');
+  var done = 0, failed = 0;
+  files.forEach(function(f) {
+    var r = new FileReader();
+    r.onload = function(e) {
+      var ext = f.name.split('.').pop().toLowerCase() || 'jpg';
+      var fname = 'images/custom-' + idx + '-' + Date.now() + '-' + (Math.random()*99999|0) + '.' + ext;
+      ghUploadImage(token, fname, e.target.result).then(function(url) {
+        var arr = csLoad();
+        if (!arr[idx].images) arr[idx].images = [];
+        arr[idx].images.push({ url: url });
+        csSave(arr);
+        done++;
+        if (done + failed === files.length) { csRender(); toast('✓ Image saved'); ghMarkPending(); }
+      }).catch(function(err) {
+        failed++;
+        if (done + failed === files.length) { alert('Image upload failed: ' + err.message); ghUpdateBadge('error'); }
+      });
+    };
+    r.readAsDataURL(f);
+  });
+  input.value = '';
+}
+
+// Add CS_KEY to baked prefixes and render on load
+(function csInit() {
+  csRender();
+})();
 
 // ── Audit Log ────────────────────────────────────────────────
 var GH_AUTHOR_KEY = 'gh_author_name';
