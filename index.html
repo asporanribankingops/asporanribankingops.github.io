@@ -156,9 +156,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .lb-counter{position:fixed;top:18px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.4);padding:4px 14px;border-radius:100px}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:var(--bg);font-size:13px;padding:8px 20px;border-radius:100px;z-index:9999;transition:transform .25s;white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+/* settings modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg);border-radius:var(--rl);border:.5px solid var(--border);padding:24px;width:420px;max-width:94vw;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.modal-box h2{font-size:15px;font-weight:600;margin-bottom:4px}
+.modal-box p{font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.5}
+.modal-input{width:100%;padding:9px 12px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg2);color:var(--text);font-size:13px;font-family:monospace;outline:none;box-sizing:border-box;margin-bottom:12px}
+.modal-input:focus{border-color:var(--info-border)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+.gh-sync-status{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:100px;cursor:pointer;border:.5px solid var(--border2);background:var(--bg2);color:var(--text2);transition:all .15s;margin-left:8px}
+.gh-sync-status.connected{background:var(--ok-bg);color:var(--ok-text);border-color:var(--ok-border)}
+.gh-sync-status:hover{opacity:.8}
 </style>
 </head>
 <body>
+
+<!-- Settings modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal-box">
+    <h2>🔑 GitHub Sync Setup</h2>
+    <p>Paste your GitHub fine-grained PAT below. It's stored only in your browser and used to push edits directly to GitHub so everyone sees your changes.</p>
+    <input class="modal-input" id="gh-token-input" type="password" placeholder="github_pat_…" autocomplete="off">
+    <div style="font-size:11px;color:var(--text2);margin-bottom:12px" id="gh-token-status"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('settings-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-green" onclick="ghSaveToken()"><i class="ti ti-device-floppy" style="font-size:12px"></i> Save token</button>
+    </div>
+  </div>
+</div>
 
 <div class="lb" id="lb">
   <button class="lb-close" onclick="closeLb()"><i class="ti ti-x"></i></button>
@@ -175,7 +201,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="topbar-icon"><i class="ti ti-phone-call"></i></div>
     <div>
       <h1>NRI Onboarding &mdash; PBM Call Script &amp; SOP</h1>
-      <p>Stage-specific scripts for re-engaging customers who dropped off</p>
+      <p>Stage-specific scripts for re-engaging customers who dropped off
+        <span class="gh-sync-status" id="gh-sync-badge" onclick="document.getElementById('settings-modal').classList.add('open')">
+          <i class="ti ti-cloud-off" style="font-size:11px"></i> <span id="gh-sync-label">Sync off</span>
+        </span>
+      </p>
     </div>
   </div>
   <div class="tabs">
@@ -3399,6 +3429,144 @@ function clResetItems() {
 
 renderStages(STAGES);
 renderCl();
+
+// ── GitHub Sync ──────────────────────────────────────────────
+var GH_REPO = 'asporanribankingops/asporanribankingops.github.io';
+var GH_PATH = 'index.html';
+var GH_TOKEN_KEY = 'gh_pat_token';
+
+function ghGetToken() { return localStorage.getItem(GH_TOKEN_KEY) || ''; }
+
+function ghSaveToken() {
+  var val = document.getElementById('gh-token-input').value.trim();
+  if (!val) return;
+  localStorage.setItem(GH_TOKEN_KEY, val);
+  document.getElementById('settings-modal').classList.remove('open');
+  ghUpdateBadge(true);
+  toast('GitHub sync enabled ✓');
+}
+
+function ghUpdateBadge(connected) {
+  var badge = document.getElementById('gh-sync-badge');
+  var label = document.getElementById('gh-sync-label');
+  if (connected) {
+    badge.className = 'gh-sync-status connected';
+    badge.innerHTML = '<i class="ti ti-cloud-check" style="font-size:11px"></i> <span>Synced</span>';
+  } else {
+    badge.className = 'gh-sync-status';
+    badge.innerHTML = '<i class="ti ti-cloud-off" style="font-size:11px"></i> <span>Sync off</span>';
+  }
+}
+
+// On load, populate token input and update badge
+(function ghInit() {
+  var tok = ghGetToken();
+  if (tok) {
+    document.getElementById('gh-token-input').value = tok;
+    ghUpdateBadge(true);
+  }
+})();
+
+// Push the entire current page HTML to GitHub
+async function ghPushPage(commitMsg) {
+  var token = ghGetToken();
+  if (!token) {
+    toast('Set GitHub token first — click "Sync off" in the header');
+    return false;
+  }
+
+  // Show syncing indicator
+  var badge = document.getElementById('gh-sync-badge');
+  badge.innerHTML = '<i class="ti ti-loader-2 ti-spin" style="font-size:11px"></i> <span>Saving…</span>';
+
+  try {
+    // 1. Get current SHA of the file
+    var metaResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_PATH, {
+      headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!metaResp.ok) throw new Error('Could not fetch file SHA: ' + metaResp.status);
+    var meta = await metaResp.json();
+    var sha = meta.sha;
+
+    // 2. Get the current page HTML, strip any injected contenteditable attributes before saving
+    var html = document.documentElement.outerHTML;
+    // Remove contenteditable / editing highlights that may be active
+    html = html.replace(/ contenteditable="true"/g, '').replace(/ spellcheck="false"/g, '').replace(/style="outline:[^"]*1\.5px solid[^"]*"/g, '');
+
+    // 3. Base64 encode
+    var encoded = btoa(unescape(encodeURIComponent(html)));
+
+    // 4. Push
+    var pushResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_PATH, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: commitMsg || 'Update SOP content', content: encoded, sha: sha })
+    });
+
+    if (!pushResp.ok) {
+      var err = await pushResp.json();
+      throw new Error(err.message || pushResp.status);
+    }
+
+    ghUpdateBadge(true);
+    toast('✓ Saved & pushed to GitHub — everyone can see this now');
+    return true;
+  } catch(e) {
+    ghUpdateBadge(true);
+    toast('Push failed: ' + e.message);
+    console.error(e);
+    return false;
+  }
+}
+
+// Patch all save functions to also call ghPushPage after saving locally
+(function ghPatchSaves() {
+  // Wrap saveEdits (stage scripts, tips, fields)
+  var _origSaveEdits = saveEdits;
+  saveEdits = function() {
+    _origSaveEdits();
+    ghPushPage('Update stage script content');
+  };
+
+  // Wrap stSave (static table save — Objections, CRM)
+  var _origStSave = stSave;
+  stSave = function(tbodyId, actionsId, storeKey) {
+    _origStSave(tbodyId, actionsId, storeKey);
+    ghPushPage('Update ' + storeKey + ' table');
+  };
+
+  // Wrap waSave (WhatsApp blocks)
+  var _origWaSave = waSave;
+  waSave = function(id) {
+    _origWaSave(id);
+    ghPushPage('Update WhatsApp template ' + id);
+  };
+
+  // Wrap waExtraSave
+  var _origWaExtraSave = waExtraSave;
+  waExtraSave = function(uid) {
+    _origWaExtraSave(uid);
+    ghPushPage('Add WhatsApp template');
+  };
+
+  // Wrap clSave (checklist)
+  var _origClSave = clSave;
+  clSave = function() {
+    _origClSave();
+    ghPushPage('Update pre-call checklist');
+  };
+
+  // Wrap pbSecSave (playbook / KYC / framework sections)
+  var _origPbSecSave = pbSecSave;
+  pbSecSave = function(card) {
+    _origPbSecSave(card);
+    ghPushPage('Update SOP section: ' + (card.id || 'unknown'));
+  };
+})();
 
 // ── Audit Log ────────────────────────────────────────────────
 (function() {
