@@ -144,6 +144,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="switchTab('checklist')"><i class="ti ti-checkbox" style="font-size:14px"></i> Pre-call checklist</button>
     <button class="tab" onclick="switchTab('playbook')"><i class="ti ti-book" style="font-size:14px"></i> Support Playbook</button>
     <button class="tab" onclick="switchTab('kycsop')"><i class="ti ti-file-check" style="font-size:14px"></i> KYC Ops SOP</button>
+    <button class="tab" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
   </div>
 </div>
 
@@ -1507,6 +1508,427 @@ After 24 hours, your full transfer limits will automatically apply. In the meant
     </div><!-- #kyc-all -->
   </div><!-- #panel-kycsop -->
 
+  <!-- ── PBM Opening Framework Panel ──────────────────────── -->
+  <div id="panel-pbmframework" class="panel">
+
+    <input class="pb-search" id="pbm-search" placeholder="Search principles, scenarios, guidelines…" oninput="pbmSearch()" />
+
+    <div class="pb-toc">
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-objective')">Objective</button>
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-avoid')">What to Avoid</button>
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-principles')">Principles</button>
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-scenarios')">Scenarios</button>
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-tone')">Tone Guidelines</button>
+      <button class="pb-toc-btn" onclick="pbmScroll('pbm-psychology')">Key Shift</button>
+    </div>
+
+    <div id="pbm-all">
+
+      <!-- OBJECTIVE -->
+      <div class="pb-part" id="pbm-objective">
+        <div class="pb-part-title">Objective of the Opening</div>
+        <div class="pb-scenario" id="pbm-s-objective">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">🎯</div>
+            <div class="pb-scenario-title">The first 10–15 seconds should achieve</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body open">
+            <ol class="pb-steps">
+              <li data-n="1">Establish legitimacy quickly</li>
+              <li data-n="2">Sound operational/support-oriented rather than sales-oriented</li>
+              <li data-n="3">Reduce resistance and perceived effort</li>
+              <li data-n="4">Create continuity ("your application / your process")</li>
+              <li data-n="5">Position the PBM as a helpful single point of contact</li>
+              <li data-n="6">Avoid giving away control too early</li>
+              <li data-n="7">Create familiarity naturally without testing memory</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHAT TO AVOID -->
+      <div class="pb-part" id="pbm-avoid">
+        <div class="pb-part-title">What to Avoid</div>
+
+        <div class="pb-scenario" id="pbm-s-weak1">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">✗</div>
+            <div class="pb-scenario-title">Weak Opening 1 — Asking Permission First</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-weak1" style="border-left-color:var(--danger-border)">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking, is it the right time to talk?"</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-weak1',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-weak1')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this is weak</div>
+            <ul class="pb-bullets">
+              <li>Sounds like a generic sales call</li>
+              <li>Triggers an automatic "I'm busy" response</li>
+              <li>Asks for permission before establishing value</li>
+              <li>Does not explain the purpose of the call</li>
+              <li>Creates uncertainty and friction immediately</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-s-weak2">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--danger-bg)">✗</div>
+            <div class="pb-scenario-title">Weak Opening 2 — Burdening Customer's Memory</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-weak2" style="border-left-color:var(--danger-border)">
+              <span class="pb-tpl-text">"I hope you remember, we connected while you were opening the account."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-weak2',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-weak2')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this is weak</div>
+            <ul class="pb-bullets">
+              <li>Places cognitive burden on the customer — "Do I remember? Should I remember?"</li>
+              <li>Creates subtle social pressure</li>
+              <li>Sounds uncertain and validation-seeking</li>
+              <li>Weakens confidence and authority</li>
+            </ul>
+            <div class="pb-ok">The PBM should establish continuity <strong>naturally</strong> — not ask the customer to confirm familiarity.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRINCIPLES -->
+      <div class="pb-part" id="pbm-principles">
+        <div class="pb-part-title">Recommended Opening Principles</div>
+
+        <div class="pb-scenario" id="pbm-s-p1">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">1</div>
+            <div class="pb-scenario-title">Lead with Purpose</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <p style="font-size:13px;margin-bottom:8px">The customer should understand immediately:</p>
+            <ul class="pb-bullets">
+              <li>why we are calling,</li>
+              <li>what stage the process is in,</li>
+              <li>and how we are helping.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-s-p2">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">2</div>
+            <div class="pb-scenario-title">Sound Like Assistance, Not Sales</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="info-row">
+              <div class="info-box">
+                <div class="info-lbl">Tone should feel</div>
+                <div class="info-val">Supportive · Process-driven · Concierge-like · Personalized</div>
+              </div>
+              <div class="info-box">
+                <div class="info-lbl">PBM should feel like</div>
+                <div class="info-val">A dedicated relationship manager — <strong>not</strong> a telecaller</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-s-p3">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">3</div>
+            <div class="pb-scenario-title">Assume Continuity Naturally</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <p style="font-size:13px;margin-bottom:8px">Use language like:</p>
+            <div class="pb-msgs">
+              <span class="pb-msg-chip">"your account opening process"</span>
+              <span class="pb-msg-chip">"your application"</span>
+              <span class="pb-msg-chip">"help move this forward"</span>
+              <span class="pb-msg-chip">"assist you with the next steps"</span>
+              <span class="pb-msg-chip">"we had connected earlier regarding your onboarding"</span>
+            </div>
+            <div class="pb-ok" style="margin-top:8px">This creates psychological continuity without making the customer validate memory.</div>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-s-p4">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">4</div>
+            <div class="pb-scenario-title">Avoid Asking Permission Too Early</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="info-row">
+              <div class="info-box">
+                <div class="info-lbl" style="color:var(--danger-text)">❌ Instead of</div>
+                <div class="info-val">"Is this a good time?"<br>"Can I speak to you for 2 minutes?"</div>
+              </div>
+              <div class="info-box">
+                <div class="info-lbl" style="color:var(--ok-text)">✅ Use</div>
+                <div class="info-val">"I'll just take 2 minutes"<br>"Quick update regarding your application"<br>"Calling to help move this forward"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-s-p5">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">5</div>
+            <div class="pb-scenario-title">Position the PBM Clearly</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <p style="font-size:13px;margin-bottom:8px">The PBM should be framed as a dedicated point of contact who simplifies the process and is accountable for helping the customer.</p>
+            <div class="pb-msgs">
+              <span class="pb-msg-chip">"I'll personally assist you through the process."</span>
+              <span class="pb-msg-chip">"I'll be your point of contact."</span>
+              <span class="pb-msg-chip">"I'm helping coordinate the next steps for your account opening."</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENARIOS -->
+      <div class="pb-part" id="pbm-scenarios">
+        <div class="pb-part-title">Recommended Openings by Scenario</div>
+
+        <div class="pb-scenario" id="pbm-sc1">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">1</div>
+            <div class="pb-scenario-title">Scenario 1 — General Warm Lead / Account Opening in Progress</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t1">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. I'll be assisting you with your NRI account opening process. I just wanted 2 minutes to update you on the status and help move the application forward from my end."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t1',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t1')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Sounds premium and personalized</li>
+              <li>Establishes ownership</li>
+              <li>Creates continuity</li>
+              <li>Low-friction ask</li>
+              <li>Sounds operational rather than sales-driven</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc2">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">2</div>
+            <div class="pb-scenario-title">Scenario 2 — Existing Connection / Follow-Up Call</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t2">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. We had connected earlier regarding your NRI account opening process, and I'm just following up to help coordinate the next steps from my side."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t2',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t2')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Establishes familiarity naturally</li>
+              <li>No memory burden on the customer</li>
+              <li>Sounds smooth and professional</li>
+              <li>Reinforces PBM ownership</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc3">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">3</div>
+            <div class="pb-scenario-title">Scenario 3 — Pending Documents</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t3">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. I'm reaching out to help complete your account opening process — we just need a couple of documents from your end and I can assist you with the next steps."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t3',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t3')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Collaborative rather than pushy</li>
+              <li>Focused on assistance</li>
+              <li>Makes the task feel manageable</li>
+              <li>Reduces friction around document collection</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc4">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">4</div>
+            <div class="pb-scenario-title">Scenario 4 — Stalled / Inactive Application</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t4">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. I wanted to quickly check if you're facing any issues with your account opening process — I can help simplify things from my side."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t4',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t4')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Customer-centric approach</li>
+              <li>Opens conversation naturally</li>
+              <li>Encourages objections/issues to surface</li>
+              <li>Positions PBM as problem-solver</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc5">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">5</div>
+            <div class="pb-scenario-title">Scenario 5 — Follow-Up After Earlier Interaction</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t5">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. I'm following up regarding your NRI account opening application. I'll personally help coordinate the remaining steps so we can move the process forward smoothly."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t5',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t5')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Reinforces continuity</li>
+              <li>Builds trust and accountability</li>
+              <li>Creates premium service perception</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc7">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--info-bg)">7</div>
+            <div class="pb-scenario-title">Scenario 7 — Customer Has Gone Silent</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t7">
+              <span class="pb-tpl-text">"Hi, this is Pratiksha Das from Aspora NRI Banking. I just wanted to reconnect regarding your NRI account opening process and check if there's anything pending or any support you need from my side."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t7',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t7')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">Why this works</div>
+            <ul class="pb-bullets">
+              <li>Soft re-engagement</li>
+              <li>Non-confrontational</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pb-scenario" id="pbm-sc8">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">8</div>
+            <div class="pb-scenario-title">Scenario 8 — Initial Funding</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-template" id="pbm-t8">
+              <span class="pb-tpl-text">"Hi, Pratiksha Das from Aspora NRI Banking. Thank you for completing your onboarding journey — to enable transactions in your account, you are required to do the first funding of any amount you are comfortable with. I can assist you on call if you choose to do the funding now."</span>
+              <div class="pb-tpl-actions">
+                <button class="pb-copy-btn" onclick="pbCopyTpl('pbm-t8',this)">Copy</button>
+                <button class="pb-edit-btn" onclick="pbEditTpl('pbm-t8')">Edit</button>
+              </div>
+            </div>
+            <div class="pb-h3">What NOT to do</div>
+            <ul class="pb-bullets">
+              <li>Do not mention a specific amount — if asked "how much should I fund?", say there is no minimum but higher savings leads to higher interest rate</li>
+              <li>Do not make the user feel under pressure or compulsion to fund immediately</li>
+            </ul>
+            <div class="pb-h3">What TO do</div>
+            <ul class="pb-bullets">
+              <li>If user seems unsure, mention they can earn up to 7% interest — higher savings = higher rate</li>
+              <li>Inform about upcoming Fixed Deposits with competitive industry rates for maximum returns</li>
+              <li>Mention perks: one year free remittance, virtual debit card, UPI via international number</li>
+              <li>Encourage by stating: unlock maximum interest rate of 6.5% if deposit is 2,000 GBP and above</li>
+            </ul>
+            <div class="pb-h3">Interest Rates Reference</div>
+            <table class="pb-table">
+              <tr><th>INR Amount Range</th><th>Approx. GBP Range</th><th>Rate</th></tr>
+              <tr><td>₹0 – ₹1 lakh</td><td>£0 – £870</td><td>2.50%</td></tr>
+              <tr><td>₹1 lakh – ₹5 lakh</td><td>£870 – £4,348</td><td>3.25%</td></tr>
+              <tr><td>₹5 lakh – ₹10 lakh</td><td>£4,348 – £8,696</td><td>3.50%</td></tr>
+              <tr><td>₹10 lakh – ₹25 lakh</td><td>£8,696 – £21,739</td><td><strong>6.50%</strong></td></tr>
+              <tr><td>₹25 lakh – ₹50 lakh</td><td>£21,739 – £43,478</td><td><strong>7.00%</strong></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TONE -->
+      <div class="pb-part" id="pbm-tone">
+        <div class="pb-part-title">Tone Guidelines for PBMs</div>
+        <div class="pb-scenario" id="pbm-s-tone">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--bg2)">🎙️</div>
+            <div class="pb-scenario-title">Tone Do's and Don'ts</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="info-row">
+              <div class="info-box">
+                <div class="info-lbl" style="color:var(--ok-text)">✅ Sound</div>
+                <div class="info-val">Calm · Confident · Composed · Consultative · Ownership-oriented</div>
+              </div>
+              <div class="info-box">
+                <div class="info-lbl" style="color:var(--danger-text)">❌ Avoid sounding</div>
+                <div class="info-val">Overly energetic · Transactional · Rushed · Uncertain · Scripted</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEY SHIFT -->
+      <div class="pb-part" id="pbm-psychology">
+        <div class="pb-part-title">Key Psychological Shift</div>
+        <div class="pb-scenario" id="pbm-s-shift">
+          <div class="pb-scenario-hdr" onclick="pbToggle(this)">
+            <div class="pb-scenario-icon" style="background:var(--ok-bg)">💡</div>
+            <div class="pb-scenario-title">How the call should feel</div>
+            <i class="ti ti-chevron-down chevron"></i>
+          </div>
+          <div class="pb-scenario-body">
+            <div class="pb-ok" style="font-size:14px;font-weight:600;text-align:center;padding:16px">"Your dedicated banking contact helping complete an important process."</div>
+            <div style="text-align:center;font-size:13px;color:var(--text2);margin:12px 0 8px">NOT</div>
+            <div class="pb-warning" style="text-align:center">"A sales agent trying to convince you to open an account."</div>
+            <div style="text-align:center;font-size:13px;color:var(--text2);margin:12px 0 8px">OR</div>
+            <div class="pb-warning" style="text-align:center">"A caller seeking validation or permission to continue the conversation."</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- #pbm-all -->
+  </div><!-- #panel-pbmframework -->
+
 </div>
 
 <script>
@@ -1993,7 +2415,7 @@ function updateCap(num, idx, val) {
 }
 
 function switchTab(id) {
-  var ids = ['stages','objections','crm','whatsapp','checklist','playbook','kycsop'];
+  var ids = ['stages','objections','crm','whatsapp','checklist','playbook','kycsop','pbmframework'];
   var tabs = document.querySelectorAll('.tab');
   var panels = document.querySelectorAll('.panel');
   for (var i = 0; i < ids.length; i++) {
@@ -2047,6 +2469,21 @@ function kycScroll(id) {
   setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 50);
 }
 
+// ── Opening Framework helpers ────────────────────────────────
+function pbmSearch() {
+  var q = document.getElementById('pbm-search').value.toLowerCase();
+  document.querySelectorAll('#pbm-all .pb-scenario').forEach(function(s) {
+    s.style.display = (!q || s.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+function pbmScroll(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  switchTab('pbmframework');
+  setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 50);
+}
+
 var KYC_CHECKLIST = [
   'Passport: Clear copy with visible face, passport number, issue date, and expiry date',
   'POA: Dated within last 3 months, accepted type, name matches passport exactly, notarized',
@@ -2093,7 +2530,7 @@ var PB_SEC_SELECTORS = [
 
 // Inject Edit button + actions bar into every scenario header
 (function pbInitSections() {
-  document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario').forEach(function(card) {
+  document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario, #pbm-all .pb-scenario').forEach(function(card) {
     var hdr = card.querySelector('.pb-scenario-hdr');
     var body = card.querySelector('.pb-scenario-body');
     if (!hdr || !body) return;
