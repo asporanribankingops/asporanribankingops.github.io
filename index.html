@@ -183,6 +183,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="btn" onclick="document.getElementById('settings-modal').classList.remove('open')">Cancel</button>
       <button class="btn btn-green" onclick="ghSaveToken()"><i class="ti ti-device-floppy" style="font-size:12px"></i> Save token</button>
     </div>
+    <hr style="margin:16px 0;border:none;border-top:.5px solid var(--border)">
+    <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Push all edits you've made here to GitHub so <strong>everyone</strong> sees them on the public URL.</p>
+    <button class="btn btn-blue" style="width:100%;justify-content:center;padding:9px" onclick="ghBakeAndPush()">
+      <i class="ti ti-cloud-upload" style="font-size:14px"></i> &nbsp;Push all my changes to public URL
+    </button>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px" id="bake-status"></div>
   </div>
 </div>
 
@@ -195,6 +201,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="lb-cap" id="lb-cap"></div>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- Baked defaults: replaced by ghBakeAndPush() to seed localStorage for all visitors -->
+<script id="baked-defaults">/* no baked data yet */</script>
 
 <div class="topbar">
   <div class="topbar-left">
@@ -3568,6 +3577,112 @@ async function ghPushPage(commitMsg) {
     ghPushPage('Update SOP section: ' + (card.id || 'unknown'));
   };
 })();
+
+// ── Bake & Push ──────────────────────────────────────────────
+async function ghBakeAndPush() {
+  var token = ghGetToken();
+  if (!token) {
+    alert('Please save your GitHub token first.');
+    return;
+  }
+  var statusEl = document.getElementById('bake-status');
+  statusEl.textContent = 'Collecting your changes…';
+
+  // 1. Collect every relevant localStorage key
+  var baked = {};
+  var allKeys = [];
+  for (var i = 0; i < localStorage.length; i++) allKeys.push(localStorage.key(i));
+
+  var relevantPrefixes = [
+    SKEY,          // stage edits (exact key)
+    'cl_items',    // checklist
+    'wa_extra',    // extra WA blocks
+    'wa_wa',       // wa1, wa2, wa3
+    'st_',         // static tables
+    'pb_sec_',     // playbook/kyc/pbm section edits
+    'pbm_new_card_', // new pbm cards
+    'pb_deleted_', // deleted cards
+    'pb_tpl_',     // template edits
+  ];
+
+  allKeys.forEach(function(k) {
+    if (!k) return;
+    var match = relevantPrefixes.some(function(p) {
+      return k === p || k.indexOf(p) === 0;
+    });
+    if (match) {
+      var val = localStorage.getItem(k);
+      if (val) baked[k] = val;
+    }
+  });
+
+  if (!Object.keys(baked).length) {
+    statusEl.textContent = 'No local changes found to push.';
+    return;
+  }
+
+  statusEl.textContent = 'Fetching current file from GitHub…';
+
+  try {
+    // 2. Fetch current file
+    var metaResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_PATH, {
+      headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!metaResp.ok) throw new Error('Fetch failed: ' + metaResp.status);
+    var meta = await metaResp.json();
+    var sha = meta.sha;
+    // Decode base64 content (handle GitHub's line-wrapped base64)
+    var currentHtml = decodeURIComponent(escape(atob(meta.content.replace(/\n/g, ''))));
+
+    // 3. Replace the baked-defaults script block
+    var bakedScript =
+      '<script id="baked-defaults">\n' +
+      '(function(){\n' +
+      '  var _baked = ' + JSON.stringify(baked) + ';\n' +
+      '  Object.keys(_baked).forEach(function(k){\n' +
+      '    if(!localStorage.getItem(k)) localStorage.setItem(k,_baked[k]);\n' +
+      '  });\n' +
+      '})();\n' +
+      '<\/script>';
+
+    var updated = currentHtml.replace(
+      /<script id="baked-defaults">[\s\S]*?<\/script>/,
+      bakedScript
+    );
+
+    if (updated === currentHtml) {
+      throw new Error('Could not find baked-defaults placeholder in the file.');
+    }
+
+    // 4. Push
+    statusEl.textContent = 'Pushing to GitHub…';
+    var encoded = btoa(unescape(encodeURIComponent(updated)));
+    var pushResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_PATH, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Bake local edits into public page (' + Object.keys(baked).length + ' items)',
+        content: encoded,
+        sha: sha
+      })
+    });
+
+    if (!pushResp.ok) {
+      var err = await pushResp.json();
+      throw new Error(err.message || pushResp.status);
+    }
+
+    statusEl.innerHTML = '<span style="color:var(--ok-text)">✓ Done! ' + Object.keys(baked).length + ' changes pushed. Public URL will update in ~30 seconds.</span>';
+    ghUpdateBadge(true);
+    toast('✓ All your changes are now live for everyone');
+  } catch(e) {
+    statusEl.innerHTML = '<span style="color:var(--danger-text)">Error: ' + e.message + '</span>';
+  }
+}
 
 // ── Audit Log ────────────────────────────────────────────────
 (function() {
