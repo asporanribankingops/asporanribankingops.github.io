@@ -3772,7 +3772,7 @@ async function ghBakeAndPush(silent) {
       '})();\n' +
       '<\/script><!--BD-END-->';
 
-    // Use indexOf markers — immune to </script> appearing inside JSON data
+    // Use indexOf markers — immune to script-close tags inside JSON data
     var bdStart = currentHtml.indexOf('<!--BD-START-->');
     var bdEnd   = currentHtml.indexOf('<!--BD-END-->');
     if (bdStart === -1 || bdEnd === -1) {
