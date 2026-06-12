@@ -272,6 +272,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" data-tab="kycsop" onclick="switchTab('kycsop')"><i class="ti ti-file-check" style="font-size:14px"></i> KYC Ops SOP</button>
     <button class="tab" data-tab="pbmframework" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
+    <div id="custom-tabs-btns"></div>
+    <button class="tab" id="add-page-btn" onclick="cpAddPage()" style="border-style:dashed;opacity:.7"><i class="ti ti-plus" style="font-size:13px"></i> New page</button>
   </div>
 </div>
 
@@ -442,6 +444,15 @@ I will personally assist you through each step once you are ready.</div>
       .cs-img-wrap img{width:100%;height:100%;object-fit:cover}
       .cs-img-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
       .cs-actions{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:.5px solid var(--border)}
+      .cp-section{background:var(--bg);border:.5px solid var(--border);border-radius:var(--r);margin-bottom:18px;overflow:hidden}
+      .cp-section-hdr{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--bg2);border-bottom:.5px solid var(--border)}
+      .cp-section-title{flex:1;font-size:14px;font-weight:600;background:transparent;border:none;outline:none;color:var(--text1)}
+      .cp-section-title:focus{background:var(--bg);border-radius:4px;padding:2px 6px}
+      .cp-section-body{padding:16px}
+      .cp-section-content{width:100%;min-height:100px;font-size:14px;line-height:1.7;color:var(--text1);background:transparent;border:none;outline:none;resize:vertical;font-family:inherit}
+      .cp-section-content:focus{background:var(--bg2);border-radius:6px;padding:10px;border:.5px solid var(--border2)}
+      .cp-page-title-input{font-size:22px;font-weight:700;border:none;outline:none;background:transparent;color:var(--text1);width:100%}
+      .cp-page-title-input:focus{background:var(--bg2);border-radius:6px;padding:4px 10px}
       .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
       .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
       .pb-part{margin-bottom:32px}
@@ -3718,6 +3729,7 @@ async function ghBakeAndPush(silent) {
     'wa_wa',       // wa1, wa2, wa3
     'st_',         // static tables
     'pb_sec_',     // playbook/kyc/pbm section edits
+    'custom_pages_v1',        // custom pages (new tabs)
     'stages_custom_sections', // stage tab custom sections
     'pbm_new_card_', // new pbm cards
     'pb_deleted_', // deleted cards
@@ -3824,6 +3836,138 @@ async function ghBakeAndPush(silent) {
     ghUpdateBadge(false);
   }
 }
+
+// ── Custom Pages ──────────────────────────────────────────────
+var CP_KEY = 'custom_pages_v1';
+function cpLoad() { try { return JSON.parse(localStorage.getItem(CP_KEY)) || []; } catch(e) { return []; } }
+function cpSave(arr) { localStorage.setItem(CP_KEY, JSON.stringify(arr)); ghMarkPending(); }
+
+function cpAddPage() {
+  var arr = cpLoad();
+  var id = 'cp_' + Date.now();
+  arr.push({ id: id, title: 'New Page', sections: [] });
+  cpSave(arr);
+  cpRender();
+  switchTab(id);
+}
+
+function cpRender() {
+  // Render tab buttons
+  var arr = cpLoad();
+  var btns = document.getElementById('custom-tabs-btns');
+  if (btns) {
+    btns.innerHTML = arr.map(function(p) {
+      return '<button class="tab" data-tab="' + p.id + '" onclick="switchTab(\'' + p.id + '\')" style="position:relative">' +
+        '<i class="ti ti-file-text" style="font-size:14px"></i> ' + esc(p.title) + '</button>';
+    }).join('');
+  }
+  // Render panels
+  var container = document.getElementById('custom-pages-panels');
+  if (!container) return;
+  container.innerHTML = arr.map(function(page, pi) {
+    var secs = page.sections || [];
+    var secsHtml = secs.map(function(sec, si) {
+      var imgs = (sec.images || []).map(function(img, ii) {
+        return '<div class="cs-img-wrap">' +
+          '<img src="' + esc(img.url || img.data) + '" onclick="openLb(\'' + esc(img.url || img.data) + '\')">' +
+          '<button class="cs-img-del" onclick="cpDelImg(' + pi + ',' + si + ',' + ii + ')"><i class="ti ti-x" style="font-size:9px"></i></button>' +
+          '</div>';
+      }).join('');
+      return '<div class="cp-section">' +
+        '<div class="cp-section-hdr">' +
+          '<input class="cp-section-title" value="' + esc(sec.title) + '" placeholder="Section title" oninput="cpUpdateSecTitle(' + pi + ',' + si + ',this.value)">' +
+          '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border)" onclick="cpDelSec(' + pi + ',' + si + ')"><i class="ti ti-trash" style="font-size:12px"></i></button>' +
+        '</div>' +
+        '<div class="cp-section-body">' +
+          '<textarea class="cp-section-content" placeholder="Write content, scripts, notes, instructions…" oninput="cpUpdateSecContent(' + pi + ',' + si + ',this.value)">' + esc(sec.content || '') + '</textarea>' +
+          (imgs ? '<div class="cs-imgs">' + imgs + '</div>' : '') +
+          '<div class="cs-actions">' +
+            '<label class="btn btn-sm btn-blue" style="cursor:pointer"><i class="ti ti-photo-plus" style="font-size:12px"></i> Add image' +
+              '<input type="file" accept="image/*" multiple style="display:none" onchange="cpAddImgs(' + pi + ',' + si + ',this)">' +
+            '</label>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    return '<div id="panel-' + page.id + '" class="panel">' +
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">' +
+        '<input class="cp-page-title-input" value="' + esc(page.title) + '" placeholder="Page title" oninput="cpUpdateTitle(' + pi + ',this.value)">' +
+        '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border);white-space:nowrap" onclick="cpDeletePage(' + pi + ')"><i class="ti ti-trash" style="font-size:12px"></i> Delete page</button>' +
+      '</div>' +
+      secsHtml +
+      '<button class="pbm-add-btn" onclick="cpAddSection(' + pi + ')"><i class="ti ti-plus" style="font-size:12px"></i> Add section</button>' +
+    '</div>';
+  }).join('');
+}
+
+function cpUpdateTitle(pi, val) {
+  var arr = cpLoad(); if (!arr[pi]) return;
+  arr[pi].title = val; cpSave(arr);
+  // update tab button label live
+  var btn = document.querySelector('[data-tab="' + arr[pi].id + '"]');
+  if (btn) btn.innerHTML = '<i class="ti ti-file-text" style="font-size:14px"></i> ' + esc(val);
+}
+function cpUpdateSecTitle(pi, si, val) {
+  var arr = cpLoad(); if (!arr[pi] || !arr[pi].sections[si]) return;
+  arr[pi].sections[si].title = val; cpSave(arr);
+}
+function cpUpdateSecContent(pi, si, val) {
+  var arr = cpLoad(); if (!arr[pi] || !arr[pi].sections[si]) return;
+  arr[pi].sections[si].content = val; cpSave(arr);
+}
+function cpAddSection(pi) {
+  var arr = cpLoad(); if (!arr[pi]) return;
+  arr[pi].sections.push({ title: 'New Section', content: '', images: [] });
+  cpSave(arr); cpRender(); switchTab(arr[pi].id);
+}
+function cpDelSec(pi, si) {
+  if (!confirm('Delete this section?')) return;
+  var arr = cpLoad(); if (!arr[pi]) return;
+  arr[pi].sections.splice(si, 1); cpSave(arr); cpRender(); switchTab(arr[pi].id);
+}
+function cpDeletePage(pi) {
+  if (!confirm('Delete this entire page?')) return;
+  var arr = cpLoad(); arr.splice(pi, 1); cpSave(arr); cpRender(); switchTab('stages');
+}
+function cpDelImg(pi, si, ii) {
+  var arr = cpLoad(); if (!arr[pi] || !arr[pi].sections[si]) return;
+  arr[pi].sections[si].images.splice(ii, 1); cpSave(arr); cpRender(); switchTab(arr[pi].id);
+}
+function cpAddImgs(pi, si, input) {
+  var files = [].slice.call(input.files);
+  if (!files.length) return;
+  var token = ghGetToken();
+  if (!token) { alert('Please set your GitHub token first (click the Synced badge).'); return; }
+  ghUpdateBadge('saving');
+  toast('Uploading ' + files.length + ' image' + (files.length > 1 ? 's' : '') + '…');
+  var done = 0, failed = 0;
+  var arr = cpLoad();
+  files.forEach(function(f) {
+    var r = new FileReader();
+    r.onload = function(e) {
+      var ext = f.name.split('.').pop().toLowerCase() || 'jpg';
+      var fname = 'images/page-' + pi + '-sec-' + si + '-' + Date.now() + '-' + (Math.random()*99999|0) + '.' + ext;
+      ghUploadImage(token, fname, e.target.result).then(function(url) {
+        var a2 = cpLoad();
+        if (a2[pi] && a2[pi].sections[si]) {
+          if (!a2[pi].sections[si].images) a2[pi].sections[si].images = [];
+          a2[pi].sections[si].images.push({ url: url });
+          cpSave(a2);
+        }
+        done++;
+        if (done + failed === files.length) { cpRender(); switchTab(arr[pi].id); toast('✓ Image saved'); }
+      }).catch(function(err) {
+        failed++;
+        if (done + failed === files.length) { alert('Upload failed: ' + err.message); ghUpdateBadge('error'); }
+      });
+    };
+    r.readAsDataURL(f);
+  });
+  input.value = '';
+}
+
+(function cpInit() { cpRender(); })();
 
 // ── Stage Custom Sections ─────────────────────────────────────
 var CS_KEY = 'stages_custom_sections';
@@ -4029,6 +4173,9 @@ switchTab = function(id) {
       <div style="color:var(--text2);font-size:13px;padding:20px 0">Loading…</div>
     </div>
   </div>
+
+  <!-- Custom pages injected here by cpRender() -->
+  <div id="custom-pages-panels"></div>
 
 </body>
 </html>
