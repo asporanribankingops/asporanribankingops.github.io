@@ -78,11 +78,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .edit-img-cap{width:100px;font-size:11px;padding:3px 4px;border:.5px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);margin-top:4px}
 .del-img{position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#a32d2d;color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
 .script-with-imgs{display:flex;flex-direction:column;gap:10px}
+/* carousel */
+.img-carousel{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:6px;width:200px}
+.img-carousel-track{position:relative;width:180px}
+.img-carousel-track img{width:180px;height:auto;border-radius:var(--r);border:.5px solid var(--border2);cursor:pointer;display:block}
+.img-carousel-track img:hover{opacity:.85}
+.img-carousel-nav{display:flex;align-items:center;gap:8px}
+.img-carousel-btn{width:28px;height:28px;border-radius:50%;border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.img-carousel-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.img-carousel-btn:disabled{opacity:.3;cursor:default}
+.img-carousel-counter{font-size:11px;color:var(--text2);min-width:36px;text-align:center}
+.img-carousel-dots{display:flex;gap:4px;justify-content:center}
+.img-carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s}
+.img-carousel-dot.active{background:var(--info-text)}
+.view-img-cap{font-size:11px;color:var(--text2);margin-top:2px;text-align:center}
+/* legacy single image */
 .view-imgs{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;margin-top:4px}
 .view-img-wrap{display:flex;flex-direction:column;align-items:center}
 .view-img-wrap img{width:180px;height:auto;border-radius:var(--r);border:.5px solid var(--border2);cursor:pointer;display:block}
 .view-img-wrap img:hover{opacity:.85}
-.view-img-cap{font-size:11px;color:var(--text2);margin-top:3px}
 .btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:5px 11px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
 .btn:hover{background:var(--bg2);color:var(--text)}
 .btn-blue{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
@@ -2259,14 +2273,34 @@ function stageHtml(s) {
       if (images.length) {
         h += '<div class="script-with-imgs">';
         h += '<div class="script-view">' + esc(script) + '</div>';
-        h += '<div class="view-imgs">';
-        for (var vi = 0; vi < images.length; vi++) {
-          var vimg = images[vi];
-          h += '<div class="view-img-wrap"><img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
+        if (images.length === 1) {
+          var vimg = images[0];
+          h += '<div class="view-imgs"><div class="view-img-wrap"><img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
           if (vimg.caption) h += '<div class="view-img-cap">' + esc(vimg.caption) + '</div>';
+          h += '</div></div>';
+        } else {
+          var cid = 'car_' + s.num;
+          h += '<div class="img-carousel" id="' + cid + '" data-idx="0">';
+          h += '<div class="img-carousel-track">';
+          for (var vi = 0; vi < images.length; vi++) {
+            var vimg = images[vi];
+            h += '<img src="' + vimg.data + '" alt="' + esc(vimg.caption||'') + '" style="display:' + (vi===0?'block':'none') + '" onclick="openLb(\'' + vimg.data + '\',\'' + esc(vimg.caption||'') + '\')">';
+          }
+          h += '</div>';
+          h += '<div class="img-carousel-nav">';
+          h += '<button class="img-carousel-btn" onclick="carNav(\'' + cid + '\',-1)" disabled>&#8592;</button>';
+          h += '<span class="img-carousel-counter">1 / ' + images.length + '</span>';
+          h += '<button class="img-carousel-btn" onclick="carNav(\'' + cid + '\',1)"' + (images.length<=1?' disabled':'') + '>&#8594;</button>';
+          h += '</div>';
+          h += '<div class="img-carousel-dots">';
+          for (var di = 0; di < images.length; di++) {
+            h += '<div class="img-carousel-dot' + (di===0?' active':'') + '" onclick="carGoto(\'' + cid + '\',' + di + ')"></div>';
+          }
+          h += '</div>';
+          if (images[0].caption) h += '<div class="view-img-cap" id="' + cid + '_cap">' + esc(images[0].caption) + '</div>';
           h += '</div>';
         }
-        h += '</div></div>';
+        h += '</div>';
       } else {
         h += '<div class="script-view">' + esc(script) + '</div>';
       }
@@ -2791,6 +2825,34 @@ function copyEl(id) {
   navigator.clipboard.writeText(el.textContent.trim()).then(function() {
     if (btn) { var orig=btn.innerHTML; btn.innerHTML='<i class="ti ti-check" style="font-size:12px"></i> Copied!'; setTimeout(function(){ btn.innerHTML=orig; },1800); }
   });
+}
+
+function carNav(cid, dir) {
+  var car = document.getElementById(cid);
+  if (!car) return;
+  var imgs = car.querySelectorAll('.img-carousel-track img');
+  var dots = car.querySelectorAll('.img-carousel-dot');
+  var counter = car.querySelector('.img-carousel-counter');
+  var cap = car.querySelector('[id$="_cap"]');
+  var idx = parseInt(car.dataset.idx, 10);
+  imgs[idx].style.display = 'none';
+  dots[idx] && dots[idx].classList.remove('active');
+  idx = Math.max(0, Math.min(imgs.length - 1, idx + dir));
+  imgs[idx].style.display = 'block';
+  dots[idx] && dots[idx].classList.add('active');
+  car.dataset.idx = idx;
+  if (counter) counter.textContent = (idx + 1) + ' / ' + imgs.length;
+  if (cap) cap.textContent = imgs[idx].alt || '';
+  var btns = car.querySelectorAll('.img-carousel-btn');
+  if (btns[0]) btns[0].disabled = idx === 0;
+  if (btns[1]) btns[1].disabled = idx === imgs.length - 1;
+}
+
+function carGoto(cid, target) {
+  var car = document.getElementById(cid);
+  if (!car) return;
+  var current = parseInt(car.dataset.idx, 10);
+  carNav(cid, target - current);
 }
 
 function openLb(src, cap) {
