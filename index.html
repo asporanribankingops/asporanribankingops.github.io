@@ -192,10 +192,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="panel-objections" class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <span class="sec-lbl" style="margin:0">All Objections</span>
+      <div style="display:flex;gap:6px" id="obj-panel-actions">
+        <button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit('obj-tbody','obj-panel-actions','obj')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>
+      </div>
+    </div>
     <div class="card-sec" style="margin-top:4px">
       <table class="dtable">
         <thead><tr><th style="width:38%">Customer says</th><th>PBM response</th></tr></thead>
-        <tbody>
+        <tbody id="obj-tbody">
           <tr><td style="font-style:italic;color:var(--text2)">"I'll do it later"</td><td>"Absolutely - when would be a good time? I'll set a reminder and call you back at that time."</td></tr>
           <tr><td style="font-style:italic;color:var(--text2)">"The app keeps crashing"</td><td>"I'll raise a tech ticket right away from my end. Alternatively, clearing the app cache or switching devices often resolves it quickly."</td></tr>
           <tr><td style="font-style:italic;color:var(--text2)">"I changed my mind about the NRI account"</td><td>"I understand - may I ask what changed? Often there's a specific concern I can address. Your data is saved for 30 days if you'd like to revisit."</td></tr>
@@ -210,11 +216,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
   <div id="panel-crm" class="panel">
-    <p class="sec-lbl" style="margin-top:4px">Call disposition codes</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <p class="sec-lbl" style="margin:0">Call disposition codes</p>
+      <div style="display:flex;gap:6px" id="crm-codes-actions">
+        <button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit('crm-codes-tbody','crm-codes-actions','crm-codes')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>
+      </div>
+    </div>
     <div class="card-sec">
       <table class="dtable">
         <thead><tr><th style="width:18%">Code</th><th style="width:44%">Meaning</th><th>Next action</th></tr></thead>
-        <tbody>
+        <tbody id="crm-codes-tbody">
           <tr><td><span class="code-chip">C1</span></td><td>Completed onboarding live on this call</td><td>Mark as converted, log in CRM</td></tr>
           <tr><td><span class="code-chip">C2</span></td><td>Customer committed to complete within 24 hours</td><td>Check CRM after 24h; call back if not done</td></tr>
           <tr><td><span class="code-chip">C3</span></td><td>Callback scheduled</td><td>Call exactly on time</td></tr>
@@ -225,11 +236,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         </tbody>
       </table>
     </div>
-    <p class="sec-lbl">Follow-up SLA</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px">
+      <p class="sec-lbl" style="margin:0">Follow-up SLA</p>
+      <div style="display:flex;gap:6px" id="crm-sla-actions">
+        <button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit('crm-sla-tbody','crm-sla-actions','crm-sla')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>
+      </div>
+    </div>
     <div class="card-sec">
       <table class="dtable">
         <thead><tr><th style="width:30%">Outcome</th><th style="width:25%">SLA</th><th>Action required</th></tr></thead>
-        <tbody>
+        <tbody id="crm-sla-tbody">
           <tr><td>No answer</td><td>Within 4 hours</td><td>Retry call + send WhatsApp message</td></tr>
           <tr><td>Callback scheduled</td><td>Exact scheduled time</td><td>Call precisely on time, no delays</td></tr>
           <tr><td>Committed to complete</td><td>24 hours</td><td>Check if done; if not, call again</td></tr>
@@ -242,11 +258,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
   <div id="panel-whatsapp" class="panel">
     <div class="wa-block">
-      <div class="wa-hdr"><span>Drop-off reminder</span><button class="btn" onclick="copyEl('wa1')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-hdr"><span>Drop-off reminder</span><div style="display:flex;gap:6px"><button class="btn" onclick="copyEl('wa1')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button><button class="btn btn-blue" style="font-size:11px;padding:2px 8px" id="wa1-edit-btn" onclick="waEdit('wa1')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button></div></div>
       <div class="wa-body" id="wa1">Hi [Name], this is [PBM Name] from Aspora NRI Banking. I tried reaching you regarding your NRI account opening application. You are very close to completing the process - I am here to personally assist you with the remaining steps. You can resume your application here: [link]. Feel free to call me at [PBM number] if you need any assistance.</div>
+      <div class="wa-edit-actions" id="wa1-actions" style="display:none;gap:6px;padding:8px 14px;border-top:.5px solid var(--border)"><button class="btn btn-green" onclick="waSave('wa1')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button><button class="btn" onclick="waCancel('wa1')">Cancel</button><button class="btn btn-red" onclick="waReset('wa1')">Reset</button></div>
     </div>
     <div class="wa-block">
-      <div class="wa-hdr"><span>Document checklist - stage 0-2 drop-offs</span><button class="btn" onclick="copyEl('wa2')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-hdr"><span>Document checklist - stage 0-2 drop-offs</span><div style="display:flex;gap:6px"><button class="btn" onclick="copyEl('wa2')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button><button class="btn btn-blue" style="font-size:11px;padding:2px 8px" id="wa2-edit-btn" onclick="waEdit('wa2')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button></div></div>
       <div class="wa-body" id="wa2">Hi [Name], this is [PBM Name] from Aspora NRI Banking. To help move your NRI account opening forward, here is a quick checklist of what you will need:
 
 - Passport (valid)
@@ -257,15 +274,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 Resume here: [link]
 
 I will personally assist you through each step once you are ready.</div>
+      <div class="wa-edit-actions" id="wa2-actions" style="display:none;gap:6px;padding:8px 14px;border-top:.5px solid var(--border)"><button class="btn btn-green" onclick="waSave('wa2')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button><button class="btn" onclick="waCancel('wa2')">Cancel</button><button class="btn btn-red" onclick="waReset('wa2')">Reset</button></div>
     </div>
     <div class="wa-block">
-      <div class="wa-hdr"><span>Post-KYC encouragement - stage 16 drop-offs</span><button class="btn" onclick="copyEl('wa3')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button></div>
+      <div class="wa-hdr"><span>Post-KYC encouragement - stage 16 drop-offs</span><div style="display:flex;gap:6px"><button class="btn" onclick="copyEl('wa3')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button><button class="btn btn-blue" style="font-size:11px;padding:2px 8px" id="wa3-edit-btn" onclick="waEdit('wa3')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button></div></div>
       <div class="wa-body" id="wa3">Hi [Name], this is [PBM Name] from Aspora NRI Banking. Your KYC has been successfully verified - well done on completing that. Just 3 steps remaining: SIM binding, e-signing, and MPIN setup. It takes less than 10 minutes and I can personally assist you through each one. Resume here: [link]</div>
+      <div class="wa-edit-actions" id="wa3-actions" style="display:none;gap:6px;padding:8px 14px;border-top:.5px solid var(--border)"><button class="btn btn-green" onclick="waSave('wa3')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button><button class="btn" onclick="waCancel('wa3')">Cancel</button><button class="btn btn-red" onclick="waReset('wa3')">Reset</button></div>
     </div>
+    <button class="pbm-add-btn" style="margin-top:10px" onclick="waAddBlock()"><i class="ti ti-plus" style="font-size:12px"></i> Add message template</button>
+    <div id="wa-extra-blocks"></div>
   </div>
 
   <div id="panel-checklist" class="panel">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Tick off each item before dialling the customer.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <p style="font-size:13px;color:var(--text2);margin:0">Tick off each item before dialling the customer.</p>
+      <div style="display:flex;gap:6px" id="cl-panel-actions">
+        <button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="clEdit()"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>
+      </div>
+    </div>
     <div class="card-sec"><div style="padding:4px 16px" id="cl-wrap"></div></div>
     <button class="btn" onclick="resetCl()" style="margin-top:12px"><i class="ti ti-refresh" style="font-size:14px"></i> Reset checklist</button>
   </div>
@@ -3057,6 +3083,300 @@ function renderCl() {
 }
 function toggleCl(i) { if(checks[i]) delete checks[i]; else checks[i]=true; renderCl(); }
 function resetCl() { checks = {}; renderCl(); }
+
+// ── Static table edit (Objections, CRM) ──────────────────────
+var ST_ORIG = {};
+var ST_SNAPSHOT = {};
+
+function stEdit(tbodyId, actionsId, storeKey) {
+  var tbody = document.getElementById(tbodyId);
+  var actEl = document.getElementById(actionsId);
+  if (!tbody || !actEl) return;
+  ST_SNAPSHOT[storeKey] = tbody.innerHTML;
+
+  // make each td contenteditable
+  tbody.querySelectorAll('td').forEach(function(td) {
+    td.setAttribute('contenteditable', 'true');
+    td.setAttribute('spellcheck', 'false');
+    td.style.outline = '1.5px solid var(--info-border)';
+    td.style.borderRadius = '3px';
+  });
+
+  actEl.innerHTML =
+    '<button class="btn btn-green" style="font-size:11px;padding:2px 8px" onclick="stSave(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">' +
+      '<i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button>' +
+    '<button class="btn" style="font-size:11px;padding:2px 8px" onclick="stCancel(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">Cancel</button>' +
+    '<button class="btn btn-red" style="font-size:11px;padding:2px 8px" onclick="stReset(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">Reset</button>' +
+    '<button class="btn" style="font-size:11px;padding:2px 8px" onclick="stAddRow(\'' + tbodyId + '\')"><i class="ti ti-plus" style="font-size:11px"></i> Add row</button>';
+}
+
+function stSave(tbodyId, actionsId, storeKey) {
+  var tbody = document.getElementById(tbodyId);
+  tbody.querySelectorAll('td').forEach(function(td) {
+    td.removeAttribute('contenteditable'); td.removeAttribute('spellcheck'); td.style.outline = ''; td.style.borderRadius = '';
+  });
+  localStorage.setItem('st_' + storeKey, tbody.innerHTML);
+  document.getElementById(actionsId).innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">' +
+      '<i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  toast('Saved');
+}
+
+function stCancel(tbodyId, actionsId, storeKey) {
+  var tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = ST_SNAPSHOT[storeKey] || tbody.innerHTML;
+  tbody.querySelectorAll('td').forEach(function(td) {
+    td.removeAttribute('contenteditable'); td.style.outline = ''; td.style.borderRadius = '';
+  });
+  document.getElementById(actionsId).innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">' +
+      '<i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+}
+
+function stReset(tbodyId, actionsId, storeKey) {
+  if (!confirm('Reset to original content?')) return;
+  localStorage.removeItem('st_' + storeKey);
+  var tbody = document.getElementById(tbodyId);
+  if (ST_ORIG[tbodyId]) tbody.innerHTML = ST_ORIG[tbodyId];
+  tbody.querySelectorAll('td').forEach(function(td) {
+    td.removeAttribute('contenteditable'); td.style.outline = ''; td.style.borderRadius = '';
+  });
+  document.getElementById(actionsId).innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="stEdit(\'' + tbodyId + '\',\'' + actionsId + '\',\'' + storeKey + '\')">' +
+      '<i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  toast('Reset to original');
+}
+
+function stAddRow(tbodyId) {
+  var tbody = document.getElementById(tbodyId);
+  var cols = tbody.querySelector('tr') ? tbody.querySelector('tr').querySelectorAll('td').length : 2;
+  var tr = document.createElement('tr');
+  for (var i = 0; i < cols; i++) {
+    var td = document.createElement('td');
+    td.setAttribute('contenteditable', 'true');
+    td.setAttribute('spellcheck', 'false');
+    td.style.outline = '1.5px solid var(--info-border)';
+    td.style.borderRadius = '3px';
+    td.textContent = '';
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+  tr.querySelector('td').focus();
+}
+
+// Restore saved static tables on load
+(function stRestore() {
+  ['obj-tbody','crm-codes-tbody','crm-sla-tbody'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    ST_ORIG[id] = el.innerHTML;
+    var saved = localStorage.getItem('st_' + id.replace('-tbody',''));
+    if (saved) el.innerHTML = saved;
+  });
+})();
+
+// ── WhatsApp block edit ───────────────────────────────────────
+var WA_ORIG = {};
+var WA_SNAPSHOT = {};
+
+(function waRestore() {
+  ['wa1','wa2','wa3'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    WA_ORIG[id] = el.textContent;
+    var saved = localStorage.getItem('wa_' + id);
+    if (saved) el.textContent = saved;
+  });
+  var extra = localStorage.getItem('wa_extra');
+  if (extra) {
+    try {
+      var blocks = JSON.parse(extra);
+      blocks.forEach(function(b) { waRenderExtra(b.id, b.title, b.body); });
+    } catch(e) {}
+  }
+})();
+
+function waEdit(id) {
+  var el = document.getElementById(id);
+  var actEl = document.getElementById(id + '-actions');
+  var editBtn = document.getElementById(id + '-edit-btn');
+  if (!el) return;
+  WA_SNAPSHOT[id] = el.textContent;
+  el.setAttribute('contenteditable', 'true');
+  el.setAttribute('spellcheck', 'false');
+  el.style.outline = '1.5px solid var(--info-border)';
+  el.focus();
+  if (actEl) actEl.style.display = 'flex';
+  if (editBtn) editBtn.style.display = 'none';
+}
+
+function waSave(id) {
+  var el = document.getElementById(id);
+  var actEl = document.getElementById(id + '-actions');
+  var editBtn = document.getElementById(id + '-edit-btn');
+  if (!el) return;
+  el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); el.style.outline = '';
+  localStorage.setItem('wa_' + id, el.textContent);
+  if (actEl) actEl.style.display = 'none';
+  if (editBtn) editBtn.style.display = '';
+  toast('Saved');
+}
+
+function waCancel(id) {
+  var el = document.getElementById(id);
+  var actEl = document.getElementById(id + '-actions');
+  var editBtn = document.getElementById(id + '-edit-btn');
+  if (!el) return;
+  el.textContent = WA_SNAPSHOT[id] || el.textContent;
+  el.removeAttribute('contenteditable'); el.style.outline = '';
+  if (actEl) actEl.style.display = 'none';
+  if (editBtn) editBtn.style.display = '';
+}
+
+function waReset(id) {
+  if (!confirm('Reset to original?')) return;
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = WA_ORIG[id] || el.textContent;
+  el.removeAttribute('contenteditable'); el.style.outline = '';
+  localStorage.removeItem('wa_' + id);
+  var actEl = document.getElementById(id + '-actions');
+  var editBtn = document.getElementById(id + '-edit-btn');
+  if (actEl) actEl.style.display = 'none';
+  if (editBtn) editBtn.style.display = '';
+  toast('Reset to original');
+}
+
+var _waExtraBlocks = [];
+try { _waExtraBlocks = JSON.parse(localStorage.getItem('wa_extra') || '[]'); } catch(e) {}
+
+function waAddBlock() {
+  var uid = 'wa-extra-' + Date.now();
+  var block = { id: uid, title: 'New template', body: 'Type your WhatsApp message here…' };
+  _waExtraBlocks.push(block);
+  localStorage.setItem('wa_extra', JSON.stringify(_waExtraBlocks));
+  waRenderExtra(uid, block.title, block.body);
+}
+
+function waRenderExtra(uid, title, body) {
+  var container = document.getElementById('wa-extra-blocks');
+  if (!container || document.getElementById(uid)) return;
+  var div = document.createElement('div');
+  div.className = 'wa-block';
+  div.id = 'wa-block-' + uid;
+  div.innerHTML =
+    '<div class="wa-hdr">' +
+      '<span contenteditable="true" spellcheck="false" style="outline:none;border-bottom:1px dashed var(--border2)" id="' + uid + '-title">' + title + '</span>' +
+      '<div style="display:flex;gap:6px">' +
+        '<button class="btn" onclick="copyEl(\'' + uid + '\')"><i class="ti ti-copy" style="font-size:12px"></i> Copy</button>' +
+        '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" id="' + uid + '-edit-btn" onclick="waEdit(\'' + uid + '\')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>' +
+        '<button class="btn btn-red" style="font-size:11px;padding:2px 8px" onclick="waDeleteExtra(\'' + uid + '\')"><i class="ti ti-trash" style="font-size:11px"></i></button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wa-body" id="' + uid + '">' + body + '</div>' +
+    '<div class="wa-edit-actions" id="' + uid + '-actions" style="display:none;gap:6px;padding:8px 14px;border-top:.5px solid var(--border)">' +
+      '<button class="btn btn-green" onclick="waExtraSave(\'' + uid + '\')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button>' +
+      '<button class="btn" onclick="waCancel(\'' + uid + '\')">Cancel</button>' +
+    '</div>';
+  container.appendChild(div);
+  WA_ORIG[uid] = body;
+  waEdit(uid);
+}
+
+function waExtraSave(uid) {
+  var el = document.getElementById(uid);
+  var titleEl = document.getElementById(uid + '-title');
+  if (!el) return;
+  el.removeAttribute('contenteditable'); el.style.outline = '';
+  var actEl = document.getElementById(uid + '-actions');
+  var editBtn = document.getElementById(uid + '-edit-btn');
+  if (actEl) actEl.style.display = 'none';
+  if (editBtn) editBtn.style.display = '';
+  _waExtraBlocks = _waExtraBlocks.map(function(b) {
+    if (b.id === uid) return { id: uid, title: titleEl ? titleEl.textContent : b.title, body: el.textContent };
+    return b;
+  });
+  localStorage.setItem('wa_extra', JSON.stringify(_waExtraBlocks));
+  toast('Saved');
+}
+
+function waDeleteExtra(uid) {
+  if (!confirm('Delete this template?')) return;
+  _waExtraBlocks = _waExtraBlocks.filter(function(b) { return b.id !== uid; });
+  localStorage.setItem('wa_extra', JSON.stringify(_waExtraBlocks));
+  var block = document.getElementById('wa-block-' + uid);
+  if (block) block.remove();
+}
+
+// ── Pre-call checklist edit ───────────────────────────────────
+var CL_ORIG = CHECKLIST.slice();
+(function clRestore() {
+  var saved = localStorage.getItem('cl_items');
+  if (saved) { try { CHECKLIST.length = 0; JSON.parse(saved).forEach(function(x){ CHECKLIST.push(x); }); } catch(e) {} }
+})();
+
+function clEdit() {
+  var actEl = document.getElementById('cl-panel-actions');
+  var wrap = document.getElementById('cl-wrap');
+  var html = '<div style="display:flex;flex-direction:column;gap:6px;padding:4px 0">';
+  for (var i = 0; i < CHECKLIST.length; i++) {
+    html += '<div style="display:flex;gap:6px;align-items:center">' +
+      '<input class="info-ta" style="flex:1;padding:5px 8px;font-size:13px" id="cl-inp-' + i + '" value="' + esc(CHECKLIST[i]) + '">' +
+      '<button class="btn btn-red" style="padding:4px 8px;font-size:11px" onclick="this.closest(\'div\').remove()"><i class="ti ti-trash" style="font-size:11px"></i></button>' +
+      '</div>';
+  }
+  html += '</div>';
+  html += '<button class="btn" style="font-size:12px;margin-top:6px" onclick="clAddItem()"><i class="ti ti-plus" style="font-size:11px"></i> Add item</button>';
+  wrap.innerHTML = html;
+  actEl.innerHTML =
+    '<button class="btn btn-green" style="font-size:11px;padding:2px 8px" onclick="clSave()"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button>' +
+    '<button class="btn" style="font-size:11px;padding:2px 8px" onclick="clCancelEdit()">Cancel</button>' +
+    '<button class="btn btn-red" style="font-size:11px;padding:2px 8px" onclick="clResetItems()">Reset</button>';
+}
+
+function clAddItem() {
+  var wrap = document.getElementById('cl-wrap');
+  var list = wrap.querySelector('div');
+  var idx = list ? list.querySelectorAll('input').length : 0;
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:6px;align-items:center';
+  row.innerHTML = '<input class="info-ta" style="flex:1;padding:5px 8px;font-size:13px" id="cl-inp-' + idx + '" placeholder="New checklist item…">' +
+    '<button class="btn btn-red" style="padding:4px 8px;font-size:11px" onclick="this.closest(\'div\').remove()"><i class="ti ti-trash" style="font-size:11px"></i></button>';
+  if (list) list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function clSave() {
+  var inputs = document.getElementById('cl-wrap').querySelectorAll('input');
+  var arr = [];
+  inputs.forEach(function(inp) { if (inp.value.trim()) arr.push(inp.value.trim()); });
+  CHECKLIST.length = 0;
+  arr.forEach(function(x) { CHECKLIST.push(x); });
+  localStorage.setItem('cl_items', JSON.stringify(CHECKLIST));
+  checks = {};
+  document.getElementById('cl-panel-actions').innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="clEdit()"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  renderCl();
+  toast('Checklist saved');
+}
+
+function clCancelEdit() {
+  document.getElementById('cl-panel-actions').innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="clEdit()"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  renderCl();
+}
+
+function clResetItems() {
+  if (!confirm('Reset checklist to original items?')) return;
+  localStorage.removeItem('cl_items');
+  CHECKLIST.length = 0;
+  CL_ORIG.forEach(function(x) { CHECKLIST.push(x); });
+  checks = {};
+  document.getElementById('cl-panel-actions').innerHTML =
+    '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="clEdit()"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+  renderCl();
+  toast('Checklist reset');
+}
 
 renderStages(STAGES);
 renderCl();
