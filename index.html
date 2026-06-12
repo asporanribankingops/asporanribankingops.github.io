@@ -2181,6 +2181,7 @@ var openSet = {};
 var editScript = {};
 var editField = {};
 var editTips = {};
+var editObjs = {};
 var checks = {};
 
 function getStage(num) {
@@ -2191,6 +2192,7 @@ function getScript(num)  { var s=getStage(num); return (edits[num]&&edits[num].s
 function getMeans(num)   { var s=getStage(num); return (edits[num]&&edits[num].means!==undefined)?edits[num].means:s.means; }
 function getReasons(num) { var s=getStage(num); return (edits[num]&&edits[num].reasons!==undefined)?edits[num].reasons:s.reasons; }
 function getTips(num)    { var s=getStage(num); return (edits[num]&&edits[num].tips!==undefined)?edits[num].tips:(s.tips||[]); }
+function getObjs(num)    { var s=getStage(num); return (edits[num]&&edits[num].objs!==undefined)?edits[num].objs:(s.obj||[]); }
 function getImages(num)  { return (edits[num]&&edits[num].images)?edits[num].images:[]; }
 
 function esc(v) {
@@ -2346,14 +2348,48 @@ function stageHtml(s) {
       h += '</div>';
     }
 
-    if (s.obj && s.obj.length) {
-      h += '<div class="sec-lbl">Objection handlers</div><div style="margin-bottom:8px">';
-      for (var oi = 0; oi < s.obj.length; oi++) {
-        var o = s.obj[oi];
-        h += '<div class="obj-row">';
-        h += '<div class="obj-q"><i class="ti ti-quote" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>' + esc(o.q) + '</div>';
-        h += '<div class="obj-a"><i class="ti ti-corner-down-right" style="font-size:12px;vertical-align:-1px;margin-right:4px;color:var(--text2)"></i>' + esc(o.a) + '</div>';
+    var objs = getObjs(s.num);
+    var isEditObjs = !!editObjs[s.num];
+    h += '<div class="sec-lbl" style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">';
+    h += '<span>Objection handlers</span>';
+    if (!isEditObjs) {
+      h += '<button class="btn btn-blue" style="font-size:11px;padding:2px 8px" onclick="startObjs(' + s.num + ')"><i class="ti ti-edit" style="font-size:11px"></i> Edit</button>';
+    }
+    h += '</div>';
+    if (isEditObjs) {
+      h += '<div id="objs-edit-' + s.num + '" style="margin:6px 0 8px;display:flex;flex-direction:column;gap:10px">';
+      for (var oi = 0; oi < objs.length; oi++) {
+        var o = objs[oi];
+        h += '<div class="obj-edit-row" data-idx="' + oi + '">';
+        h += '<div style="display:flex;gap:6px;align-items:flex-start">';
+        h += '<div style="flex:1;display:flex;flex-direction:column;gap:4px">';
+        h += '<input class="info-ta" style="padding:5px 8px;font-size:13px;font-style:italic" placeholder="Objection…" id="obj_q_' + s.num + '_' + oi + '" value="' + esc(o.q) + '">';
+        h += '<textarea class="info-ta" style="padding:5px 8px;font-size:13px;min-height:52px" placeholder="Response…" id="obj_a_' + s.num + '_' + oi + '">' + esc(o.a) + '</textarea>';
         h += '</div>';
+        h += '<button class="btn btn-red" style="padding:4px 8px;font-size:11px;margin-top:2px" onclick="this.closest(\'.obj-edit-row\').remove()"><i class="ti ti-trash" style="font-size:11px"></i></button>';
+        h += '</div></div>';
+      }
+      h += '</div>';
+      h += '<div style="display:flex;gap:6px;margin-bottom:10px">';
+      h += '<button class="btn" style="font-size:12px" onclick="addObj(' + s.num + ')"><i class="ti ti-plus" style="font-size:11px"></i> Add handler</button>';
+      h += '<button class="btn btn-green" onclick="saveObjs(' + s.num + ')"><i class="ti ti-device-floppy" style="font-size:11px"></i> Save</button>';
+      h += '<button class="btn" onclick="cancelObjs(' + s.num + ')">Cancel</button>';
+      if (edits[s.num] && edits[s.num].objs !== undefined) {
+        h += '<button class="btn btn-red" onclick="resetObjs(' + s.num + ')">Reset</button>';
+      }
+      h += '</div>';
+    } else {
+      h += '<div style="margin-bottom:8px">';
+      if (objs.length) {
+        for (var oi = 0; oi < objs.length; oi++) {
+          var o = objs[oi];
+          h += '<div class="obj-row">';
+          h += '<div class="obj-q"><i class="ti ti-quote" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>' + esc(o.q) + '</div>';
+          h += '<div class="obj-a"><i class="ti ti-corner-down-right" style="font-size:12px;vertical-align:-1px;margin-right:4px;color:var(--text2)"></i>' + esc(o.a) + '</div>';
+          h += '</div>';
+        }
+      } else {
+        h += '<span style="font-size:12px;color:var(--text2)">No handlers yet — click Edit to add some.</span>';
       }
       h += '</div>';
     }
@@ -2416,6 +2452,46 @@ function copyScript(num, btn) {
     btn.innerHTML = '<i class="ti ti-check" style="font-size:13px"></i> Copied!';
     setTimeout(function(){ btn.innerHTML = orig; }, 1800);
   });
+}
+
+function startObjs(num) { editObjs[num] = true; filterStages(); }
+function cancelObjs(num) { delete editObjs[num]; filterStages(); }
+function saveObjs(num) {
+  var container = document.getElementById('objs-edit-' + num);
+  if (!container) return;
+  var rows = container.querySelectorAll('.obj-edit-row');
+  var arr = [];
+  rows.forEach(function(row) {
+    var q = row.querySelector('input') ? row.querySelector('input').value.trim() : '';
+    var a = row.querySelector('textarea') ? row.querySelector('textarea').value.trim() : '';
+    if (q || a) arr.push({ q: q, a: a });
+  });
+  if (!edits[num]) edits[num] = {};
+  edits[num].objs = arr;
+  saveEdits(); delete editObjs[num]; toast('Objection handlers saved'); filterStages();
+}
+function resetObjs(num) {
+  if (!confirm('Reset objection handlers to original?')) return;
+  if (edits[num]) delete edits[num].objs;
+  saveEdits(); delete editObjs[num]; toast('Handlers reset'); filterStages();
+}
+function addObj(num) {
+  var container = document.getElementById('objs-edit-' + num);
+  if (!container) return;
+  var idx = container.querySelectorAll('.obj-edit-row').length;
+  var row = document.createElement('div');
+  row.className = 'obj-edit-row';
+  row.dataset.idx = idx;
+  row.innerHTML =
+    '<div style="display:flex;gap:6px;align-items:flex-start">' +
+      '<div style="flex:1;display:flex;flex-direction:column;gap:4px">' +
+        '<input class="info-ta" style="padding:5px 8px;font-size:13px;font-style:italic" placeholder="Objection…" id="obj_q_' + num + '_' + idx + '">' +
+        '<textarea class="info-ta" style="padding:5px 8px;font-size:13px;min-height:52px" placeholder="Response…" id="obj_a_' + num + '_' + idx + '"></textarea>' +
+      '</div>' +
+      '<button class="btn btn-red" style="padding:4px 8px;font-size:11px;margin-top:2px" onclick="this.closest(\'.obj-edit-row\').remove()"><i class="ti ti-trash" style="font-size:11px"></i></button>' +
+    '</div>';
+  container.appendChild(row);
+  row.querySelector('input').focus();
 }
 
 function startTips(num) { editTips[num] = true; filterStages(); }
