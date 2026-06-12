@@ -2599,12 +2599,11 @@ function pbInitCard(card) {
 (function pbInitSections() {
   document.querySelectorAll('#pb-all .pb-scenario, #kyc-all .pb-scenario, #pbm-all .pb-scenario').forEach(pbInitCard);
 
-  // Add "+ Add Section" buttons to each pb-part inside Opening Framework
-  document.querySelectorAll('#panel-pbmframework .pb-part').forEach(function(part) {
+  // Add "+ Add Section" button to every pb-part across all tabs
+  document.querySelectorAll('.pb-part').forEach(function(part) {
     var btn = document.createElement('button');
     btn.className = 'pbm-add-btn';
     btn.innerHTML = '<i class="ti ti-plus" style="font-size:12px"></i> Add Section';
-    var partId = part.id || '';
     btn.onclick = function() { pbmAddSection(part); };
     part.appendChild(btn);
   });
