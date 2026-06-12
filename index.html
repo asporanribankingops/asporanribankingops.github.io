@@ -248,23 +248,22 @@ I will personally assist you through each step once you are ready.</div>
   <!-- ── Support Agent Playbook Panel ─────────────────────────── -->
   <div id="panel-playbook" class="panel">
     <style>
-      .pb-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-      .pb-toolbar-right{display:flex;gap:6px}
-      .pb-edit-mode-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:13px;cursor:pointer;font-weight:500;transition:all .15s}
-      .pb-edit-mode-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
-      .pb-edit-mode-btn.active{background:var(--ok-bg);color:var(--ok-text);border-color:var(--ok-border)}
-      .pb-save-all-btn{display:none;padding:7px 14px;border-radius:var(--r);border:.5px solid var(--ok-border);background:var(--ok-bg);color:var(--ok-text);font-size:13px;cursor:pointer;font-weight:600}
-      .pb-reset-all-btn{display:none;padding:7px 14px;border-radius:var(--r);border:.5px solid var(--danger-border);background:var(--danger-bg);color:var(--danger-text);font-size:13px;cursor:pointer}
-      #pb-all.editing .pb-scenario-body.open,
-      #pb-all.editing .pb-scenario-body{outline:none}
-      #pb-all.editing [contenteditable]{outline:1.5px dashed var(--info-border);border-radius:3px;padding:1px 3px;cursor:text;min-width:20px;display:inline-block}
-      #pb-all.editing [contenteditable]:focus{outline:2px solid var(--info-border);background:var(--info-bg)}
-      #pb-all.editing table [contenteditable]{display:block}
-      .pb-edit-hint{display:none;font-size:12px;color:var(--info-text);background:var(--info-bg);border:.5px solid var(--info-border);border-radius:var(--r);padding:8px 14px;margin-bottom:12px}
-      #pb-all.editing ~ .pb-edit-hint, .pb-edit-hint.visible{display:block}
-      .pb-search{width:100%;padding:9px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;outline:none;margin-bottom:0}
+      .pb-search{width:100%;padding:9px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:13px;outline:none;margin-bottom:16px}
       .pb-search:focus{border-color:var(--info-border)}
-      .pb-toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;margin-top:12px}
+      .pb-toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+      /* per-section edit */
+      .pb-sec-edit-btn{margin-left:auto;padding:3px 10px;border-radius:var(--r);border:.5px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+      .pb-sec-edit-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+      .pb-scenario.sec-editing{border-color:var(--info-border)}
+      .pb-scenario.sec-editing .pb-scenario-body [contenteditable]{outline:1.5px dashed var(--info-border);border-radius:3px;padding:1px 3px;cursor:text}
+      .pb-scenario.sec-editing .pb-scenario-body [contenteditable]:focus{outline:2px solid var(--info-border);background:var(--info-bg)}
+      .pb-scenario.sec-editing .pb-scenario-body table [contenteditable]{display:block}
+      .pb-sec-actions{display:none;gap:6px;padding:10px 16px;border-top:.5px solid var(--info-border);background:var(--info-bg)}
+      .pb-scenario.sec-editing .pb-sec-actions{display:flex}
+      .pb-sec-save{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--ok-border);background:var(--ok-bg);color:var(--ok-text);font-size:12px;cursor:pointer;font-weight:600}
+      .pb-sec-cancel{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;cursor:pointer}
+      .pb-sec-reset{padding:5px 14px;border-radius:var(--r);border:.5px solid var(--danger-border);background:var(--danger-bg);color:var(--danger-text);font-size:12px;cursor:pointer}
+      .pb-sec-hint{font-size:11px;color:var(--info-text);margin-left:auto;align-self:center}
       .pb-toc-btn{padding:5px 12px;border-radius:100px;font-size:12px;border:.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
       .pb-toc-btn:hover{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
       .pb-part{margin-bottom:32px}
@@ -307,15 +306,7 @@ I will personally assist you through each step once you are ready.</div>
       .pb-highlight{background:var(--ok-bg);color:var(--ok-text);padding:2px 6px;border-radius:4px;font-weight:600;font-size:12px}
     </style>
 
-    <div class="pb-toolbar">
-      <input class="pb-search" id="pb-search" placeholder="Search scenarios, keywords, templates…" oninput="pbSearch()" style="margin-bottom:0;flex:1" />
-      <div class="pb-toolbar-right">
-        <button class="pb-edit-mode-btn" id="pb-edit-mode-btn" onclick="pbToggleEditMode()"><i class="ti ti-edit" style="font-size:14px"></i> Edit</button>
-        <button class="pb-save-all-btn" id="pb-save-all-btn" onclick="pbSaveAll()">💾 Save all</button>
-        <button class="pb-reset-all-btn" id="pb-reset-all-btn" onclick="pbResetAll()">↩ Reset all</button>
-      </div>
-    </div>
-    <div class="pb-edit-hint" id="pb-edit-hint">✏️ Edit mode on — click any text, table cell, heading, or bullet to edit it inline. Press <strong>Save all</strong> when done.</div>
+    <input class="pb-search" id="pb-search" placeholder="Search scenarios, keywords, templates…" oninput="pbSearch()" />
 
     <div class="pb-toc">
       <button class="pb-toc-btn" onclick="pbScrollTo('pb-partA')">A · Product Overview</button>
@@ -1395,10 +1386,9 @@ function pbSearch() {
   });
 }
 
-// ── Playbook global edit mode ────────────────────────────────
-var PB_EDIT_SELECTORS = [
+// ── Per-section edit mode ────────────────────────────────────
+var PB_SEC_SELECTORS = [
   '.pb-scenario-title',
-  '.pb-part-title',
   '.pb-h3',
   '.pb-scenario-body p',
   '.pb-bullets li',
@@ -1410,87 +1400,99 @@ var PB_EDIT_SELECTORS = [
   '.pb-ok',
   '.pb-note',
   '.pb-dt',
-  '.pb-dt strong',
   '.pb-template .pb-tpl-text',
-  '.info-box .info-val',
-  '.info-box .info-lbl'
+  '.info-box .info-val'
 ];
 
-var _pbEditMode = false;
+// Inject Edit button + actions bar into every scenario header
+(function pbInitSections() {
+  document.querySelectorAll('#pb-all .pb-scenario').forEach(function(card) {
+    var hdr = card.querySelector('.pb-scenario-hdr');
+    var body = card.querySelector('.pb-scenario-body');
+    if (!hdr || !body) return;
 
-function pbToggleEditMode() {
-  _pbEditMode = !_pbEditMode;
-  var pbAll = document.getElementById('pb-all');
-  var btn = document.getElementById('pb-edit-mode-btn');
-  var hint = document.getElementById('pb-edit-hint');
-  var saveBtn = document.getElementById('pb-save-all-btn');
-  var resetBtn = document.getElementById('pb-reset-all-btn');
+    // Edit button inside header
+    var editBtn = document.createElement('button');
+    editBtn.className = 'pb-sec-edit-btn';
+    editBtn.innerHTML = '<i class="ti ti-pencil" style="font-size:11px"></i> Edit';
+    editBtn.onclick = function(e) { e.stopPropagation(); pbSecEdit(card); };
+    hdr.appendChild(editBtn);
 
-  if (_pbEditMode) {
-    // Open all scenario bodies first so elements are visible/editable
-    document.querySelectorAll('#pb-all .pb-scenario-body').forEach(function(b) {
-      b.classList.add('open');
-      var chevron = b.previousElementSibling && b.previousElementSibling.querySelector('.chevron');
-      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    // Actions bar below body
+    var actions = document.createElement('div');
+    actions.className = 'pb-sec-actions';
+    actions.innerHTML =
+      '<button class="pb-sec-save" onclick="pbSecSave(this.closest(\'.pb-scenario\'))">💾 Save</button>' +
+      '<button class="pb-sec-cancel" onclick="pbSecCancel(this.closest(\'.pb-scenario\'))">Cancel</button>' +
+      '<button class="pb-sec-reset" onclick="pbSecReset(this.closest(\'.pb-scenario\'))">↩ Reset</button>' +
+      '<span class="pb-sec-hint">Click any text to edit</span>';
+    card.appendChild(actions);
+
+    // Restore saved content
+    var id = card.id;
+    if (id) {
+      var saved = localStorage.getItem('pb_sec_' + id);
+      if (saved) body.innerHTML = saved;
+    }
+  });
+})();
+
+function pbSecEdit(card) {
+  // Open the body
+  var body = card.querySelector('.pb-scenario-body');
+  body.classList.add('open');
+  var chevron = card.querySelector('.chevron');
+  if (chevron) chevron.style.transform = 'rotate(180deg)';
+
+  // Save snapshot for cancel
+  card._pbSnapshot = body.innerHTML;
+
+  // Make elements editable
+  PB_SEC_SELECTORS.forEach(function(sel) {
+    body.querySelectorAll(sel).forEach(function(el) {
+      if (el.closest('[contenteditable="true"]')) return;
+      el.setAttribute('contenteditable', 'true');
+      el.setAttribute('spellcheck', 'false');
     });
-    // Make elements contenteditable
-    PB_EDIT_SELECTORS.forEach(function(sel) {
-      document.querySelectorAll('#pb-all ' + sel).forEach(function(el) {
-        // skip nested matches (e.g. strong inside pb-warning)
-        if (el.closest('[contenteditable="true"]')) return;
-        el.setAttribute('contenteditable', 'true');
-        el.setAttribute('spellcheck', 'false');
-      });
-    });
-    pbAll.classList.add('editing');
-    btn.classList.add('active');
-    btn.innerHTML = '<i class="ti ti-edit-off" style="font-size:14px"></i> Editing…';
-    hint.classList.add('visible');
-    saveBtn.style.display = '';
-    resetBtn.style.display = '';
-  } else {
-    pbExitEditMode();
-  }
+  });
+
+  card.classList.add('sec-editing');
+  card.querySelector('.pb-sec-edit-btn').style.display = 'none';
 }
 
-function pbExitEditMode() {
-  _pbEditMode = false;
-  document.querySelectorAll('#pb-all [contenteditable]').forEach(function(el) {
+function pbSecSave(card) {
+  var body = card.querySelector('.pb-scenario-body');
+  // Remove contenteditable before saving HTML
+  body.querySelectorAll('[contenteditable]').forEach(function(el) {
     el.removeAttribute('contenteditable');
     el.removeAttribute('spellcheck');
   });
-  document.getElementById('pb-all').classList.remove('editing');
-  var btn = document.getElementById('pb-edit-mode-btn');
-  btn.classList.remove('active');
-  btn.innerHTML = '<i class="ti ti-edit" style="font-size:14px"></i> Edit';
-  document.getElementById('pb-edit-hint').classList.remove('visible');
-  document.getElementById('pb-save-all-btn').style.display = 'none';
-  document.getElementById('pb-reset-all-btn').style.display = 'none';
+  var id = card.id;
+  if (id) localStorage.setItem('pb_sec_' + id, body.innerHTML);
+  card.classList.remove('sec-editing');
+  card.querySelector('.pb-sec-edit-btn').style.display = '';
+  toast('Section saved ✓');
 }
 
-function pbSaveAll() {
-  var html = document.getElementById('pb-all').innerHTML;
-  localStorage.setItem('pb_all_content', html);
-  pbExitEditMode();
-  toast('Playbook saved ✓');
+function pbSecCancel(card) {
+  var body = card.querySelector('.pb-scenario-body');
+  if (card._pbSnapshot !== undefined) body.innerHTML = card._pbSnapshot;
+  body.querySelectorAll('[contenteditable]').forEach(function(el) {
+    el.removeAttribute('contenteditable');
+    el.removeAttribute('spellcheck');
+  });
+  card.classList.remove('sec-editing');
+  card.querySelector('.pb-sec-edit-btn').style.display = '';
 }
 
-function pbResetAll() {
-  if (!confirm('Reset all playbook content to original? This cannot be undone.')) return;
-  localStorage.removeItem('pb_all_content');
-  // Remove all per-template saves too
-  Object.keys(localStorage).filter(function(k){ return k.startsWith('pb_tpl_'); }).forEach(function(k){ localStorage.removeItem(k); });
-  pbExitEditMode();
+function pbSecReset(card) {
+  if (!confirm('Reset this section to original content?')) return;
+  var id = card.id;
+  if (id) localStorage.removeItem('pb_sec_' + id);
+  card.classList.remove('sec-editing');
+  card.querySelector('.pb-sec-edit-btn').style.display = '';
   location.reload();
 }
-
-// Restore saved playbook content on load
-(function pbRestoreContent() {
-  var saved = localStorage.getItem('pb_all_content');
-  if (!saved) return;
-  var el = document.getElementById('pb-all');
-  if (el) el.innerHTML = saved;
-})();
 
 // ── Playbook template edit/save/reset ───────────────────────
 (function initPbTemplates() {
