@@ -200,12 +200,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="topbar-left">
     <div class="topbar-icon"><i class="ti ti-phone-call"></i></div>
     <div>
-      <h1>NRI Onboarding &mdash; PBM Call Script &amp; SOP</h1>
-      <p>Stage-specific scripts for re-engaging customers who dropped off
-        <span class="gh-sync-status" id="gh-sync-badge" onclick="document.getElementById('settings-modal').classList.add('open')">
-          <i class="ti ti-cloud-off" style="font-size:11px"></i> <span id="gh-sync-label">Sync off</span>
-        </span>
-      </p>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <h1 style="margin:0">NRI Onboarding &mdash; PBM Call Script &amp; SOP</h1>
+        <button class="gh-sync-status" id="gh-sync-badge" onclick="document.getElementById('settings-modal').classList.add('open')" style="font-size:12px;padding:4px 12px;cursor:pointer">
+          <i class="ti ti-cloud-off" style="font-size:12px"></i> Sync off — click to enable
+        </button>
+      </div>
+      <p>Stage-specific scripts for re-engaging customers who dropped off</p>
     </div>
   </div>
   <div class="tabs">
