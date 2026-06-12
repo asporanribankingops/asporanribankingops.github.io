@@ -2677,43 +2677,47 @@ function resetFld(num, field) {
 function handleImgs(num, input) {
   var files = [].slice.call(input.files);
   if (!files.length) return;
+  var token = ghGetToken();
+  if (!token) {
+    alert('Please set your GitHub token first.\n\nClick the "Synced" badge at the top of the page, paste your token, and click Save token. Then try uploading again.');
+    input.value = '';
+    return;
+  }
   if (!edits[num]) edits[num] = {};
   if (!edits[num].images) edits[num].images = [];
+
+  // Show uploading status on badge
+  ghUpdateBadge('saving');
+  toast('Uploading ' + files.length + ' image' + (files.length>1?'s':'') + '…');
+
   var done = 0;
-  var token = ghGetToken();
+  var failed = 0;
   files.forEach(function(f) {
     var r = new FileReader();
     r.onload = function(e) {
       var dataUrl = e.target.result;
       var ext = f.name.split('.').pop().toLowerCase() || 'jpg';
-      var fname = 'images/stage-' + num + '-' + Date.now() + '-' + Math.floor(Math.random()*10000) + '.' + ext;
-      if (token) {
-        // Upload to GitHub as a real file, store only the URL
-        ghUploadImage(token, fname, dataUrl).then(function(url) {
-          edits[num].images.push({url: url, caption: ''});
-          done++;
-          if (done === files.length) {
-            saveEdits();
-            var el = document.getElementById('ei_'+num);
-            if (el) el.innerHTML = editImgsHtml(num);
-            toast(files.length + ' image' + (files.length>1?'s':'') + ' uploaded');
-          }
-        }).catch(function(err) {
-          done++;
-          if (done === files.length) {
-            alert('Image upload failed: ' + err.message + '\n\nMake sure your GitHub token is set (click the Synced badge) and try again.');
-          }
-        });
-      } else {
-        edits[num].images.push({data: dataUrl, caption: ''});
+      var fname = 'images/stage-' + num + '-' + Date.now() + '-' + (Math.random()*99999|0) + '.' + ext;
+      ghUploadImage(token, fname, dataUrl).then(function(url) {
+        edits[num].images.push({url: url, caption: ''});
         done++;
-        if (done === files.length) {
+        if (done + failed === files.length) {
           saveEdits();
           var el = document.getElementById('ei_'+num);
           if (el) el.innerHTML = editImgsHtml(num);
-          toast(files.length + ' image' + (files.length>1?'s':'') + ' added');
+          // Immediately push so image reference is saved for everyone
+          ghBakeAndPush(true).then(function() {
+            ghUpdateBadge(true);
+            toast('✓ ' + done + ' image' + (done>1?'s':'') + ' saved for everyone');
+          });
         }
-      }
+      }).catch(function(err) {
+        failed++;
+        if (done + failed === files.length) {
+          alert('Image upload failed: ' + err.message + '\n\nCheck that your GitHub token has write access to the repository.');
+          ghUpdateBadge('error');
+        }
+      });
     };
     r.readAsDataURL(f);
   });
