@@ -3885,12 +3885,12 @@ var VP_DEFAULTS = {
     { icon: '🎧', title: '24/7 human support available', sub: 'NRI banking specialists, whenever you need them' }
   ],
   rates: [
-    { bank: 'Aspora', savings: '7.00%', fd1yr: '7.25%', note: '🏆 Best rate — highlight this' },
-    { bank: 'IDFC First', savings: '6.50%', fd1yr: '7.00%', note: '' },
-    { bank: 'ICICI Bank', savings: '3.50%', fd1yr: '6.70%', note: '' },
-    { bank: 'HDFC Bank', savings: '3.50%', fd1yr: '6.60%', note: '' },
-    { bank: 'Axis Bank', savings: '3.50%', fd1yr: '6.70%', note: '' },
-    { bank: 'SBI', savings: '2.70%', fd1yr: '6.50%', note: '' }
+    { bank: 'Aspora', slab: 'All balances (flat)', savings: '7.00%', fd1yr: '7.25%', note: '🏆 Best rate — highlight this' },
+    { bank: 'IDFC First', slab: 'Up to ₹1L / ₹1L–₹10L / >₹10L', savings: '3.50% / 6.00% / 7.00%', fd1yr: '7.25%', note: 'Tiered — most NRIs get <7%' },
+    { bank: 'ICICI Bank', slab: 'Up to ₹50L / >₹50L', savings: '3.00% / 3.50%', fd1yr: '6.70%', note: '' },
+    { bank: 'HDFC Bank', slab: 'Up to ₹50L / >₹50L', savings: '3.00% / 3.50%', fd1yr: '6.60%', note: '' },
+    { bank: 'Axis Bank', slab: 'Up to ₹50L / >₹50L', savings: '3.00% / 3.50%', fd1yr: '6.70%', note: '' },
+    { bank: 'SBI', slab: 'Up to ₹10Cr / >₹10Cr', savings: '2.70% / 3.00%', fd1yr: '6.50%', note: '' }
   ],
   pitch: [
     'Aspora offers 7% savings interest — that\'s 2x what ICICI and HDFC pay. For a ₹10L balance, that\'s ₹35,000 extra per year.',
@@ -3917,11 +3917,12 @@ function vpRender() {
 
   // Rates
   var rv = document.getElementById('vp-rates-view');
-  if (rv) rv.innerHTML = '<table class="vp-rate-table"><thead><tr><th>Bank</th><th>Savings rate</th><th>1-yr FD rate</th><th>Note</th></tr></thead><tbody>' +
+  if (rv) rv.innerHTML = '<table class="vp-rate-table"><thead><tr><th>Bank</th><th>Balance slab</th><th>Savings rate</th><th>1-yr FD rate</th><th>Note</th></tr></thead><tbody>' +
     d.rates.map(function(r) {
       var isAspora = r.bank === 'Aspora';
-      return '<tr class="' + (isAspora ? 'vp-rate-aspora' : '') + '"><td>' + esc(r.bank) + '</td><td>' + esc(r.savings) + '</td><td>' + esc(r.fd1yr) + '</td><td>' + esc(r.note) + '</td></tr>';
-    }).join('') + '</tbody></table>';
+      return '<tr class="' + (isAspora ? 'vp-rate-aspora' : '') + '"><td><strong>' + esc(r.bank) + '</strong></td><td style="color:var(--text2);font-size:12px">' + esc(r.slab||'') + '</td><td>' + esc(r.savings) + '</td><td>' + esc(r.fd1yr) + '</td><td style="font-size:12px">' + esc(r.note) + '</td></tr>';
+    }).join('') + '</tbody></table>' +
+    '<div style="font-size:11px;color:var(--text3);margin-top:8px">* NRE savings account rates. Verify current rates before quoting. Last updated: June 2025.</div>';
 
   // Pitch
   var pv = document.getElementById('vp-pitch-view');
@@ -3962,12 +3963,13 @@ function vpEditRates() {
   if (edit.style.display === 'none') {
     view.style.display = 'none'; edit.style.display = 'block';
     btn.innerHTML = '<i class="ti ti-check" style="font-size:12px"></i> Done';
-    edit.innerHTML = '<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Bank · Savings rate · 1-yr FD rate · Note</div>' +
+    edit.innerHTML = '<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Bank · Balance slab · Savings rate · 1-yr FD rate · Note</div>' +
       d.rates.map(function(r, i) {
-        return '<div class="vp-edit-row">' +
-          '<input class="vp-edit-input" value="' + esc(r.bank) + '" oninput="vpUpdateRate(' + i + ',\'bank\',this.value)" placeholder="Bank">' +
-          '<input class="vp-edit-input" style="max-width:90px" value="' + esc(r.savings) + '" oninput="vpUpdateRate(' + i + ',\'savings\',this.value)" placeholder="Savings %">' +
-          '<input class="vp-edit-input" style="max-width:90px" value="' + esc(r.fd1yr) + '" oninput="vpUpdateRate(' + i + ',\'fd1yr\',this.value)" placeholder="FD 1yr %">' +
+        return '<div class="vp-edit-row" style="flex-wrap:wrap">' +
+          '<input class="vp-edit-input" style="min-width:100px;max-width:120px" value="' + esc(r.bank) + '" oninput="vpUpdateRate(' + i + ',\'bank\',this.value)" placeholder="Bank">' +
+          '<input class="vp-edit-input" style="flex:2;min-width:160px" value="' + esc(r.slab||'') + '" oninput="vpUpdateRate(' + i + ',\'slab\',this.value)" placeholder="Balance slab e.g. Up to ₹50L / >₹50L">' +
+          '<input class="vp-edit-input" style="max-width:140px" value="' + esc(r.savings) + '" oninput="vpUpdateRate(' + i + ',\'savings\',this.value)" placeholder="Savings rate">' +
+          '<input class="vp-edit-input" style="max-width:100px" value="' + esc(r.fd1yr) + '" oninput="vpUpdateRate(' + i + ',\'fd1yr\',this.value)" placeholder="FD 1yr %">' +
           '<input class="vp-edit-input" value="' + esc(r.note) + '" oninput="vpUpdateRate(' + i + ',\'note\',this.value)" placeholder="Note">' +
           '<button class="btn btn-sm" style="color:var(--danger-text);background:var(--danger-bg);border-color:var(--danger-border)" onclick="vpDelRate(' + i + ')"><i class="ti ti-trash" style="font-size:11px"></i></button>' +
         '</div>';
