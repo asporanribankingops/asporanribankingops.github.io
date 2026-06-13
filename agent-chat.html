@@ -7,722 +7,533 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a202c;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-
-/* ── Header ── */
-.hdr{background:linear-gradient(135deg,#1e3a5f,#2d6a4f);color:#fff;padding:10px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.hdr-logo{font-size:22px;font-weight:800;letter-spacing:-0.5px}
-.hdr-logo span{color:#52b788}
-.hdr-sub{font-size:11px;opacity:.7;margin-top:1px}
-.hdr-badge{margin-left:auto;display:flex;align-items:center;gap:8px}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#6b7280;flex-shrink:0;transition:background .3s}
-.status-dot.ai{background:#52b788;box-shadow:0 0 6px #52b788}
-.status-dot.local{background:#fbbf24}
-#status-text{font-size:11px;opacity:.8}
-.hdr-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:background .2s}
-.hdr-btn:hover{background:rgba(255,255,255,.25)}
-
-/* ── Quick chips ── */
-.chips-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:8px 14px;display:flex;gap:7px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.hdr{background:linear-gradient(135deg,#1e3a5f,#2d6a4f);color:#fff;padding:9px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.hdr-logo{font-size:20px;font-weight:800;letter-spacing:-0.5px}.hdr-logo span{color:#52b788}
+.hdr-sub{font-size:10px;opacity:.7;margin-top:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.status-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:11px}
+.dot{width:7px;height:7px;border-radius:50%;background:#6b7280;flex-shrink:0}
+.dot.ai{background:#52b788;box-shadow:0 0 5px #52b788}.dot.local{background:#fbbf24}
+.hdr-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;padding:5px 11px;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;transition:background .15s}
+.hdr-btn:hover{background:rgba(255,255,255,.22)}
+.chips-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:7px 12px;display:flex;gap:6px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
 .chips-bar::-webkit-scrollbar{display:none}
-.chip{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .15s;color:#374151}
-.chip:hover,.chip.active{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
-
-/* ── Main layout ── */
-.main{display:flex;flex:1;overflow:hidden;gap:0}
-
-/* ── Sidebar ── */
-.sidebar{width:230px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
-.sidebar-title{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#6b7280;border-bottom:1px solid #f1f5f9}
-.sidebar-scroll{overflow-y:auto;flex:1;padding:8px 0}
-.sidebar-section{margin-bottom:4px}
-.sidebar-section-hdr{padding:4px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-.sidebar-section-hdr .arrow{transition:transform .2s}
-.sidebar-section-hdr.collapsed .arrow{transform:rotate(-90deg)}
-.sidebar-items{padding:2px 0}
-.sidebar-item{padding:6px 14px;font-size:12px;cursor:pointer;color:#374151;display:flex;align-items:center;gap:8px;transition:background .1s;border-left:3px solid transparent}
-.sidebar-item:hover{background:#f8fafc}
-.sidebar-item.active{background:#eff6ff;color:#1e40af;border-left-color:#3b82f6;font-weight:600}
-.sidebar-item .item-emoji{font-size:14px;flex-shrink:0}
-.sidebar-item .item-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* ── Chat area ── */
-.chat-area{flex:1;display:flex;flex-direction:column;background:#f8fafc;overflow:hidden}
-.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.chat-messages::-webkit-scrollbar{width:4px}
-.chat-messages::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px}
-.msg{display:flex;gap:9px;animation:fadeIn .2s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:2px}
-.msg.user .msg-avatar{background:#e2e8f0;color:#475569;margin-left:auto;order:2}
-.msg.assistant .msg-avatar{background:#1e3a5f;color:#fff}
+.chip{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:4px 11px;font-size:11.5px;cursor:pointer;white-space:nowrap;transition:all .12s;color:#374151}
+.chip:hover{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.main{display:flex;flex:1;overflow:hidden}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.sb-title{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#6b7280;border-bottom:1px solid #f1f5f9;background:#fafafa}
+.sb-scroll{overflow-y:auto;flex:1}
+.sb-scroll::-webkit-scrollbar{width:3px}
+.sb-scroll::-webkit-scrollbar-thumb{background:#e2e8f0}
+.sb-section-hdr{padding:5px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;background:#fafafa;border-top:1px solid #f1f5f9}
+.sb-section-hdr .arr{transition:transform .15s;font-size:9px}
+.sb-body.hidden{display:none}
+.sb-item{padding:5px 12px;font-size:12px;cursor:pointer;color:#374151;display:flex;align-items:center;gap:7px;transition:background .08s;border-left:3px solid transparent}
+.sb-item:hover{background:#f8fafc}
+.sb-item.active{background:#eff6ff;color:#1e40af;border-left-color:#3b82f6;font-weight:600}
+.sb-item .ie{font-size:13px;flex-shrink:0}
+.sb-item .il{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px}
+.snum{background:#e2e8f0;color:#374151;border-radius:4px;padding:1px 5px;font-size:10px;font-weight:700;flex-shrink:0}
+.sb-item.active .snum{background:#bfdbfe;color:#1e40af}
+.chat-area{flex:1;display:flex;flex-direction:column;background:#f8fafc;overflow:hidden;min-width:0}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px}
+.msg{display:flex;gap:8px;animation:fi .18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.msg-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px}
+.msg.user .msg-av{background:#e2e8f0;order:2}
 .msg.user{flex-direction:row-reverse}
-.msg-bubble{max-width:72%;background:#fff;border-radius:14px;padding:10px 14px;font-size:13.5px;line-height:1.55;box-shadow:0 1px 3px rgba(0,0,0,.06);position:relative}
-.msg.user .msg-bubble{background:#1e3a5f;color:#fff;border-radius:14px 14px 4px 14px}
-.msg.assistant .msg-bubble{border-radius:4px 14px 14px 14px}
-.msg-bubble .tag{display:inline-block;background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-bottom:5px;letter-spacing:.3px}
-.msg-bubble .tag.objection{background:#fee2e2;color:#991b1b}
-.msg-bubble .tag.kyc{background:#e0e7ff;color:#3730a3}
-.msg-bubble .tag.tech{background:#dcfce7;color:#166534}
-.msg-bubble .tag.rate{background:#fef9c3;color:#713f12}
-.msg-bubble .tag.ai{background:#f3e8ff;color:#6b21a8}
-.msg-bubble .script-box{background:#f8fafc;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;border-radius:6px;padding:8px 10px;margin-top:6px;font-style:italic;font-size:13px;color:#374151}
-.msg-bubble .tips{margin-top:6px;padding-left:14px}
-.msg-bubble .tips li{margin-bottom:3px;font-size:13px}
-.msg-copy-btn{position:absolute;top:6px;right:8px;background:transparent;border:none;cursor:pointer;opacity:0;transition:opacity .2s;font-size:13px;padding:2px 4px;border-radius:4px}
-.msg-bubble:hover .msg-copy-btn{opacity:.5}
-.msg-copy-btn:hover{opacity:1!important;background:#f1f5f9}
-
-.msg.thinking .msg-bubble{color:#6b7280;font-style:italic;background:#f8fafc}
-.typing-dots{display:flex;gap:4px;padding:4px 0}
-.typing-dots span{width:6px;height:6px;background:#94a3b8;border-radius:50%;animation:bounce .9s infinite}
+.msg-bbl{max-width:74%;background:#fff;border-radius:14px;padding:9px 12px;font-size:13px;line-height:1.55;box-shadow:0 1px 3px rgba(0,0,0,.06);position:relative}
+.msg.user .msg-bbl{background:#1e3a5f;color:#fff;border-radius:14px 14px 4px 14px}
+.msg.assistant .msg-bbl{border-radius:4px 14px 14px 14px}
+.tag{display:inline-block;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:10px;margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+.tag.objection{background:#fee2e2;color:#991b1b}
+.tag.kyc{background:#e0e7ff;color:#3730a3}
+.tag.tech{background:#dcfce7;color:#166534}
+.tag.rate{background:#fef9c3;color:#713f12}
+.tag.ai{background:#f3e8ff;color:#6b21a8}
+.tag.stage{background:#dbeafe;color:#1e3a8a}
+.script-box{background:#f1f5f9;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;border-radius:6px;padding:8px 10px;margin-top:6px;font-style:italic;font-size:12.5px;color:#374151;line-height:1.5}
+.tips-list{margin-top:6px;padding-left:14px}
+.tips-list li{margin-bottom:3px;font-size:12.5px;color:#4b5563}
+.stage-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.stage-imgs img{width:calc(50% - 4px);max-width:200px;border-radius:8px;border:1px solid #e2e8f0;cursor:pointer;transition:transform .15s;object-fit:cover}
+.stage-imgs img:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.stage-imgs.single img{width:100%;max-width:300px}
+.copy-btn{position:absolute;top:5px;right:7px;background:transparent;border:none;cursor:pointer;opacity:0;transition:opacity .15s;font-size:12px;padding:2px 4px;border-radius:4px}
+.msg-bbl:hover .copy-btn{opacity:.45}
+.copy-btn:hover{opacity:1!important;background:#f1f5f9}
+.typing-dots{display:flex;gap:4px;padding:3px 0}
+.typing-dots span{width:6px;height:6px;background:#94a3b8;border-radius:50%;animation:bd .9s infinite}
 .typing-dots span:nth-child(2){animation-delay:.15s}
 .typing-dots span:nth-child(3){animation-delay:.3s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-
-.chat-input-row{background:#fff;border-top:1px solid #e2e8f0;padding:10px 14px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
-#chat-input{flex:1;border:1.5px solid #e2e8f0;border-radius:10px;padding:9px 13px;font-size:13.5px;outline:none;resize:none;max-height:90px;line-height:1.4;font-family:inherit;transition:border-color .2s}
+@keyframes bd{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-row{background:#fff;border-top:1px solid #e2e8f0;padding:9px 12px;display:flex;gap:7px;align-items:flex-end;flex-shrink:0}
+#chat-input{flex:1;border:1.5px solid #e2e8f0;border-radius:10px;padding:8px 12px;font-size:13px;outline:none;resize:none;max-height:88px;line-height:1.4;font-family:inherit;transition:border-color .2s}
 #chat-input:focus{border-color:#3b82f6}
-.send-btn{background:#1e3a5f;color:#fff;border:none;border-radius:10px;padding:9px 14px;cursor:pointer;font-size:16px;transition:background .2s;flex-shrink:0}
+.send-btn{background:#1e3a5f;color:#fff;border:none;border-radius:10px;padding:8px 14px;cursor:pointer;font-size:15px;flex-shrink:0;transition:background .15s}
 .send-btn:hover{background:#2d6a4f}
-.send-btn:disabled{background:#94a3b8;cursor:not-allowed}
-
-.welcome-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;text-align:center;max-width:380px;margin:auto}
-.welcome-card h3{font-size:16px;color:#1e3a5f;margin-bottom:8px}
-.welcome-card p{font-size:13px;color:#6b7280;margin-bottom:12px;line-height:1.5}
-.welcome-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.welcome-chip{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;transition:all .15s}
-.welcome-chip:hover{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
-
-/* ── Context panel ── */
-.context-panel{width:260px;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
-.cp-title{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#6b7280;border-bottom:1px solid #f1f5f9}
-.cp-scroll{overflow-y:auto;flex:1;padding:12px}
-.cp-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12.5px}
-.cp-card-title{font-weight:700;color:#374151;margin-bottom:4px;font-size:12px}
-.cp-card p,.cp-card li{color:#6b7280;line-height:1.5;margin-bottom:2px}
-.cp-card ul{padding-left:14px}
-.cp-card .highlight{color:#1e3a5f;font-weight:600}
-.cp-empty{color:#94a3b8;font-size:12px;text-align:center;padding:20px 0;font-style:italic}
-.call-timer{text-align:center;padding:12px 0;border-bottom:1px solid #f1f5f9;flex-shrink:0}
-.timer-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
-.timer-value{font-size:24px;font-weight:700;color:#1e3a5f;font-variant-numeric:tabular-nums;letter-spacing:1px}
-.mood-row{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid #f1f5f9;flex-shrink:0}
-.mood-btn{flex:1;padding:5px 4px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;font-size:10px;text-align:center;transition:all .15s;font-family:inherit}
-.mood-btn.active{border-width:2px}
+.kb-hint{font-size:10px;color:#94a3b8;padding:1px 12px;text-align:right;flex-shrink:0;background:#fff}
+.ctx-panel{width:250px;background:#fff;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.call-timer{text-align:center;padding:10px;border-bottom:1px solid #f1f5f9;flex-shrink:0}
+.timer-lbl{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
+.timer-val{font-size:22px;font-weight:700;color:#1e3a5f;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.mood-row{display:flex;gap:5px;padding:7px 10px;border-bottom:1px solid #f1f5f9;flex-shrink:0}
+.mood-btn{flex:1;padding:5px 4px;border:1.5px solid #e2e8f0;border-radius:7px;background:#fff;cursor:pointer;font-size:10px;text-align:center;transition:all .12s;font-family:inherit}
 .mood-btn.pos.active{background:#dcfce7;border-color:#22c55e;color:#166534}
 .mood-btn.neu.active{background:#fef9c3;border-color:#eab308;color:#713f12}
 .mood-btn.neg.active{background:#fee2e2;border-color:#ef4444;color:#991b1b}
-
-/* ── Modal ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:14px;padding:24px;width:380px;max-width:94vw}
-.modal h3{font-size:16px;font-weight:700;color:#1e3a5f;margin-bottom:4px}
-.modal p{font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.5}
-.modal label{font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px}
-.modal input,.modal select{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;margin-bottom:12px;font-family:inherit}
+.ctx-title{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#6b7280;border-bottom:1px solid #f1f5f9;background:#fafafa}
+.ctx-scroll{overflow-y:auto;flex:1;padding:10px}
+.ctx-scroll::-webkit-scrollbar{width:3px}
+.ctx-scroll::-webkit-scrollbar-thumb{background:#e2e8f0}
+.ctx-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:9px 10px;margin-bottom:8px;font-size:12px}
+.ctx-card-title{font-weight:700;color:#374151;margin-bottom:5px;font-size:11.5px}
+.ctx-card p,.ctx-card li{color:#6b7280;line-height:1.5;margin-bottom:2px}
+.ctx-card ul{padding-left:13px}
+.hi{color:#1e3a5f;font-weight:600}
+.ctx-empty{color:#94a3b8;font-size:12px;text-align:center;padding:20px 10px;font-style:italic}
+.welcome-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;text-align:center;max-width:360px;margin:auto}
+.welcome-card h3{font-size:15px;color:#1e3a5f;margin-bottom:6px}
+.welcome-card p{font-size:12.5px;color:#6b7280;margin-bottom:12px;line-height:1.5}
+.wc-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.wc-chip{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:4px 11px;border-radius:20px;font-size:11.5px;cursor:pointer;transition:all .12s}
+.wc-chip:hover{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
+.lb-overlay.open{display:flex}
+.lb-overlay img{max-width:90vw;max-height:88vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.lb-close{position:fixed;top:14px;right:18px;color:#fff;font-size:26px;cursor:pointer;background:rgba(0,0,0,.4);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:22px;width:390px;max-width:94vw}
+.modal h3{font-size:15px;font-weight:700;color:#1e3a5f;margin-bottom:3px}
+.modal p{font-size:12.5px;color:#6b7280;margin-bottom:14px;line-height:1.5}
+.modal label{font-size:11.5px;font-weight:600;color:#374151;display:block;margin-bottom:3px}
+.modal input,.modal select{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit}
 .modal input:focus,.modal select:focus{border-color:#3b82f6}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end}
-.modal-btn{padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;border:1.5px solid transparent;font-family:inherit;font-weight:600}
-.modal-btn.primary{background:#1e3a5f;color:#fff}
-.modal-btn.secondary{background:#fff;border-color:#e2e8f0;color:#374151}
-.modal-note{background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:8px 10px;font-size:11px;color:#713f12;margin-top:8px;line-height:1.4}
-
-/* ── Keyboard hint ── */
-.kb-hint{font-size:10px;color:#94a3b8;padding:2px 8px;text-align:right;flex-shrink:0}
+.modal-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:12px}
+.mbtn{padding:7px 16px;border-radius:8px;font-size:12.5px;cursor:pointer;border:1.5px solid transparent;font-family:inherit;font-weight:600}
+.mbtn.pri{background:#1e3a5f;color:#fff}.mbtn.sec{background:#fff;border-color:#e2e8f0;color:#374151}
+.modal-note{background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:7px 9px;font-size:11px;color:#713f12;margin-top:6px;line-height:1.4}
 </style>
 </head>
 <body>
-
-<!-- Header -->
+<div class="lb-overlay" id="lb-overlay" onclick="closeLB()">
+  <button class="lb-close" onclick="closeLB()">&#x2715;</button>
+  <img id="lb-img" src="" alt="">
+</div>
 <div class="hdr">
   <div>
     <div class="hdr-logo">aspora <span>ASSIST</span></div>
-    <div class="hdr-sub">Agent Real-Time Call Aid</div>
+    <div class="hdr-sub">Agent Real-Time Call Aid &mdash; asporanribankingops.github.io/agent-chat.html</div>
   </div>
-  <div class="hdr-badge">
-    <div class="status-dot" id="status-dot"></div>
-    <span id="status-text">Local KB</span>
-    <button class="hdr-btn" onclick="openSettings()">⚙ AI Setup</button>
-    <button class="hdr-btn" onclick="startTimer()">▶ Call</button>
-    <button class="hdr-btn" onclick="resetAll()">↺ Reset</button>
+  <div class="hdr-right">
+    <div class="status-pill"><div class="dot" id="status-dot"></div><span id="status-text">Local KB</span></div>
+    <button class="hdr-btn" onclick="openSettings()">&#9881; Settings</button>
+    <button class="hdr-btn" id="timer-btn" onclick="toggleTimer()">&#9658; Start Call</button>
+    <button class="hdr-btn" onclick="resetAll()">&#8635; Reset</button>
   </div>
 </div>
-
-<!-- Quick chips -->
-<div class="chips-bar" id="chips-bar">
-  <div class="chip" onclick="askChip('Customer says they are too busy right now')">⏰ Too Busy</div>
-  <div class="chip" onclick="askChip('Customer wants to call back later')">📞 Call Back</div>
-  <div class="chip" onclick="askChip('Customer already has HDFC / ICICI / SBI NRI account')">🏦 Has Other Bank</div>
-  <div class="chip" onclick="askChip('Customer is worried about online safety and data privacy')">🔒 Safety Concern</div>
-  <div class="chip" onclick="askChip('What documents does the customer need to open the account?')">📄 Documents</div>
-  <div class="chip" onclick="askChip('Customer is asking what is FATCA or CRS compliance')">📋 FATCA / CRS</div>
-  <div class="chip" onclick="askChip('Customer is asking what is digital notary or why notary is needed')">📜 Notary</div>
-  <div class="chip" onclick="askChip('Customer is asking why SIM binding is required')">📱 SIM Binding</div>
-  <div class="chip" onclick="askChip('Customer is comparing interest rates with other banks')">💰 Interest Rates</div>
-  <div class="chip" onclick="askChip('What is the difference between NRE and NRO account?')">🔄 NRE vs NRO</div>
-  <div class="chip" onclick="askChip('Customer is not receiving OTP or having technical issue with the app')">⚠️ Tech Issue</div>
-  <div class="chip" onclick="askChip('Customer says they need to discuss with family or spouse first')">👨‍👩‍👧 Family Decision</div>
-  <div class="chip" onclick="askChip('Customer is asking about fees and charges')">💳 Fees</div>
-  <div class="chip" onclick="askChip('Customer says 7% interest is too good to be true or suspicious')">🤔 Trust Issue</div>
-  <div class="chip" onclick="askChip('Customer dropped off after video KYC and is not completing it')">📹 Video KYC Drop</div>
+<div class="chips-bar">
+  <div class="chip" onclick="askChip('Customer says they are too busy right now')">&#9200; Too Busy</div>
+  <div class="chip" onclick="askChip('Customer wants to call back later')">&#128222; Call Back</div>
+  <div class="chip" onclick="askChip('Customer already has HDFC or ICICI NRI account')">&#127970; Has Other Bank</div>
+  <div class="chip" onclick="askChip('Customer worried about online safety and data privacy')">&#128274; Safety Concern</div>
+  <div class="chip" onclick="askChip('What documents does customer need to open account')">&#128196; Documents</div>
+  <div class="chip" onclick="askChip('Customer asking about FATCA CRS compliance')">&#128203; FATCA / CRS</div>
+  <div class="chip" onclick="askChip('Customer asking why digital notary is needed')">&#128220; Notary</div>
+  <div class="chip" onclick="askChip('Customer asking why SIM binding is needed')">&#128241; SIM Binding</div>
+  <div class="chip" onclick="askChip('Customer comparing interest rates with other banks')">&#128176; Interest Rates</div>
+  <div class="chip" onclick="askChip('What is difference between NRE and NRO account')">&#128260; NRE vs NRO</div>
+  <div class="chip" onclick="askChip('Customer not receiving OTP or technical issue with app')">&#9888; Tech Issue</div>
+  <div class="chip" onclick="askChip('Customer needs to discuss with family before deciding')">&#128106; Family Decision</div>
+  <div class="chip" onclick="askChip('Customer asking about fees and charges')">&#128179; Fees</div>
+  <div class="chip" onclick="askChip('Customer suspects 7 percent interest is too good to be true')">&#129300; Trust Issue</div>
+  <div class="chip" onclick="askChip('Why should customer choose Aspora over other banks')">&#11088; Why Aspora</div>
 </div>
-
-<!-- Main -->
 <div class="main">
-
-  <!-- Sidebar -->
   <div class="sidebar">
-    <div class="sidebar-title">Scenarios</div>
-    <div class="sidebar-scroll" id="sidebar-scroll">
-      <!-- Populated by JS -->
-    </div>
+    <div class="sb-title">Navigator</div>
+    <div class="sb-scroll" id="sb-scroll"></div>
   </div>
-
-  <!-- Chat -->
   <div class="chat-area">
-    <div class="chat-messages" id="chat-messages">
+    <div class="chat-msgs" id="chat-msgs">
       <div class="welcome-card">
-        <h3>👋 Ready to assist</h3>
-        <p>Type a customer question below, or click a quick chip above. I'll give you the exact script to use during the call.</p>
-        <div class="welcome-chips">
-          <div class="welcome-chip" onclick="askChip('Customer not interested in opening account')">Not interested</div>
-          <div class="welcome-chip" onclick="askChip('How to convince customer about Aspora value')">Why Aspora?</div>
-          <div class="welcome-chip" onclick="askChip('Customer stuck on a stage in the app')">App stuck</div>
-          <div class="welcome-chip" onclick="askChip('Customer worried about repatriation of funds')">Repatriation</div>
-          <div class="welcome-chip" onclick="askChip('What is the opening process step by step?')">How to open</div>
+        <h3>&#128075; Ready to assist on your call</h3>
+        <p>Click any stage to see the app screenshot + call script. Or type a customer question for an instant answer.</p>
+        <div class="wc-chips">
+          <div class="wc-chip" onclick="loadStage(0)">Stage 0 &mdash; New Lead</div>
+          <div class="wc-chip" onclick="loadStage(5)">Stage 5 &mdash; App Download</div>
+          <div class="wc-chip" onclick="loadStage(9)">Stage 9 &mdash; Documents</div>
+          <div class="wc-chip" onclick="loadStage(15)">Stage 15 &mdash; Video KYC</div>
+          <div class="wc-chip" onclick="loadStage(20)">Stage 20 &mdash; Pending</div>
+          <div class="wc-chip" onclick="askChip('Why choose Aspora over other banks')">Why Aspora</div>
         </div>
       </div>
     </div>
-    <div class="kb-hint">Enter to send · Shift+Enter for new line</div>
+    <div class="kb-hint">Enter to send &middot; Shift+Enter for new line</div>
     <div class="chat-input-row">
-      <textarea id="chat-input" placeholder="Type customer's question or concern..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+      <textarea id="chat-input" placeholder="Type customer question or concern here..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="sendMessage()">&#10148;</button>
     </div>
   </div>
-
-  <!-- Context panel -->
-  <div class="context-panel">
+  <div class="ctx-panel">
     <div class="call-timer">
-      <div class="timer-label">Call Duration</div>
-      <div class="timer-value" id="timer-value">00:00</div>
+      <div class="timer-lbl">Call Duration</div>
+      <div class="timer-val" id="timer-val">00:00</div>
     </div>
     <div class="mood-row">
-      <button class="mood-btn pos" onclick="setMood(this,'pos')">😊 Warm</button>
-      <button class="mood-btn neu active" onclick="setMood(this,'neu')">😐 Neutral</button>
-      <button class="mood-btn neg" onclick="setMood(this,'neg')">😤 Resistant</button>
+      <button class="mood-btn pos" onclick="setMood(this,'pos')">&#128522; Warm</button>
+      <button class="mood-btn neu active" onclick="setMood(this,'neu')">&#128528; Neutral</button>
+      <button class="mood-btn neg" onclick="setMood(this,'neg')">&#128544; Resistant</button>
     </div>
-    <div class="cp-title">Context & Tips</div>
-    <div class="cp-scroll" id="cp-scroll">
-      <div class="cp-empty">Response tips will appear here</div>
+    <div class="ctx-title">Tips &amp; Context</div>
+    <div class="ctx-scroll" id="ctx-scroll">
+      <div class="ctx-empty">Select a stage or ask a question &mdash; tips appear here</div>
     </div>
   </div>
 </div>
-
-<!-- Settings modal -->
-<div class="modal-overlay" id="settings-modal">
+<div class="modal-ov" id="settings-modal">
   <div class="modal">
-    <h3>⚙ AI Assistant Setup</h3>
-    <p>Add your Anthropic API key to enable AI-powered answers for any question. Without it, the local knowledge base handles common scenarios instantly.</p>
-    <label>Anthropic API Key</label>
+    <h3>&#9881; Settings</h3>
+    <p>All content is hosted publicly on GitHub Pages &mdash; accessible to anyone with the link. API key and PAT stay only in your browser.</p>
+    <label>Anthropic API Key (enables AI answers for any question)</label>
     <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
     <label>AI Model</label>
     <select id="model-select">
-      <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest (recommended for calls)</option>
-      <option value="claude-sonnet-4-6">Claude Sonnet 4.6 — Smarter</option>
-      <option value="claude-opus-4-8">Claude Opus 4.8 — Most capable</option>
+      <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 &mdash; Fastest (best for live calls)</option>
+      <option value="claude-sonnet-4-6">Claude Sonnet 4.6 &mdash; Smarter</option>
+      <option value="claude-opus-4-8">Claude Opus 4.8 &mdash; Most capable</option>
     </select>
-    <div class="modal-note">🔒 Your API key is stored only in this browser (localStorage). It is never sent anywhere except directly to Anthropic to power AI responses.</div>
-    <div class="modal-actions" style="margin-top:14px">
-      <button class="modal-btn secondary" onclick="closeSettings()">Cancel</button>
-      <button class="modal-btn primary" onclick="saveSettings()">Save & Connect</button>
+    <label>GitHub PAT (to push updates publicly)</label>
+    <input type="password" id="gh-pat-input" placeholder="ghp_..." />
+    <div class="modal-note">&#128274; API key and PAT are stored only in this browser (localStorage). Never embedded in HTML or shared.</div>
+    <div class="modal-actions">
+      <button class="mbtn sec" onclick="closeSettings()">Cancel</button>
+      <button class="mbtn pri" onclick="saveSettings()">Save</button>
     </div>
   </div>
 </div>
-
 <script>
-// ─── Knowledge Base ───────────────────────────────────────────────────────────
-var KB = [
-  // OBJECTIONS
-  {id:'obj-time', cat:'Objections', emoji:'⏰', title:'Too busy / No time',
-   triggers:['busy','time','later','now','rush','quick','hurry','call back','callback'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"I completely understand — I know your time is precious. Let me take just 60 seconds. The reason I called is that right now, your NRE savings are probably earning 3% or less at your current bank. Aspora pays up to 7% — tax-free. On ₹10 lakh, that's ₹40,000 extra per year, automatically, no effort from you. That's money that's already yours, you're just not collecting it yet. Can I take 2 minutes to show you how easy it is to switch?"`,
-   tips:['Acknowledge first — never argue', 'Give a concrete number (₹40,000/yr)', 'Ask for "just 2 minutes" not a full commitment', 'If still resistant: book a specific callback slot — "Is Tuesday 4pm good?"']},
-
-  {id:'obj-callbk', cat:'Objections', emoji:'📞', title:'Will call back later',
-   triggers:['call back','later','another time','tomorrow','next week','think about'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"Of course — I want to make sure I reach you at the right time. Before I let you go, could I just understand what's making you want to think it over? Is it the process, the bank itself, or something else?" [listen] "Got it. How about I book a specific time — would [day] at [time] work? I'll send you a WhatsApp reminder too."`,
-   tips:['Always anchor the callback to a specific day/time', 'Ask WHY they need more time — uncover real objection', 'Send a WhatsApp with key value points before callback', 'Set maximum 3-day callback — urgency: "rates reviewed quarterly"']},
-
-  {id:'obj-existing', cat:'Objections', emoji:'🏦', title:'Has account at another bank',
-   triggers:['already have','hdfc','icici','axis','sbi','kotak','federal','other bank','existing'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"That's great — having an NRI account already means you understand the value. The question is: what rate are you getting today? [let them answer] HDFC/ICICI typically pays 3–3.5% on savings. Aspora pays up to 7% — that's more than double. Many of our customers keep their existing account for bill payments and open Aspora for their savings. You don't have to close anything. Would it make sense to park your savings where it earns the most?"`,
-   tips:['Never ask them to close existing account', 'Frame as "add Aspora alongside"', 'Use exact competitor rates from the rate card', 'HDFC: 3%, ICICI: 3%, SBI: 2.7%, Axis: 3%']},
-
-  {id:'obj-safety', cat:'Objections', emoji:'🔒', title:'Online safety / Data concern',
-   triggers:['safe','safety','trust','secure','data','privacy','hack','steal','fraud','secure','regulated'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"That's the most important question you could ask, and I'm glad you brought it up. Aspora is regulated by the RBI — the same regulator that governs HDFC and ICICI. Your deposits are insured up to ₹5 lakh under DICGC — a government scheme. We use bank-grade 256-bit encryption. And your KYC is verified by a licensed notary — the same process used for international agreements. This is as safe as any established Indian bank, with the advantage that everything is digital and transparent."`,
-   tips:['Lead with RBI regulation — most powerful reassurance', 'DICGC insurance = government guarantee', 'Never be defensive — confidence is key', 'If they ask about specific incident: acknowledge and redirect to protections']},
-
-  {id:'obj-trust', cat:'Objections', emoji:'🤔', title:'Too good to be true / Suspicious',
-   triggers:['too good','suspicious','scam','genuine','real','doubt','believe','really','actually','legitimate','how'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"I completely get that — 7% does sound extraordinary when you're used to 3%. Here's why it's possible: Aspora doesn't have the overhead of thousands of physical branches and ATMs. That saving gets passed directly to you as higher interest. It's the same reason online-first banks like IDFC First can offer 7% — no branches = higher rates for customers. We're RBI regulated, DICGC insured, and you can start with any amount and withdraw any time. Would you like me to show you exactly how the interest is calculated?"`,
-   tips:['Explain the "why" — no branches = higher rates', 'Reference IDFC First as validation (well-known)', 'Offer to walk through interest calculation', '"Start with ₹10,000 and see the interest in your first quarter"']},
-
-  {id:'obj-family', cat:'Objections', emoji:'👨‍👩‍👧', title:'Need to discuss with family',
-   triggers:['family','wife','husband','spouse','parents','discuss','consult','ask','partner'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"That makes complete sense — big financial decisions should be made together. Can I ask, is there a specific concern your family might have? [listen] One thing I can offer: I can send you a short 2-page summary on WhatsApp right now that covers everything — the interest rates, the safety, how money can be taken out anytime — so your conversation with your family is well-informed. Then we can reconnect. When would be a good time to call with your family on the line?"`,
-   tips:['Send the summary IMMEDIATELY on WhatsApp', 'Offer to do a 3-way call with spouse/family', 'Find out if it\'s a genuine need or a deflection — ask "what specific concern do they have?"', 'Book a specific family call time']},
-
-  {id:'obj-complicated', cat:'Objections', emoji:'😓', title:'Process seems complicated',
-   triggers:['complicated','complex','difficult','too much','long','time consuming','steps','process','tedious'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"I hear you — the process might look long at first glance, but most of our customers complete it in under 15 minutes on their phone. It's broken into small steps. You can pause and resume anytime — you don't have to do it all at once. I'll be with you on WhatsApp the whole time to guide you through each step. The trickiest part is usually the notary, and we have a dedicated team that handles that for you. Shall we try the first two steps right now while we're on the call?"`,
-   tips:['Start the process WITH them on the call', '"15 minutes" makes it feel achievable', 'Offer to do a guided walkthrough over WhatsApp', 'Break it down: "Just 3 things: fill the form, upload docs, video call"']},
-
-  {id:'obj-fees', cat:'Objections', emoji:'💳', title:'Asking about fees',
-   triggers:['fee','fees','charge','cost','free','charges','annual','maintenance','deduct','hidden'],
-   tag:'objection', tagLabel:'Objection',
-   script:`"Great question. Aspora has zero maintenance fees — no annual charges, no minimum balance requirement, no hidden costs. International transfers in your first year are also free. The account is completely free to open and free to maintain. The only way Aspora earns is from the difference between the interest we lend at and what we pay you — which still leaves you with up to 7%. That's it."`,
-   tips:['Zero fees is a strong USP — lead with it', 'Free international transfers in Year 1', 'No minimum balance — open with any amount', 'Compare: HDFC charges ₹5,000–10,000/year AMB penalty']},
-
-  // PROCESS / DOCUMENTS
-  {id:'docs', cat:'Process & KYC', emoji:'📄', title:'Documents required',
-   triggers:['document','documents','what do i need','passport','pan','photo','proof','id','identity','require'],
-   tag:'kyc', tagLabel:'KYC / Docs',
-   script:`"Opening an Aspora NRE account is simple. You'll need: 1) Your passport (all pages with photo + address page), 2) Your PAN card, 3) Proof of overseas address — a utility bill, bank statement or driving licence from your current country of residence. That's it. No physical copies needed — everything is uploaded digitally. For the notary step, a licensed notary verifies your documents on a short video call. I can walk you through exactly what to prepare."`,
-   tips:['Three things: Passport, PAN, Overseas address proof', 'No physical mailing required — 100% digital', 'Notary is digital — 10-minute video call', 'If no PAN: they can apply online at incometaxindia.gov.in first']},
-
-  {id:'fatca', cat:'Process & KYC', emoji:'📋', title:'FATCA / CRS',
-   triggers:['fatca','crs','tax','declaration','foreign','reporting','compliance','us citizen','uk resident'],
-   tag:'kyc', tagLabel:'FATCA / CRS',
-   script:`"FATCA and CRS are international tax transparency agreements. If you hold assets in India, your country of residence may receive information about it — this is to prevent tax evasion. All major Indian banks report under this. It doesn't mean you'll be taxed more; it just means your home country knows you have an Indian account. NRE account interest is tax-free in India — but you should check your home country's tax rules. A tax advisor can help if you're unsure about your specific situation."`,
-   tips:['FATCA = US. CRS = rest of world. Both are reporting, not taxation', 'NRE interest is TAX-FREE in India — key message', 'Reporting ≠ being taxed more', 'Recommend they consult a tax advisor for home-country implications']},
-
-  {id:'notary', cat:'Process & KYC', emoji:'📜', title:'Digital notary',
-   triggers:['notary','notarize','attest','certify','document','notarisation','video','verify'],
-   tag:'kyc', tagLabel:'KYC',
-   script:`"The notary step is required by RBI for NRI accounts — it's how your overseas identity gets officially verified. But with Aspora, this is done digitally. A licensed notary does a 5–10 minute video call with you, verifies your passport and address proof, and that's it. No courier, no visiting a consulate. Our team schedules this for you and assists throughout. Most customers complete this in one sitting from their living room."`,
-   tips:['It\'s RBI mandatory — not Aspora\'s choice', 'Digital = no courier or consulate visit', 'Aspora team books and assists', 'Typical time: 5-10 minutes on video']},
-
-  {id:'sim', cat:'Process & KYC', emoji:'📱', title:'SIM binding',
-   triggers:['sim','mobile','phone','number','india','binding','link','verify','otp','number'],
-   tag:'kyc', tagLabel:'KYC',
-   script:`"SIM binding links your account to a verified Indian mobile number. This is a security feature — it ensures only you can receive OTPs and transact on the account. If you don't have an active Indian SIM, you can use a family member's number (spouse, parent) who is in India. Or we can help you get a virtual Indian number. It's a one-time setup for the life of the account."`,
-   tips:['Security feature — protects the customer', 'Family member\'s Indian number is acceptable', 'Virtual Indian number option if no family', 'One-time only — no ongoing effort']},
-
-  {id:'video-kyc', cat:'Process & KYC', emoji:'📹', title:'Video KYC drop-off',
-   triggers:['video kyc','video call','face','selfie','live','vcip','dropped','incomplete','stuck','kyc'],
-   tag:'kyc', tagLabel:'KYC',
-   script:`"Video KYC is just a quick 5-minute live verification — an agent will see your face, verify your PAN and Aadhaar, and that's it. The call happens in good lighting, and your internet needs to be stable. If you had trouble earlier, common reasons are: poor lighting, unstable internet, or the call getting cut. We can reschedule immediately — it usually goes through on the next attempt. Want me to book a slot right now?"`,
-   tips:['Good lighting + stable WiFi = success', 'Book immediately — don\'t let them wait', 'Common failures: darkness, VPN, background noise', 'If fails twice: escalate to supervisor for manual KYC path']},
-
-  // ACCOUNT QUESTIONS
-  {id:'nre-nro', cat:'Account Info', emoji:'🔄', title:'NRE vs NRO',
-   triggers:['nre','nro','difference','which one','type','account type','what is','savings'],
-   tag:'kyc', tagLabel:'Account Type',
-   script:`"Great question. NRE account: you deposit money earned ABROAD in foreign currency, it converts to INR. The interest is 100% tax-free in India, and you can repatriate (take out) the full principal and interest at any time. NRO account: for income earned IN INDIA — rent, pension, dividends. Interest is taxable in India. Repatriation has some limits. For most NRIs living abroad and sending money home, the NRE account is the better choice for savings. Aspora offers the NRE account."`,
-   tips:['NRE = Foreign earnings, tax-free, fully repatriable', 'NRO = India income, taxable, partial repatriation', 'Aspora = NRE (better for most NRIs)', 'Repatriation: NRE is fully free, NRO limited to $1M/year']},
-
-  {id:'repatriation', cat:'Account Info', emoji:'🌍', title:'Repatriation / Withdrawing money',
-   triggers:['repatriate','withdraw','take out','send back','transfer abroad','access','move money','UK','US','funds'],
-   tag:'kyc', tagLabel:'Account Info',
-   script:`"With an NRE account at Aspora, repatriation is completely free and unrestricted — you can move every single rupee back to your UK/US/UAE account at any time with no RBI approval needed. There's no cap, no paperwork, no waiting period. International transfers in Year 1 are also free of Aspora fees. Your money is as accessible as if it were in a local account — you're never locked in."`,
-   tips:['NRE = 100% repatriation, no limits', 'No RBI approval needed for NRE', 'Year 1: free international transfers', 'If asking about NRO: $1M/year with CA certificate']},
-
-  {id:'interest', cat:'Account Info', emoji:'💰', title:'Interest rate explanation',
-   triggers:['interest','rate','7%','how much','earn','return','percent','per annum','quarterly','calculate'],
-   tag:'rate', tagLabel:'Interest Rate',
-   script:`"Aspora pays tiered savings interest on your NRE account: ₹0–₹1L: 2.50%, ₹1L–₹5L: 3.25%, ₹5L–₹10L: 3.50%, ₹10L–₹25L: 6.50%, and ₹25L–₹50L: 7.00%. Interest is calculated daily and paid quarterly. So if you maintain ₹30 lakh, you earn 7% = ₹2.1 lakh per year, TAX FREE in India — that's ₹52,500 every quarter appearing in your account automatically. Compare that to HDFC at 3% = ₹90,000/year for the same balance."`,
-   tips:['Daily calculation, quarterly payout', 'Tax-free in India (NRE)', 'Use specific ₹ amounts — makes it real', 'Compare HDFC 3% vs Aspora 7% — ₹1.2 lakh extra/year on ₹30L']},
-
-  // COMPETITIVE RATES
-  {id:'competitor-rates', cat:'Account Info', emoji:'📊', title:'Compare with other banks',
-   triggers:['hdfc rate','icici rate','sbi rate','axis rate','idfc rate','competitor','better rate','other bank','compare'],
-   tag:'rate', tagLabel:'Rate Compare',
-   script:`"Here's a quick comparison: HDFC Bank NRE Savings: 3.0–3.5%. ICICI Bank: 3.0–3.5%. SBI: 2.7–3.0%. Axis Bank: 3.0–3.5%. IDFC First: up to 7% (but tiered — most NRIs qualify for only 6%). Aspora: up to 7.00% for balances above ₹25L, and 6.50% for ₹10L–₹25L. For FD: Aspora also offers 7.25% for 1-year FD. On a ₹20 lakh savings balance, Aspora earns you ₹70,000 more per year than HDFC. That's the difference."`,
-   tips:['Use the exact rate table — don\'t guess', 'IDFC comparison: similar top rate but lower for most NRIs', '₹20L example: Aspora 6.5% = ₹1.3L/yr vs HDFC 3% = ₹60K/yr', 'FD option: 7.25% for 1 year — powerful alternative to savings']},
-
-  // TECHNICAL ISSUES
-  {id:'otp', cat:'Technical Help', emoji:'📲', title:'OTP not received',
-   triggers:['otp','one time','password','code','receive','sms','message','phone','not getting','not coming'],
-   tag:'tech', tagLabel:'Tech Support',
-   script:`"OTP issues are usually one of these: 1) The Indian SIM is not in an active phone — make sure there's mobile signal. 2) DND (Do Not Disturb) is activated on the Indian number — ask the recipient to check. 3) Network delay — wait 2 minutes and try again. 4) Wrong number entered — double-check the Indian mobile number in the app. If none of these work, we can switch to WhatsApp OTP instead. Would you like me to try that now?"`,
-   tips:['Check DND setting — very common cause', 'WhatsApp OTP is the backup — offer immediately', '2-minute retry is standard', 'Escalate to tech team if WhatsApp OTP also fails']},
-
-  {id:'app-issue', cat:'Technical Help', emoji:'📱', title:'App / Platform not working',
-   triggers:['app','loading','crash','error','stuck','freeze','slow','button','screen','not working','broken','page'],
-   tag:'tech', tagLabel:'Tech Support',
-   script:`"Sorry you're experiencing that. Let's try a few quick things: 1) Close and reopen the app/browser. 2) Check internet — switch from WiFi to mobile data or vice versa. 3) Clear browser cache if on web. 4) Try a different browser (Chrome usually works best). If it's still stuck, please screenshot the error and send it to me on WhatsApp — our tech team can fix it within the hour. Which step are you stuck on exactly?"`,
-   tips:['Get the exact step they\'re stuck on', 'Screenshot + WhatsApp to tech team', 'Common fix: switch WiFi to mobile data', 'If urgent: offer to complete the stuck section manually']},
-
-  {id:'upload', cat:'Technical Help', emoji:'📤', title:'Document upload issues',
-   triggers:['upload','photo','scan','document','file','pdf','image','picture','size','format','attach'],
-   tag:'tech', tagLabel:'Tech Support',
-   script:`"Document uploads need to be JPEG, PNG, or PDF, and under 5MB per file. If the photo is too large, try: 1) Compressing it at tinypng.com (free). 2) Take the photo in 'standard' mode not 'original' quality. 3) Scan using the phone's built-in document scanner. Passport scans: ensure ALL pages (including blank ones) are captured. The photo must be clear, not blurry or cut off. Would you like me to walk you through it step by step?"`,
-   tips:['File size limit: 5MB. Format: JPG/PNG/PDF', 'tinypng.com for compression', 'Passport: ALL pages required', 'Selfie: face must be clearly visible, no glasses if possible']},
-
-  // VALUE PROPOSITION
-  {id:'why-aspora', cat:'Value Proposition', emoji:'⭐', title:'Why choose Aspora?',
-   triggers:['why aspora','why this bank','why should i','benefit','advantage','reason','what makes','different','unique'],
-   tag:'kyc', tagLabel:'Value Prop',
-   script:`"Aspora is built specifically for NRIs — not an afterthought like most big banks. Here's what you get that you don't get elsewhere: 1) Up to 7% savings interest, TAX-FREE — double most big banks. 2) Zero balance, zero fees. 3) Free international transfers in Year 1. 4) 100% digital — open in 15 minutes from anywhere in the world. 5) Fully RBI-regulated and DICGC insured up to ₹5L. 6) A dedicated NRI team available 24/7. Big banks treat NRIs as an afterthought. We were built for you."`,
-   tips:['7 key features — you can use these as a framework', 'The "built for NRIs" story is differentiating', 'End with 24/7 human support — competitors are terrible here', '"Built for you" creates emotional connection']},
-
-  {id:'how-to-open', cat:'Value Proposition', emoji:'🚀', title:'How to open — step by step',
-   triggers:['how to open','steps','process','apply','start','begin','what to do','how long','15 minutes'],
-   tag:'kyc', tagLabel:'Process',
-   script:`"Opening takes about 15 minutes. Here's the exact flow: Step 1 — Fill the online application (personal details, address). Step 2 — Upload documents: passport, PAN, overseas address proof. Step 3 — Video KYC: 5-minute live verification. Step 4 — Digital notary: another 5-minute video call where a licensed notary certifies your documents. Step 5 — SIM binding: link your Indian mobile number for security. Step 6 — Account activated! That's it. I'll guide you through every step on WhatsApp. Shall we start Step 1 right now?"`,
-   tips:['Always try to start Step 1 on the call', '"15 minutes" — say it with confidence', 'Pause after each step and ask if they have questions', 'WhatsApp support throughout = remove anxiety']},
-
-  {id:'stage-stuck', cat:'Value Proposition', emoji:'📍', title:'Customer stuck on a stage',
-   triggers:['stuck','stage','step','where','stopped','paused','halfway','half way','incomplete','pending','continue'],
-   tag:'kyc', tagLabel:'Drop-off',
-   script:`"No problem — we can pick up exactly where you left off. Can you tell me which stage you're on, or share a screenshot? The most common places people pause are the notary step (scheduling can take a bit) and document upload (file size/format issues). Wherever you are, I'll walk you through the next step right now. Your progress is saved — you don't have to restart anything."`,
-   tips:['Get exact stage: ask for screenshot', 'Progress is always saved', 'Most drop-offs: notary (complex) or video KYC (technical)', 'Offer immediate guided walkthrough on the call']},
-
-  // COUNTRY-SPECIFIC
-  {id:'country', cat:'Value Proposition', emoji:'🌏', title:'Opening from abroad',
-   triggers:['uk','us','usa','uae','dubai','australia','canada','abroad','outside india','singapore','germany','country'],
-   tag:'kyc', tagLabel:'Global',
-   script:`"Great news — Aspora is available for NRIs in most countries including UK, US, UAE, Australia, Canada, Singapore, and many more. The entire process is done online — you never have to visit India or a branch. Your overseas address proof (utility bill or bank statement from your home country) is sufficient. The notary is done on a video call. Your KYC is processed digitally. You can open the account from your living room in London, New York, or Dubai."`,
-   tips:['Check current supported countries list for any edge cases', '100% online — no India visit required', 'Overseas address proof from their country is fine', 'Note: US customers may have additional FATCA disclosures']},
+var BASE = 'https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/';
+var STAGE_IMGS = {
+  0:['stage-0-1781281356237-55207.png','stage-0-1781281400328-60784.png','stage-0-1781281418193-41009.png'],
+  1:['stage-1-1781283357684-82941.png'],
+  2:['stage-2-1781281811906-39948.png'],
+  3:['stage-3-1781281927538-49126.png','stage-3-1781281958817-99253.png'],
+  4:['stage-4-1781283059315-37147.png'],
+  5:['stage-5-1781283810378-40700.png'],
+  6:['stage-6-1781282342908-81256.png','stage-6-1781282358257-4910.png','stage-6-1781282369705-58001.png'],
+  7:['stage-7-1781282600139-53568.png'],
+  8:['stage-8-1781279606567-48780.png'],
+  9:['stage-9-1781279978183-49560.png'],
+  10:['stage-10-1781280013506-43302.png'],
+  11:['stage-11-1781280377641-66415.png','stage-11-1781280387411-86560.png','stage-11-1781280397947-79684.png'],
+  12:['stage-12-1781280533921-99417.png','stage-12-1781280553671-5461.png','stage-12-1781280566774-65149.png','stage-12-1781280598441-65308.png','stage-12-1781280610455-49215.png','stage-12-1781280622724-28708.png'],
+  14:['stage-14-1781271642850-85613.png','stage-14-1781271906306-41209.png'],
+  15:['stage-15-1781271811383-45499.png','stage-15-1781271844163-62425.png','stage-15-1781271855641-84346.png','stage-15-1781271863344-18078.png'],
+  16:['stage-16-1781272090119-15003.png'],
+  17:['stage-17-1781272217545-80267.png'],
+  18:['stage-18-1781272807674-3427.png'],
+  19:['stage-19-1781272834423-9936.png','stage-19-1781272844079-7314.png'],
+  20:['stage-20-1781273223751-83548.png','stage-20-1781273234820-52554.png','stage-20-1781273252236-3329.png','stage-20-1781273269129-50982.png','stage-20-1781273276036-9516.png','stage-20-1781273285621-91047.png'],
+  21:['stage-21-1781273377599-93090.png'],
+  22:['stage-22-1781273527475-20756.png','stage-22-1781273536001-11592.png','stage-22-1781273544334-70457.png','stage-22-1781273554357-32897.png'],
+  23:['stage-23-1781273636215-5846.png','stage-23-1781273643480-63296.png','stage-23-1781273651148-69516.png','stage-23-1781273732444-45600.png'],
+  24:['stage-24-1781273856073-75303.png','stage-24-1781273867357-79390.png','stage-24-1781273879659-61868.png','stage-24-1781273895939-87557.png','stage-24-1781273905470-82828.png'],
+  25:['stage-25-1781273964695-481.png','stage-25-1781273977377-61089.png'],
+  26:['stage-26-1781274067517-11104.png','stage-26-1781274078207-5087.png','stage-26-1781274089033-78530.png'],
+  27:['stage-27-1781274125962-40663.png','stage-27-1781274135845-74335.png','stage-27-1781274148833-90818.png'],
+  28:['stage-28-1781274206057-73305.png'],
+  29:['stage-29-1781274237296-46692.png'],
+  30:['stage-30-1781274437225-62619.png']
+};
+var STAGES=[
+  {n:0,title:'Not Contacted / New Lead',script:'"Hi, am I speaking with [Name]? This is [Your Name] from Aspora. I\'m calling because you recently expressed interest in opening an NRI account. Is now a good time for just 2 minutes?"',tips:['First impression: warm, not salesy','Goal: confirm right person, establish rapport','If busy: book specific callback slot','Keep intro under 30 seconds then let them speak']},
+  {n:1,title:'Introduction Done',script:'"As an NRI in [UK/US/UAE], you probably know how hard it is to get a good savings rate in India. Aspora NRE pays up to 7% tax-free. On Rs 10 lakh that\'s Rs 70,000 per year doing nothing. Can I show you how it works in 2 minutes?"',tips:['Personalise with their country','Lead with the Rs number not the %','Tax-free is the hook','Ask a yes-able question to keep momentum']},
+  {n:2,title:'Interest Confirmed',script:'"Great. The process is 100% digital, no branch, no courier, about 15 minutes on your phone. You need: passport, PAN card, overseas address proof. Before we go further - do you have a PAN card?"',tips:['Confirm PAN early - blocker if missing','Keep it simple: 3 documents, 15 minutes','If excited: start the form right now on the call','No PAN: guide to apply at incometaxindia.gov.in']},
+  {n:3,title:'Profile / Personal Details',script:'"Open the Aspora app. Step one is your personal info - full name as on passport, date of birth, nationality. Take your time, I\'ll stay on the line."',tips:['Stay on call while they fill - prevents drop-off','Name must match passport EXACTLY','If unsure of any field: offer to check together','WhatsApp screen share if confused']},
+  {n:4,title:'Contact Details',script:'"Next is your contact details - email and Indian mobile number for OTPs. If you don\'t have an active Indian SIM, a family member\'s number in India works. Do you have one?"',tips:['Indian mobile = OTP receiver. Must be accessible','Family member number is acceptable','No Indian number: offer virtual number solution','Email: use one they check regularly']},
+  {n:5,title:'App Downloaded / Registration',script:'"Enter your mobile number, you\'ll get an OTP. Did you get it? Good. Set a strong 6-digit MPIN - not your birth year. Done? You\'re in - that\'s step 1 of 6!"',tips:['OTP not received: check DND, wait 2 min','MPIN: 6 digits, not obvious','App won\'t load: try Chrome or web version','Celebrate small wins to build momentum']},
+  {n:6,title:'Personal Details Screen',script:'"Let\'s make sure everything matches your passport exactly - especially spelling of your name and date of birth. Any discrepancy will delay verification."',tips:['Name must match passport - critical','DOB format: DD/MM/YYYY','Father\'s name: enter as on PAN card','Marital status: as on passport']},
+  {n:7,title:'Address Details',script:'"Enter your CURRENT overseas address - the one on your latest utility bill or bank statement. This is where you live now, not your India address. Then add India address separately."',tips:['Overseas address must match address proof exactly','India address: family home is fine','PIN code: 6-digit Indian pincode for India address','Common mistake: swapping India and overseas addresses']},
+  {n:8,title:'Employment / Financial Details',script:'"Just your employment details - select occupation type and income bracket. This is for regulatory compliance only, not credit assessment."',tips:['Remind them: compliance only, not judgment','No income documents required at this stage','Retired NRIs: select Retired or Other','Self-employed: select even if part-time']},
+  {n:9,title:'Document Upload Initiated',script:'"Now we upload 3 documents. 1) Passport - scan ALL pages including blank ones. 2) PAN card - front side clear photo. 3) Overseas address proof - utility bill, bank statement or driving licence from your country. Under 5MB, JPEG/PNG or PDF."',tips:['Passport: ALL pages required, not just photo page','Address proof: within last 3 months','File size limit: 5MB. Use tinypng.com to compress','Common fix: switch from original to standard camera quality']},
+  {n:10,title:'Passport Uploaded',script:'"Passport done. Now PAN card - clear photo in good lighting, all text readable, card not cropped, plain background."',tips:['No glare, all four corners visible','Old/damaged PAN: download e-PAN from incometaxindia.gov.in','PAN name must match passport name','No PAN: guide to apply online - takes 2-5 days']},
+  {n:11,title:'PAN Uploaded',script:'"PAN done - excellent. Last document: overseas address proof. Must show your name and current overseas address, dated within 3 months. UK bank statement, utility bill, or driving licence all work."',tips:['Bank statement: any page showing name + address','Driving licence: front side sufficient','If address doesn\'t match: update the address field first','Utility bill: electricity, gas, water, internet all valid']},
+  {n:12,title:'All Documents Uploaded',script:'"All 3 documents uploaded - brilliant! Our team reviews in 2-4 hours. Next step: schedule your Video KYC - a 5-minute live call. Want to book it now while we\'re on the line?"',tips:['Book Video KYC immediately - next drop-off point','Review time: 2-4 hours business hours','If docs rejected: notify immediately with specific reason','Offer to review docs with them before submission']},
+  {n:13,title:'Documents Under Review',script:'"Your documents are with our verification team. Usually 2-4 working hours. I\'ll WhatsApp you the moment they\'re cleared. In the meantime, any questions about the account?"',tips:['Set expectation: 2-4 hours, not instant','Use waiting time to upsell FD rates or nominee addition','Follow up proactively - don\'t wait for them to call','If taking longer: escalate to ops team internally']},
+  {n:14,title:'FATCA / CRS Declaration',script:'"You\'ll see a FATCA/CRS declaration - required by all banks. It asks if you\'re a tax resident of another country (yes - where you live). Select Yes and enter your Tax ID. In UK that\'s your National Insurance number."',tips:['FATCA=US, CRS=all others - same form','UK TIN = National Insurance number','US TIN = Social Security Number','UAE: no TIN needed. Reporting not extra taxation']},
+  {n:15,title:'Video KYC Scheduled',script:'"Your Video KYC is booked. Expect a 5-minute video call. They\'ll ask you to show your passport and read a few digits from your PAN. Be in a well-lit room, stable internet, VPN off, 5 minutes before your slot."',tips:['Good lighting = most important factor for success','VPN must be OFF during the call','Passport must be original, not photocopy','Tip: face a window for natural lighting']},
+  {n:16,title:'Video KYC Completed',script:'"Video KYC done - great! Next is Digital Notary: a 5-10 minute video call with a licensed notary who formally certifies your documents. Our team will schedule this. What day and time works this week?"',tips:['Schedule notary immediately - another drop-off point','Notary is RBI-mandated, not Aspora\'s choice','Typical turnaround: within 24 hours of request','This is the last major step before account activation']},
+  {n:17,title:'Digital Notary Scheduled',script:'"Your notary appointment is booked. They\'ll video-call you at the scheduled time. Have your passport and one other ID ready. About 10 minutes, they\'ll ask you to show documents and sign a declaration."',tips:['Send WhatsApp reminder 30 min before','Documents: passport + address proof ready','If notary call missed: reschedule immediately','If notary rejects doc: get specific reason, guide fix']},
+  {n:18,title:'Notary Completed',script:'"Notary done - almost there! Now SIM binding: we link a verified Indian mobile to your account for security. This receives all OTPs. Is there an Indian SIM currently active - yours or a family member\'s in India?"',tips:['SIM binding is mandatory security feature','Family member number is acceptable','Virtual Indian number option if no family','One-time only - doesn\'t change unless SIM changes']},
+  {n:19,title:'SIM Binding',script:'"The person holding that Indian SIM will receive an OTP. Enter that OTP in the app and binding is done. Ask them to be ready. OTP comes from an Indian shortcode - make sure DND is off on that number."',tips:['DND off on the Indian SIM - critical','OTP valid for 5 minutes','If binding fails: check SIM is in working phone with signal','No accessible Indian SIM: escalate to ops for virtual SIM']},
+  {n:20,title:'Account Opening Pending',script:'"Your application is submitted and processing! Account opening takes 1-2 working days after all verifications. You\'ll get SMS and email with your account number. I\'ll follow up personally tomorrow morning."',tips:['Set clear timeline: 1-2 working days','Personal follow-up reduces anxiety','Use this time to explain how to fund the account','Mention welcome kit, debit card delivery']},
+  {n:21,title:'Account Number Generated',script:'"Congratulations - your Aspora NRE account is officially open! Account number [XXXX]. Welcome kit including debit card arrives in 5-7 working days. You can transact through the app immediately. Want me to walk you through your first deposit?"',tips:['Celebrate genuinely - this is a big moment','First deposit: SWIFT from overseas account','App: show balance, transactions, interest tracker','Debit card: works internationally at all ATMs']},
+  {n:22,title:'Welcome Kit / Debit Card',script:'"Your debit card arrives in 5-7 working days. Activate through the app - enter last 4 digits and set a PIN. Works at all ATMs and online internationally. No Aspora fees for cash withdrawals in India."',tips:['Card activation: done in app, 2 minutes','ATM: no Aspora fee; third-party ATM fees may apply','If card doesn\'t arrive: raise request in app after 10 days','Rupay or Visa depending on product']},
+  {n:23,title:'First Deposit / Fund Transfer',script:'"To fund your account, do a SWIFT transfer from your UK/US bank. Our SWIFT details are in the app under Account Details > Fund Transfer. Transfer takes 1-3 working days. UK customers can also use Faster Payments - instant and free."',tips:['SWIFT details: in app under Account > Fund Account','UK Faster Payments: instant, free, up to GBP 25,000/day','First transfer: use small amount to test then send more','Currency: deposit in GBP/USD, auto-converts to INR at live rate']},
+  {n:24,title:'App Activated / Account in Use',script:'"You\'re all set! The app shows balance, interest earned, and statements. Enable Face ID for quick login. Turn on push notifications so you always know when money arrives or interest is credited."',tips:['Face ID: Settings > Security','Push notifications: always recommend enabling','Statements: downloadable PDF for any period','Interest: separate credit every quarter']},
+  {n:25,title:'Nominee Addition',script:'"One important thing to add: a nominee. This is who receives your funds if something happens to you. Just 2 minutes in the app - Profile > Nominee. Enter their name, date of birth, and relationship."',tips:['Nominee: critical for NRIs living abroad','Can add up to 2 nominees with split percentage','Nominee can be updated anytime in the app','If customer resists: "Takes 2 minutes, protects your family"']},
+  {n:26,title:'Beneficiary / Payee Setup',script:'"Add payees - family members in India you send money to - so transfers are instant next time. Go to Transfers > Add Beneficiary > Enter account number and IFSC. First transfer to new payee has 30-minute security hold, then instant."',tips:['Beneficiary setup: one-time process','Cooling period: 30 min on first transfer only','IMPS for instant, NEFT for scheduled transfers','Up to 10 beneficiaries can be saved']},
+  {n:27,title:'Repeat Usage / Engagement',script:'"Did you know your interest is calculated daily and credited quarterly? You can see your projected quarterly interest in the app under Savings > Interest Tracker. If you have more funds, our Fixed Deposit pays 7.25% for 1 year."',tips:['Interest tracker: daily running total in app','FD upsell: 7.25% for 1 year - strongest pitch for high-balance','Ask about referrals: any NRI friends who might benefit?','Offer quarterly call to review satisfaction']},
+  {n:28,title:'FD / Investment Enquiry',script:'"Our NRE Fixed Deposit pays 7.25% per annum for 1 year - also tax-free in India. Minimum Rs 10,000. Book instantly in the app under Investments > Fixed Deposit. Choose amount, tenure, and maturity option - monthly, quarterly, or at maturity."',tips:['NRE FD: tax-free in India, same as savings account','Maturity options: monthly payout popular for regular income','Premature withdrawal: allowed after 1 year with small penalty','Compare: HDFC FD 6.5%, SBI 6.8%, Aspora 7.25%']},
+  {n:29,title:'Complaint / Escalation',script:'"I\'m sorry to hear that - let me resolve this right now. Can you tell me exactly what happened? [listen] I\'m raising an escalation ticket immediately. Our resolution team will contact you within [4/24] hours. I\'ll follow up personally to make sure it\'s closed."',tips:['Never be defensive - acknowledge the issue first','Get specifics: what exactly went wrong, when','Give customer a reference/ticket number','Personal follow-up = customer retention critical moment']},
+  {n:30,title:'Account Closed / Churned',script:'"I\'m sorry to see you go. Before I process the closure, can I ask what made you decide to close? [listen] Is there anything we could resolve instead? If you change your mind, reopening is simple. We\'d love to have you back."',tips:['Ask why before processing - churn recovery attempt','Offer to escalate if it\'s a fixable issue','If irrecoverable: process smoothly - they may refer others','Capture feedback: note reason for ops team']}
 ];
-
-// ─── Sidebar config ────────────────────────────────────────────────────────────
-var SIDEBAR_SECTIONS = [
-  {label:'Objections', items:['obj-time','obj-callbk','obj-existing','obj-safety','obj-trust','obj-family','obj-complicated','obj-fees']},
-  {label:'Process & KYC', items:['docs','fatca','notary','sim','video-kyc']},
-  {label:'Account Info', items:['nre-nro','repatriation','interest','competitor-rates']},
-  {label:'Technical Help', items:['otp','app-issue','upload']},
-  {label:'Value Proposition', items:['why-aspora','how-to-open','stage-stuck','country']},
+var KB=[
+  {id:'obj-time',cat:'Objections',emoji:'⏰',title:'Too busy / No time',triggers:['busy','time','later','rush','hurry','call back','callback','not now'],tag:'objection',tagLabel:'Objection',script:'"I completely understand. One quick thing before you go: what rate is your current bank paying on NRE savings? If it\'s under 7%, Aspora is giving you Rs 40,000 extra per year on Rs 10 lakh - automatically. Can I take just 90 seconds to explain?"',tips:['Acknowledge first - never argue','Give a concrete Rs number immediately','Ask for 90 seconds not 2 minutes - feels smaller','If still resistant: book exact callback slot']},
+  {id:'obj-callbk',cat:'Objections',emoji:'📞',title:'Call back later',triggers:['call back','later','another time','tomorrow','next week','think about'],tag:'objection',tagLabel:'Objection',script:'"Of course. Before I let you go - can I ask what\'s making you want to think it over? Is it the process, the safety, or something else?" [listen] "Got it. Let me book a specific slot - would [day] at [time] work? I\'ll send a WhatsApp reminder."',tips:['Always anchor callback to specific day + time','Ask WHY to uncover real objection','Send WhatsApp with key facts before callback','Max 3-day callback - create mild urgency']},
+  {id:'obj-existing',cat:'Objections',emoji:'🏦',title:'Already has another bank',triggers:['already have','hdfc','icici','axis','sbi','kotak','other bank','existing'],tag:'objection',tagLabel:'Objection',script:'"Great - you understand NRI accounts. The question is: what rate are you getting today? HDFC/ICICI pays 3-3.5%. Aspora pays up to 7% - double. And you don\'t need to close anything. Many customers keep HDFC for bills and use Aspora for savings. Want to park savings where it earns most?"',tips:['Never ask them to close existing account','Frame as add Aspora alongside existing bank','Rates: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3%','Use: many of our customers do exactly that']},
+  {id:'obj-safety',cat:'Objections',emoji:'🔒',title:'Online safety concern',triggers:['safe','safety','trust','secure','data','privacy','hack','fraud','regulated','worry'],tag:'objection',tagLabel:'Objection',script:'"That\'s the most important question. Aspora is RBI-regulated - same regulator as HDFC and ICICI. Deposits insured up to Rs 5 lakh under DICGC - a government scheme. 256-bit bank-grade encryption. KYC done by licensed notary. As safe as any major Indian bank, just fully digital."',tips:['RBI regulation = most powerful reassurance','DICGC = government insurance - say it clearly','Never be defensive - confidence is key','If they cite a news story: acknowledge and address specifically']},
+  {id:'obj-trust',cat:'Objections',emoji:'🤔',title:'Too good to be true',triggers:['too good','suspicious','scam','genuine','real','doubt','7%','how is it possible'],tag:'objection',tagLabel:'Objection',script:'"I get that - 7% does sound extraordinary. Here\'s why: Aspora has no physical branches, no ATMs to maintain. That saving goes directly to you as higher interest. Same reason IDFC First can offer 7% - no branches = higher rates. RBI regulated, DICGC insured. Start with Rs 10,000 and see interest in your first quarter."',tips:['Explain the why - no branches = higher rates','Reference IDFC First as well-known validation','"Start small to test" removes risk barrier','Offer to show interest calculation in real time']},
+  {id:'obj-family',cat:'Objections',emoji:'👨‍👩‍👧',title:'Need family discussion',triggers:['family','wife','husband','spouse','parents','discuss','consult','ask','partner','together'],tag:'objection',tagLabel:'Objection',script:'"That makes sense. Can I ask - is there a specific concern your family might have? [listen] Let me send a 2-page summary on WhatsApp right now covering interest rates, safety, withdrawal process - so your conversation is well-informed. When would you and your family be free for a 10-minute call together?"',tips:['Send summary IMMEDIATELY on WhatsApp','Offer a 3-way call with family on the line','Find out: genuine need or deflection? Ask what specific concern','Book the family call with a specific time']},
+  {id:'obj-fees',cat:'Objections',emoji:'💳',title:'Fees and charges',triggers:['fee','fees','charge','cost','free','annual','maintenance','deduct','hidden','minimum balance'],tag:'objection',tagLabel:'Objection',script:'"Zero maintenance fees, zero minimum balance, zero annual charges. No hidden costs. International transfers free in Year 1. Compare: HDFC requires Rs 10,000 minimum balance - penalty Rs 5,000/year if you fall below. Aspora: zero."',tips:['Zero fees is a strong USP - lead with it','Free international transfers Year 1 = powerful for NRIs','No minimum balance - open with any amount','HDFC AMB penalty comparison lands well']},
+  {id:'obj-complicated',cat:'Objections',emoji:'😓',title:'Process too complicated',triggers:['complicated','complex','difficult','too much','long','tedious','confusing','steps'],tag:'objection',tagLabel:'Objection',script:'"Here\'s what it actually is: fill a form, upload 3 photos, do 2 short video calls. That\'s it. Most customers finish in 15 minutes. I\'ll stay on WhatsApp and guide you through every step personally. Shall we try just the first step together right now?"',tips:['Start the process WITH them on the call - biggest drop-off reducer','15 minutes = achievable, say it confidently','Break it into: Form + 3 photos + 2 video calls','WhatsApp support removes "what if I get stuck" fear']},
+  {id:'docs',cat:'Process & KYC',emoji:'📄',title:'Documents required',triggers:['document','passport','pan','proof','id','identity','require','need','what to bring'],tag:'kyc',tagLabel:'KYC / Docs',script:'"Three things: 1) Passport - all pages including photo and address page. 2) PAN card. 3) Overseas address proof - utility bill, bank statement, or driving licence from your current country, dated within 3 months. Everything uploaded digitally - no physical copies."',tips:['Three documents only - keep it simple','Passport: ALL pages not just photo page','Address proof: within last 3 months, matches entered address','No PAN: guide to apply at incometaxindia.gov.in']},
+  {id:'fatca',cat:'Process & KYC',emoji:'📋',title:'FATCA / CRS',triggers:['fatca','crs','tax','declaration','reporting','compliance','us citizen','uk resident'],tag:'kyc',tagLabel:'FATCA / CRS',script:'"FATCA and CRS are international tax transparency rules - India reports NRI accounts to your home country. All Indian banks do this. It does NOT mean extra taxes. NRE account interest is tax-free in India. Your TIN is usually your National Insurance number (UK) or Social Security number (US)."',tips:['FATCA = US reporting, CRS = all others','NRE interest: tax-free in India. Home country rules vary','Reporting does not equal being taxed more','UAE: no TIN needed']},
+  {id:'notary',cat:'Process & KYC',emoji:'📜',title:'Digital notary',triggers:['notary','notarize','attest','certify','notarisation','why notary'],tag:'kyc',tagLabel:'KYC',script:'"Notary is mandatory under RBI rules for NRI accounts - how your overseas identity is officially verified. With Aspora it\'s fully digital: a licensed notary does a 5-10 minute video call, verifies your passport and address proof. No courier, no consulate visit. Our team books this for you."',tips:['RBI mandatory - not Aspora\'s choice','Digital = no courier or consulate','Aspora team handles scheduling','Typical: 5-10 min video call from home']},
+  {id:'sim',cat:'Process & KYC',emoji:'📱',title:'SIM binding',triggers:['sim','mobile','phone number','india','binding','link','why sim','indian number'],tag:'kyc',tagLabel:'KYC',script:'"SIM binding links your account to a verified Indian number so only you can receive OTPs and authorise transactions. Security feature. If you don\'t have an active Indian SIM, a family member\'s number (spouse, parent in India) works. Set up once, done."',tips:['Security feature - protects the customer','Family member Indian SIM is acceptable','Virtual number option if no family available','One-time setup - no ongoing effort']},
+  {id:'video-kyc',cat:'Process & KYC',emoji:'📹',title:'Video KYC drop-off',triggers:['video kyc','video call','face','selfie','live','vcip','dropped','incomplete','stuck on kyc'],tag:'kyc',tagLabel:'KYC',script:'"Video KYC is just 5 minutes. If you had trouble before: good lighting (face a window), stable WiFi, VPN OFF. We can reschedule right now - usually works first or second attempt. Want me to book a slot immediately?"',tips:['Good lighting = most common success factor','VPN must be OFF during video KYC','Book immediately - don\'t let them wait','If fails twice: escalate for manual KYC path']},
+  {id:'nre-nro',cat:'Account Info',emoji:'🔄',title:'NRE vs NRO',triggers:['nre','nro','difference','which one','type of account','what is nre','what is nro'],tag:'kyc',tagLabel:'Account Type',script:'"NRE: for money earned ABROAD - converted to INR, interest tax-free in India, fully repatriable anytime. NRO: for income earned IN India (rent, pension, dividends) - interest taxable, repatriation has limits. For most NRIs who work abroad, NRE is the right choice. That\'s what Aspora offers."',tips:['NRE = Foreign earnings, tax-free, fully repatriable','NRO = India income, taxable, partial repatriation','Aspora = NRE (best for most NRIs)','Repatriation: NRE fully free; NRO up to $1M/year']},
+  {id:'repatriation',cat:'Account Info',emoji:'🌍',title:'Repatriation / Moving money',triggers:['repatriate','withdraw','take out','send back','transfer abroad','access money','move money','locked'],tag:'kyc',tagLabel:'Account Info',script:'"With NRE, repatriation is 100% free and unrestricted - every rupee, anytime, no RBI approval, no paperwork, no cap. International transfers in Year 1 are also free on Aspora. You are never locked in."',tips:['NRE = zero restrictions on repatriation','No RBI approval needed','Year 1: free international transfers','NRO question: $1M/year cap with CA Form 15CA']},
+  {id:'interest',cat:'Account Info',emoji:'💰',title:'Interest rate details',triggers:['interest','rate','how much earn','return','percent','per annum','quarterly','calculate','how does interest'],tag:'rate',tagLabel:'Interest Rate',script:'"Aspora NRE savings tiers: Rs 0-1L: 2.50%, Rs 1L-5L: 3.25%, Rs 5L-10L: 3.50%, Rs 10L-25L: 6.50%, Rs 25L-50L: 7.00%. Calculated daily, credited quarterly. On Rs 30 lakh you earn 7% = Rs 2.1 lakh per year, TAX-FREE. That\'s Rs 52,500 every quarter appearing automatically."',tips:['Daily calculation, quarterly credit - explain clearly','Tax-free in India (NRE) = net 7% no deductions','Example: Rs 10L at 6.5% = Rs 65,000/year','Compare: HDFC 3% on same Rs 10L = Rs 30,000 - Rs 35,000 less!']},
+  {id:'rates-compare',cat:'Account Info',emoji:'📊',title:'Competitor rate comparison',triggers:['hdfc rate','icici rate','sbi rate','axis','idfc','compare','better rate','other bank'],tag:'rate',tagLabel:'Rate Compare',script:'"Current NRE savings rates: HDFC 3.0-3.5%. ICICI 3.0-3.5%. SBI 2.7-3.0%. Axis 3.0-3.5%. IDFC First up to 7% tiered. Aspora: 6.50% for Rs 10L-25L, 7.00% for Rs 25L+. FD: Aspora 7.25% for 1 year vs HDFC 6.5%. On Rs 20 lakh, Aspora earns Rs 70,000 more per year than HDFC."',tips:['Use the Rs 70,000 gap number - very powerful','IDFC: similar top rate but most NRIs get 4-6% due to tiering','FD: 7.25% - strongest pitch for high-balance customers','Never bad-mouth competitors - just use the numbers']},
+  {id:'otp',cat:'Technical Help',emoji:'📲',title:'OTP not received',triggers:['otp','one time','code','not received','sms','not getting','not coming'],tag:'tech',tagLabel:'Tech',script:'"OTP not arriving is usually: 1) DND activated on the Indian SIM - ask them to check. 2) SIM not in active phone - ensure signal. 3) Network delay - wait 2 minutes and resend. 4) Wrong number entered - double check. If still not coming, we can switch to WhatsApp OTP - want to try that?"',tips:['DND off = most common fix. Check first','WhatsApp OTP is the backup - offer proactively','2-minute retry is standard','Escalate to tech if WhatsApp OTP also fails']},
+  {id:'app-issue',cat:'Technical Help',emoji:'📱',title:'App / platform not working',triggers:['app','loading','crash','error','stuck','freeze','slow','not working','broken','page','button'],tag:'tech',tagLabel:'Tech',script:'"Let\'s fix this quickly: 1) Close and reopen the app. 2) Switch from WiFi to mobile data or vice versa. 3) Clear browser cache if using web. 4) Try Chrome if on another browser. If still stuck, screenshot the error and WhatsApp it to me - our tech team resolves issues within the hour."',tips:['Get exact step they\'re stuck on - specifics help tech team','Screenshot via WhatsApp = fastest resolution','WiFi to mobile data switch fixes 40% of issues','If urgent: try on a different device']},
+  {id:'upload',cat:'Technical Help',emoji:'📤',title:'Document upload issues',triggers:['upload','photo','scan','file','pdf','image','picture','size','format','attach','too large','failed'],tag:'tech',tagLabel:'Tech',script:'"Upload needs: JPEG, PNG, or PDF, under 5MB. If file too large: compress at tinypng.com (free, instant). For photos: use standard not original quality. Passport: all pages in one scan. Text must be clear and document not cropped."',tips:['Max 5MB. Formats: JPG/PNG/PDF only','tinypng.com = free compression tool','Passport: ALL pages in one upload','Selfie: face fully visible, good lighting, no glasses']},
+  {id:'why-aspora',cat:'Value Proposition',emoji:'⭐',title:'Why choose Aspora?',triggers:['why aspora','why this bank','why should i','benefit','advantage','reason','different','unique','what makes'],tag:'kyc',tagLabel:'Value Prop',script:'"Aspora is built exclusively for NRIs. 1) Up to 7% savings - double most big banks. 2) Zero fees, zero minimum balance. 3) Free international transfers Year 1. 4) 100% digital - open in 15 minutes. 5) RBI regulated, DICGC insured. 6) Dedicated NRI team 24/7. Big banks treat NRIs as an afterthought. We were built for you."',tips:['7 key features - use as a framework','The built for NRIs story is differentiating','End with 24/7 support - competitors are terrible here','"Built for you" creates emotional connection']},
+  {id:'how-open',cat:'Value Proposition',emoji:'🚀',title:'How to open - full process',triggers:['how to open','steps','process','apply','start','begin','what to do','how long','whole process'],tag:'kyc',tagLabel:'Process',script:'"Full process: 1) Fill form. 2) Upload 3 documents. 3) Video KYC (5 min). 4) Digital notary (10 min). 5) SIM binding. 6) Account active! About 15-20 minutes total. I\'ll guide you on WhatsApp throughout. Shall we start right now?"',tips:['Always try to start Step 1 during the call','Say 15 minutes with confidence','WhatsApp support = remove all anxiety','Pause after each step and ask if they have questions']},
+  {id:'stuck',cat:'Value Proposition',emoji:'📍',title:'Customer stuck on a stage',triggers:['stuck','step','where am i','stopped','paused','halfway','incomplete','pending','continue','my application'],tag:'kyc',tagLabel:'Drop-off',script:'"No problem - we pick up exactly where you left off, no restart. Can you tell me which stage you\'re on or share a screenshot? Most common pause points are the notary (scheduling) and document upload (file size). Tell me where you are and I\'ll walk you through the next step right now."',tips:['Progress is always saved - reassure them','Get exact stage: ask for screenshot','Most drop-offs: notary scheduling or video KYC technical','Offer guided walkthrough on the call - biggest drop-off reducer']},
+  {id:'country',cat:'Value Proposition',emoji:'🌏',title:'Opening from abroad',triggers:['uk','us','usa','uae','dubai','australia','canada','abroad','outside india','singapore','germany'],tag:'kyc',tagLabel:'Global',script:'"Aspora works for NRIs in UK, US, UAE, Australia, Canada, Singapore, and more. The entire process is online - no India visit, no branch, no courier. Your overseas address proof from your current country is accepted. Open from your living room in London, New York, or Dubai."',tips:['100% online - no India trip required','Check latest supported countries list for edge cases','Overseas address proof from their country is fine','US NRIs: additional FATCA declaration - normal and harmless']}
 ];
-
-// ─── State ────────────────────────────────────────────────────────────────────
-var conversationHistory = [];
-var timerInterval = null;
-var timerSeconds = 0;
-var timerRunning = false;
-var currentMood = 'neu';
-
-// ─── KB lookup ────────────────────────────────────────────────────────────────
-function searchKB(query) {
-  var q = query.toLowerCase();
-  var scored = [];
-  KB.forEach(function(item) {
-    var score = 0;
-    item.triggers.forEach(function(t) { if(q.includes(t)) score += 3; });
-    if(q.includes(item.title.toLowerCase())) score += 5;
-    item.triggers.forEach(function(t) { var words = t.split(' '); words.forEach(function(w){ if(w.length>3&&q.includes(w)) score+=1; }); });
-    if(score>0) scored.push({item:item, score:score});
-  });
-  scored.sort(function(a,b){return b.score-a.score});
-  return scored.length>0 ? scored[0].item : null;
-}
-
-// ─── Render sidebar ────────────────────────────────────────────────────────────
-function renderSidebar() {
-  var html = '';
-  SIDEBAR_SECTIONS.forEach(function(sec) {
-    html += '<div class="sidebar-section"><div class="sidebar-section-hdr" onclick="toggleSection(this)">' + sec.label + ' <span class="arrow">▾</span></div><div class="sidebar-items">';
-    sec.items.forEach(function(id) {
-      var item = KB.find(function(k){return k.id===id});
-      if(item) html += '<div class="sidebar-item" data-id="'+id+'" onclick="loadKB(\''+id+'\')">'+'<span class="item-emoji">'+item.emoji+'</span><span class="item-label">'+item.title+'</span></div>';
-    });
-    html += '</div></div>';
-  });
-  document.getElementById('sidebar-scroll').innerHTML = html;
-}
-renderSidebar();
-
-function toggleSection(el) {
-  el.classList.toggle('collapsed');
-  var items = el.nextElementSibling;
-  items.style.display = items.style.display==='none' ? '' : 'none';
-}
-
-function loadKB(id) {
-  var item = KB.find(function(k){return k.id===id});
-  if(!item) return;
-  document.querySelectorAll('.sidebar-item').forEach(function(el){ el.classList.remove('active'); });
-  var el = document.querySelector('[data-id="'+id+'"]');
-  if(el) el.classList.add('active');
-  displayKBResponse(item, null);
-}
-
-// ─── Messages ─────────────────────────────────────────────────────────────────
-function addMsg(role, content, extra) {
-  var msgs = document.getElementById('chat-messages');
-  // Remove welcome card if present
-  var wc = msgs.querySelector('.welcome-card');
-  if(wc) wc.remove();
-
-  var d = document.createElement('div');
-  d.className = 'msg ' + role;
-  var avatarLabel = role==='user' ? 'YOU' : '🤖';
-  d.innerHTML = '<div class="msg-avatar">'+(role==='user'?'👤':'🤖')+'</div><div class="msg-bubble">'+(extra||'')+content+'<button class="msg-copy-btn" onclick="copyMsg(this)" title="Copy">📋</button></div>';
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
-  return d;
-}
-
-function addThinking() {
-  var msgs = document.getElementById('chat-messages');
-  var d = document.createElement('div');
-  d.className = 'msg assistant thinking';
-  d.innerHTML = '<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
-  return d;
-}
-
-function copyMsg(btn) {
-  var bubble = btn.parentElement;
-  var clone = bubble.cloneNode(true);
-  clone.querySelectorAll('.tag,.msg-copy-btn').forEach(function(el){ el.remove(); });
-  navigator.clipboard.writeText(clone.innerText.trim());
-  btn.textContent = '✓';
-  setTimeout(function(){ btn.textContent = '📋'; }, 1500);
-}
-
-function displayKBResponse(item, userQuery) {
-  if(userQuery) {
-    conversationHistory.push({role:'user', content: userQuery});
-    addMsg('user', userQuery);
-  }
-
-  var tagHtml = '<span class="tag '+item.tag+'">'+item.tagLabel+'</span><br>';
-  var scriptHtml = item.script ? '<div class="script-box">'+item.script+'</div>' : '';
-  var content = '<strong>'+item.emoji+' '+item.title+'</strong>'+scriptHtml;
-  addMsg('assistant', content, tagHtml);
-
-  // Context panel
-  updateContext(item);
-}
-
-function updateContext(item) {
-  var html = '<div class="cp-card"><div class="cp-card-title">'+item.emoji+' '+item.title+'</div>';
-  if(item.tips && item.tips.length) {
-    html += '<div class="cp-card-title" style="margin-top:8px;color:#374151">💡 Pro Tips</div><ul>';
-    item.tips.forEach(function(t){ html += '<li>'+t+'</li>'; });
-    html += '</ul>';
-  }
-  html += '</div>';
-
-  // Mood-based suggestions
-  html += '<div class="cp-card"><div class="cp-card-title">Mood: '+{pos:'😊 Warm',neu:'😐 Neutral',neg:'😤 Resistant'}[currentMood]+'</div><p>';
-  if(currentMood==='pos') html += 'Customer is engaged. This is the time to move forward — ask for commitment or the next step. "Shall we start the form together right now?"';
-  else if(currentMood==='neu') html += 'Customer is listening. Give value first. One strong number or benefit, then a low-commitment ask: "Would you like me to send you more info on WhatsApp?"';
-  else html += 'Customer is resistant. Acknowledge, don\'t argue. Ask what\'s really bothering them: "Can I ask what specifically is making you hesitate?" Listen fully before responding.';
-  html += '</p></div>';
-
-  document.getElementById('cp-scroll').innerHTML = html;
-}
-
-// ─── Send message ─────────────────────────────────────────────────────────────
-async function sendMessage() {
-  var input = document.getElementById('chat-input');
-  var query = input.value.trim();
-  if(!query) return;
-  input.value = '';
-  autoResize(input);
-
-  var apiKey = localStorage.getItem('aspora_assist_apikey');
-  var model = localStorage.getItem('aspora_assist_model') || 'claude-haiku-4-5-20251001';
-
-  // Try local KB first
-  var kbMatch = searchKB(query);
-
-  if(apiKey) {
-    // AI mode
-    conversationHistory.push({role:'user', content: query});
-    addMsg('user', query);
-    var thinking = addThinking();
-    try {
-      var reply = await callClaude(apiKey, model);
-      thinking.remove();
-      addMsg('assistant', reply, '<span class="tag ai">✨ AI</span><br>');
-      conversationHistory.push({role:'assistant', content: reply});
-      // If KB match, show tips in context panel
-      if(kbMatch) updateContext(kbMatch);
-    } catch(e) {
-      thinking.remove();
-      // Fallback to KB
-      if(kbMatch) {
-        displayKBResponse(kbMatch, null);
-        var errMsg = '<span class="tag tech">API Error — Using Local KB</span><br><em>'+e.message+'</em>';
-        addMsg('assistant', errMsg);
+var SIDEBAR_CFG=[
+  {label:'Onboarding Stages',ids:STAGES.map(function(s){return 'stage-'+s.n})},
+  {label:'Objections',ids:['obj-time','obj-callbk','obj-existing','obj-safety','obj-trust','obj-family','obj-fees','obj-complicated']},
+  {label:'Process & KYC',ids:['docs','fatca','notary','sim','video-kyc']},
+  {label:'Account Info',ids:['nre-nro','repatriation','interest','rates-compare']},
+  {label:'Technical Help',ids:['otp','app-issue','upload']},
+  {label:'Value Proposition',ids:['why-aspora','how-open','stuck','country']}
+];
+var history=[],mood='neu',timerSecs=0,timerOn=false,timerInt=null;
+function buildSidebar(){
+  var html='';
+  SIDEBAR_CFG.forEach(function(sec){
+    html+='<div><div class="sb-section-hdr" onclick="toggleSec(this)">'+sec.label+' <span class="arr">&#9662;</span></div><div class="sb-body">';
+    sec.ids.forEach(function(id){
+      if(id.startsWith('stage-')){
+        var n=parseInt(id.replace('stage-',''));
+        var s=STAGES[n];if(!s)return;
+        var hasImg=STAGE_IMGS[n]&&STAGE_IMGS[n].length>0;
+        html+='<div class="sb-item" data-id="'+id+'" onclick="loadStage('+n+')">'
+          +'<span class="snum">'+n+'</span>'
+          +'<span class="il">'+s.title+'</span>'
+          +(hasImg?'<span style="font-size:10px;opacity:.5">&#128247;</span>':'')
+          +'</div>';
       } else {
-        addMsg('assistant', '⚠️ AI error and no local match: '+e.message);
+        var item=KB.find(function(k){return k.id===id});if(!item)return;
+        html+='<div class="sb-item" data-id="'+id+'" onclick="loadKB(\''+id+'\')">'
+          +'<span class="ie">'+item.emoji+'</span>'
+          +'<span class="il">'+item.title+'</span>'
+          +'</div>';
       }
-    }
-  } else if(kbMatch) {
-    // Local KB mode
-    displayKBResponse(kbMatch, query);
-  } else {
-    // No match, no API
-    conversationHistory.push({role:'user', content: query});
-    addMsg('user', query);
-    addMsg('assistant', '💡 No exact match found in the local knowledge base. Add your Anthropic API key (click ⚙ AI Setup) for AI-powered answers to any question.', '<span class="tag">ℹ Info</span><br>');
-  }
-
-  document.getElementById('chat-input').focus();
-}
-
-// ─── Claude API call ──────────────────────────────────────────────────────────
-async function callClaude(apiKey, model) {
-  var SYSTEM = `You are an expert NRI banking agent assistant for Aspora Bank. You help agents in REAL-TIME during customer calls. Respond with:
-1. The EXACT SCRIPT to say to the customer (in quotes, natural conversational language)
-2. 2-3 quick tactical tips for the agent (not customer-facing)
-
-Keep responses SHORT and ACTIONABLE — agents are on live calls. Max 200 words.
-
-Key facts about Aspora:
-- NRE savings interest: ₹0-1L: 2.50%, ₹1L-5L: 3.25%, ₹5L-10L: 3.50%, ₹10L-25L: 6.50%, ₹25L-50L: 7.00%
-- 1-year FD rate: 7.25%
-- Zero minimum balance, zero maintenance fees
-- Free international transfers in Year 1
-- RBI regulated, DICGC insured up to ₹5 lakh
-- 100% digital, open in ~15 minutes
-- Supports UK, US, UAE, Australia, Canada, Singapore, more
-- NRE account = tax-free interest in India, fully repatriable
-- Competitor rates: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3%, IDFC First up to 7% (but tiered)
-- Process: Application → Document Upload → Video KYC → Digital Notary → SIM binding → Activation
-- Notary is digital (video call, 5-10 min, RBI mandatory)
-- FATCA/CRS: reporting only, not extra taxation
-- DICGC insurance = government scheme, same as all banks
-
-Customer mood: ${currentMood==='pos'?'Warm and engaged — push for commitment':''}${currentMood==='neu'?'Neutral — needs value before action':''}${currentMood==='neg'?'Resistant — acknowledge first, dig for real objection':''}
-
-Format your response:
-SCRIPT: "[what to say]"
-TIPS: [2-3 bullet points for the agent]`;
-
-  var messages = conversationHistory.slice(-8); // last 8 messages for context
-
-  var resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body: JSON.stringify({
-      model: model,
-      max_tokens: 512,
-      system: SYSTEM,
-      messages: messages
-    })
+    });
+    html+='</div></div>';
   });
-
-  if(!resp.ok) {
-    var err = await resp.json().catch(function(){return{error:{message:'Unknown error'}}});
-    throw new Error(err.error ? err.error.message : ('HTTP '+resp.status));
+  document.getElementById('sb-scroll').innerHTML=html;
+}
+buildSidebar();
+function toggleSec(el){
+  var body=el.nextElementSibling;
+  body.classList.toggle('hidden');
+  el.querySelector('.arr').innerHTML=body.classList.contains('hidden')?'&#9656;':'&#9662;';
+}
+function setActive(id){
+  document.querySelectorAll('.sb-item').forEach(function(el){el.classList.remove('active');});
+  var el=document.querySelector('[data-id="'+id+'"]');
+  if(el){el.classList.add('active');el.scrollIntoView({block:'nearest'});}
+}
+function addMsg(role,html,extra){
+  var msgs=document.getElementById('chat-msgs');
+  var wc=msgs.querySelector('.welcome-card');if(wc)wc.remove();
+  var d=document.createElement('div');
+  d.className='msg '+role;
+  d.innerHTML='<div class="msg-av">'+(role==='user'?'&#128100;':'&#129302;')+'</div><div class="msg-bbl">'+(extra||'')+html+'<button class="copy-btn" onclick="copyMsg(this)" title="Copy">&#128203;</button></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
+}
+function addThinking(){
+  var msgs=document.getElementById('chat-msgs');
+  var wc=msgs.querySelector('.welcome-card');if(wc)wc.remove();
+  var d=document.createElement('div');d.className='msg assistant';
+  d.innerHTML='<div class="msg-av">&#129302;</div><div class="msg-bbl"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
+}
+function copyMsg(btn){
+  var bbl=btn.parentElement.cloneNode(true);
+  bbl.querySelectorAll('.tag,.copy-btn,.stage-imgs').forEach(function(el){el.remove();});
+  navigator.clipboard.writeText(bbl.innerText.trim());
+  btn.textContent='✓';setTimeout(function(){btn.innerHTML='&#128203;';},1500);
+}
+function loadStage(n){
+  var s=STAGES[n];if(!s)return;
+  setActive('stage-'+n);
+  history.push({role:'user',content:'Show Stage '+n+': '+s.title});
+  addMsg('user','&#128205; Stage '+n+': '+s.title);
+  var imgs=STAGE_IMGS[n]||[];
+  var imgHtml='';
+  if(imgs.length>0){
+    imgHtml='<div class="stage-imgs'+(imgs.length===1?' single':'')+'">';
+    imgs.forEach(function(fn){
+      var url='https://'+BASE+fn;
+      imgHtml+='<img src="'+url+'" alt="Stage '+n+' screenshot" onclick="openLB(\''+url+'\')" loading="lazy">';
+    });
+    imgHtml+='</div>';
   }
-
-  var data = await resp.json();
-  return data.content && data.content[0] ? data.content[0].text : 'No response';
-}
-
-// ─── Quick chip / sidebar ─────────────────────────────────────────────────────
-function askChip(query) {
-  document.getElementById('chat-input').value = query;
-  sendMessage();
-}
-
-// ─── Timer ────────────────────────────────────────────────────────────────────
-function startTimer() {
-  if(timerRunning) {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    document.querySelector('.hdr-btn:nth-child(4)').textContent = '▶ Call';
-    return;
+  var tipsHtml='';
+  if(s.tips&&s.tips.length){
+    tipsHtml='<ul class="tips-list">';
+    s.tips.forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
+    tipsHtml+='</ul>';
   }
-  timerSeconds = 0;
-  timerRunning = true;
-  document.querySelector('.hdr-btn:nth-child(4)').textContent = '■ End Call';
-  timerInterval = setInterval(function() {
-    timerSeconds++;
-    var m = String(Math.floor(timerSeconds/60)).padStart(2,'0');
-    var s = String(timerSeconds%60).padStart(2,'0');
-    document.getElementById('timer-value').textContent = m+':'+s;
-  }, 1000);
+  var content='<strong>Stage '+n+' &mdash; '+s.title+'</strong>'
+    +(s.script?'<div class="script-box">'+s.script+'</div>':'')
+    +tipsHtml+imgHtml;
+  addMsg('assistant',content,'<span class="tag stage">Stage '+n+'</span><br>');
+  updateCtx(s.tips,'Stage '+n+': '+s.title);
 }
-
-// ─── Mood ─────────────────────────────────────────────────────────────────────
-function setMood(btn, mood) {
-  document.querySelectorAll('.mood-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  currentMood = mood;
+function loadKB(id){
+  var item=KB.find(function(k){return k.id===id});if(!item)return;
+  setActive(id);displayKB(item,null);
 }
-
-// ─── Settings ────────────────────────────────────────────────────────────────
-function openSettings() {
-  var saved = localStorage.getItem('aspora_assist_apikey') || '';
-  var model = localStorage.getItem('aspora_assist_model') || 'claude-haiku-4-5-20251001';
-  document.getElementById('api-key-input').value = saved;
-  document.getElementById('model-select').value = model;
+function displayKB(item,query){
+  if(query){history.push({role:'user',content:query});addMsg('user',query);}
+  var tipsHtml='';
+  if(item.tips&&item.tips.length){
+    tipsHtml='<ul class="tips-list">';
+    item.tips.forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
+    tipsHtml+='</ul>';
+  }
+  var content='<strong>'+item.emoji+' '+item.title+'</strong>'
+    +(item.script?'<div class="script-box">'+item.script+'</div>':'')
+    +tipsHtml;
+  addMsg('assistant',content,'<span class="tag '+item.tag+'">'+item.tagLabel+'</span><br>');
+  updateCtx(item.tips,item.title);
+}
+function updateCtx(tips,title){
+  var html='';
+  if(tips&&tips.length){
+    html+='<div class="ctx-card"><div class="ctx-card-title">&#128161; '+title+'</div><ul>';
+    tips.forEach(function(t){html+='<li>'+t+'</li>';});
+    html+='</ul></div>';
+  }
+  var mt={pos:'&#128522; Warm &mdash; push for commitment now. Move to next step.',neu:'&#128528; Neutral &mdash; give value first. One strong Rs number, then a low-commitment ask.',neg:'&#128544; Resistant &mdash; acknowledge first. Ask: "what specifically is making you hesitate?" then listen fully.'};
+  html+='<div class="ctx-card"><div class="ctx-card-title">Customer mood</div><p>'+mt[mood]+'</p></div>';
+  html+='<div class="ctx-card"><div class="ctx-card-title">Quick rates</div>'
+    +'<p><span class="hi">Aspora savings:</span> up to 7.00%</p>'
+    +'<p><span class="hi">Aspora FD 1yr:</span> 7.25%</p>'
+    +'<p>HDFC: 3.0% &middot; ICICI: 3.0%</p>'
+    +'<p>SBI: 2.7% &middot; Axis: 3.0%</p>'
+    +'<p>IDFC First: up to 7% (tiered)</p></div>';
+  document.getElementById('ctx-scroll').innerHTML=html;
+}
+function searchKB(q){
+  q=q.toLowerCase();var best=null,bestScore=0;
+  KB.forEach(function(item){
+    var score=0;
+    item.triggers.forEach(function(t){if(q.includes(t))score+=3;});
+    if(q.includes(item.title.toLowerCase()))score+=5;
+    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>3&&q.includes(w))score+=1;});});
+    if(score>bestScore){bestScore=score;best=item;}
+  });
+  return bestScore>0?best:null;
+}
+async function sendMessage(){
+  var inp=document.getElementById('chat-input');
+  var q=inp.value.trim();if(!q)return;
+  inp.value='';autoResize(inp);
+  var apiKey=localStorage.getItem('aspora_apikey');
+  var model=localStorage.getItem('aspora_model')||'claude-haiku-4-5-20251001';
+  var kbMatch=searchKB(q);
+  if(apiKey){
+    history.push({role:'user',content:q});addMsg('user',q);
+    var thinking=addThinking();
+    try{
+      var reply=await callClaude(apiKey,model);
+      thinking.remove();
+      addMsg('assistant',reply.replace(/\n/g,'<br>'),'<span class="tag ai">&#10024; AI</span><br>');
+      history.push({role:'assistant',content:reply});
+      if(kbMatch)updateCtx(kbMatch.tips,kbMatch.title);
+    }catch(e){
+      thinking.remove();
+      if(kbMatch){displayKB(kbMatch,null);}
+      addMsg('assistant','&#9888; AI unavailable ('+e.message+'). Showing local KB result above.');
+    }
+  } else if(kbMatch){
+    displayKB(kbMatch,q);
+  } else {
+    history.push({role:'user',content:q});addMsg('user',q);
+    addMsg('assistant','&#128161; No exact match in local knowledge base. Click &#9881; Settings to add an Anthropic API key for AI-powered answers to any question.');
+  }
+  inp.focus();
+}
+async function callClaude(apiKey,model){
+  var SYSTEM='You are an expert NRI banking agent assistant for Aspora Bank. Help agents in REAL-TIME during live customer calls. Give the EXACT SCRIPT to say (in quotes) and 2-3 agent tips. Keep responses SHORT - agents are on live calls. Max 180 words.\n\nKey facts:\n- NRE savings: Rs 0-1L 2.50%, Rs 1L-5L 3.25%, Rs 5L-10L 3.50%, Rs 10L-25L 6.50%, Rs 25L-50L 7.00%\n- 1yr FD: 7.25%. Zero fees, zero min balance. Free intl transfers Year 1\n- RBI regulated, DICGC insured up to Rs 5L. 100% digital, ~15 min to open\n- NRE: tax-free interest, fully repatriable. UK/US/UAE/Australia/Canada/SG supported\n- Competitors: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3%, IDFC First up to 7% tiered\n- Process: Form -> 3 docs -> Video KYC -> Notary -> SIM binding -> Active\n- Customer mood: '+{pos:'WARM - push for commitment',neu:'NEUTRAL - give value first',neg:'RESISTANT - acknowledge, dig for real objection'}[mood]+'\n\nFormat:\nSCRIPT: "[what to say]"\nTIPS:\n- ...\n- ...';
+  var resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:model,max_tokens:400,system:SYSTEM,messages:history.slice(-8)})
+  });
+  if(!resp.ok){var err=await resp.json().catch(function(){return{error:{message:'HTTP '+resp.status}};});throw new Error((err.error&&err.error.message)||'HTTP '+resp.status);}
+  var data=await resp.json();
+  return data.content&&data.content[0]?data.content[0].text:'No response';
+}
+function askChip(q){document.getElementById('chat-input').value=q;sendMessage();}
+function toggleTimer(){
+  var btn=document.getElementById('timer-btn');
+  if(timerOn){clearInterval(timerInt);timerOn=false;btn.innerHTML='&#9658; Start Call';}
+  else{timerSecs=0;timerOn=true;btn.innerHTML='&#9632; End Call';
+    timerInt=setInterval(function(){timerSecs++;var m=String(Math.floor(timerSecs/60)).padStart(2,'0'),s=String(timerSecs%60).padStart(2,'0');document.getElementById('timer-val').textContent=m+':'+s;},1000);}
+}
+function setMood(btn,m){document.querySelectorAll('.mood-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');mood=m;}
+function openLB(url){document.getElementById('lb-img').src=url;document.getElementById('lb-overlay').classList.add('open');}
+function closeLB(){document.getElementById('lb-overlay').classList.remove('open');}
+function openSettings(){
+  document.getElementById('api-key-input').value=localStorage.getItem('aspora_apikey')||'';
+  document.getElementById('model-select').value=localStorage.getItem('aspora_model')||'claude-haiku-4-5-20251001';
+  document.getElementById('gh-pat-input').value=localStorage.getItem('aspora_ghpat')||'';
   document.getElementById('settings-modal').classList.add('open');
 }
-function closeSettings() {
-  document.getElementById('settings-modal').classList.remove('open');
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+function saveSettings(){
+  var key=document.getElementById('api-key-input').value.trim();
+  var model=document.getElementById('model-select').value;
+  var pat=document.getElementById('gh-pat-input').value.trim();
+  if(key){localStorage.setItem('aspora_apikey',key);localStorage.setItem('aspora_model',model);}
+  else localStorage.removeItem('aspora_apikey');
+  if(pat)localStorage.setItem('aspora_ghpat',pat);
+  else localStorage.removeItem('aspora_ghpat');
+  updateStatus();closeSettings();
 }
-function saveSettings() {
-  var key = document.getElementById('api-key-input').value.trim();
-  var model = document.getElementById('model-select').value;
-  if(key) {
-    localStorage.setItem('aspora_assist_apikey', key);
-    localStorage.setItem('aspora_assist_model', model);
-    document.getElementById('status-dot').className = 'status-dot ai';
-    document.getElementById('status-text').textContent = 'AI Connected';
-  } else {
-    localStorage.removeItem('aspora_assist_apikey');
-    document.getElementById('status-dot').className = 'status-dot local';
-    document.getElementById('status-text').textContent = 'Local KB';
-  }
-  closeSettings();
+function updateStatus(){
+  var key=localStorage.getItem('aspora_apikey');
+  var dot=document.getElementById('status-dot'),txt=document.getElementById('status-text');
+  if(key){dot.className='dot ai';txt.textContent='AI + Local KB';}
+  else{dot.className='dot local';txt.textContent='Local KB';}
 }
-
-// ─── Reset ────────────────────────────────────────────────────────────────────
-function resetAll() {
-  conversationHistory = [];
-  document.getElementById('chat-messages').innerHTML = `<div class="welcome-card"><h3>👋 Ready to assist</h3><p>Type a customer question below, or click a quick chip above.</p><div class="welcome-chips"><div class="welcome-chip" onclick="askChip('Customer not interested in opening account')">Not interested</div><div class="welcome-chip" onclick="askChip('How to convince customer about Aspora value')">Why Aspora?</div><div class="welcome-chip" onclick="askChip('Customer stuck on a stage in the app')">App stuck</div></div></div>`;
-  document.getElementById('cp-scroll').innerHTML = '<div class="cp-empty">Response tips will appear here</div>';
-  clearInterval(timerInterval);
-  timerRunning = false;
-  timerSeconds = 0;
-  document.getElementById('timer-value').textContent = '00:00';
-  document.querySelector('.hdr-btn:nth-child(4)').textContent = '▶ Call';
-  document.querySelectorAll('.sidebar-item').forEach(function(el){ el.classList.remove('active'); });
+function resetAll(){
+  history=[];
+  document.getElementById('chat-msgs').innerHTML='<div class="welcome-card"><h3>&#128075; Ready to assist on your call</h3><p>Click any stage to see the app screenshot + call script. Or type a customer question for an instant answer.</p><div class="wc-chips"><div class="wc-chip" onclick="loadStage(0)">Stage 0 &mdash; New Lead</div><div class="wc-chip" onclick="loadStage(5)">Stage 5 &mdash; App Download</div><div class="wc-chip" onclick="loadStage(9)">Stage 9 &mdash; Documents</div><div class="wc-chip" onclick="loadStage(15)">Stage 15 &mdash; Video KYC</div><div class="wc-chip" onclick="loadStage(20)">Stage 20 &mdash; Pending</div><div class="wc-chip" onclick="askChip(\'Why choose Aspora over other banks\')">Why Aspora</div></div></div>';
+  document.getElementById('ctx-scroll').innerHTML='<div class="ctx-empty">Select a stage or ask a question &mdash; tips appear here</div>';
+  clearInterval(timerInt);timerOn=false;timerSecs=0;
+  document.getElementById('timer-val').textContent='00:00';
+  document.getElementById('timer-btn').innerHTML='&#9658; Start Call';
+  document.querySelectorAll('.sb-item').forEach(function(el){el.classList.remove('active');});
 }
-
-// ─── Input helpers ────────────────────────────────────────────────────────────
-function handleKey(e) {
-  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); }
-}
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 90)+'px';
-}
-
-// ─── Init status ──────────────────────────────────────────────────────────────
-(function() {
-  var key = localStorage.getItem('aspora_assist_apikey');
-  if(key) {
-    document.getElementById('status-dot').className = 'status-dot ai';
-    document.getElementById('status-text').textContent = 'AI Connected';
-  } else {
-    document.getElementById('status-dot').className = 'status-dot local';
-    document.getElementById('status-text').textContent = 'Local KB';
-  }
-})();
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,88)+'px';}
+updateStatus();
 </script>
 </body>
 </html>
