@@ -402,7 +402,7 @@ var KB=[
 
   // ACCOUNT INFO
   {id:'nre-nro',cat:'Account Info',emoji:'🔄',title:'NRE vs NRO',
-   triggers:['nre','nro','difference','which one','type of account','what is nre','what is nro'],tag:'kyc',tagLabel:'Account Type',
+   triggers:['nre account','nro account','nre vs nro','what is nre','what is nro','nre or nro','which account should'],tag:'kyc',tagLabel:'Account Type',
    pts:['NRE = Money earned ABROAD → tax-free in India, 100% repatriable','NRO = Income earned IN India (rent, pension) → taxable, capped repatriation','For most NRIs working abroad: NRE is the right choice','Aspora offers NRE accounts']},
 
   {id:'repatriation',cat:'Account Info',emoji:'🌍',title:'Repatriation / Moving Money',
@@ -432,7 +432,7 @@ var KB=[
 
   // VALUE PROP
   {id:'why-aspora',cat:'Value Proposition',emoji:'⭐',title:'Why Choose Aspora?',
-   triggers:['why aspora','why this bank','why should i','benefit','advantage','different','unique'],tag:'kyc',tagLabel:'Value Prop',
+   triggers:['why aspora','what is aspora','about aspora','aspora','aspora bank','why should i','benefit','advantage','different','unique'],tag:'kyc',tagLabel:'Value Prop',
    pts:['Up to 7% savings — double most big banks. TAX-FREE in India.','Zero fees. Zero minimum balance. Free intl transfers Year 1.','100% digital — open in ~15 mins from anywhere in the world','RBI regulated + DICGC insured (same as HDFC, SBI)','Built for NRIs — not a side feature like at big banks']},
 
   {id:'how-open',cat:'Value Proposition',emoji:'🚀',title:'How to Open — Steps',
@@ -589,7 +589,7 @@ function searchKB(q){
     item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>3&&q.includes(w))score+=1;});});
     if(score>bestScore){bestScore=score;best=item;}
   });
-  return bestScore>0?best:null;
+  return bestScore>=3?best:null;
 }
 async function sendMessage(){
   var inp=document.getElementById('chat-input');
@@ -598,30 +598,38 @@ async function sendMessage(){
   var apiKey=localStorage.getItem('aspora_apikey');
   var model=localStorage.getItem('aspora_model')||'claude-haiku-4-5-20251001';
   var kbMatch=searchKB(q);
+  history.push({role:'user',content:q});
+  addMsg('user',q);
   if(apiKey){
-    history.push({role:'user',content:q});addMsg('user',q);
+    var previewEl=null;
+    if(kbMatch){
+      var ptsHtml='<ul class="pts">';
+      (kbMatch.pts||[]).forEach(function(p){ptsHtml+='<li>'+p+'</li>';});
+      ptsHtml+='</ul>';
+      var bdrClass=kbMatch.extra==='coaching'?'bdr-gold':kbMatch.extra==='case-study'?'bdr-green':'bdr-blue';
+      previewEl=addMsg('assistant','<div class="kb-card '+bdrClass+'"><strong>'+kbMatch.emoji+' '+kbMatch.title+'</strong>'+ptsHtml+'</div>','<span class="tag '+kbMatch.tag+'" style="opacity:.55">Quick ref</span><br>');
+      updateCtx(kbMatch.pts,kbMatch.title);
+    }
     var thinking=addThinking();
     try{
       var reply=await callClaude(apiKey,model);
       thinking.remove();
-      addMsg('assistant',reply.replace(/\n/g,'<br>'),'<span class="tag ai">&#10024; AI</span><br>');
+      if(previewEl)previewEl.style.opacity='0.4';
+      addMsg('assistant',reply.replace(/\n/g,'<br>'),'<span class="tag ai">&#10024; AI Answer</span><br>');
       history.push({role:'assistant',content:reply});
-      if(kbMatch)updateCtx(kbMatch.tips,kbMatch.title);
     }catch(e){
       thinking.remove();
-      if(kbMatch){displayKB(kbMatch,null);}
-      addMsg('assistant','&#9888; AI unavailable ('+e.message+'). Showing local KB match above.');
+      if(!kbMatch)addMsg('assistant','&#9888; AI error: '+e.message);
     }
   } else if(kbMatch){
-    displayKB(kbMatch,q);
+    displayKB(kbMatch,null);
   } else {
-    history.push({role:'user',content:q});addMsg('user',q);
-    addMsg('assistant','&#128161; No match found in local KB. Add an Anthropic API key in &#9881; Settings for AI-powered answers to any question including complex scenarios.');
+    addMsg('assistant','&#128161; No local match. Add Anthropic API key in &#9881; Settings for AI answers to any question.');
   }
   inp.focus();
 }
 async function callClaude(apiKey,model){
-  var SYSTEM='You are an expert NRI banking PBM (Personal Banker Manager) assistant for Aspora Bank. Help PBMs during REAL-TIME live customer calls. Give EXACT SCRIPT to say (in quotes) + 2-3 tactical tips. MAX 200 words - agents are on live calls.\n\nKEY FACTS:\n- NRE savings tiers: Rs 0-1L: 2.50%, Rs 1L-5L: 3.25%, Rs 5L-10L: 3.50%, Rs 10L-25L: 6.50%, Rs 25L-50L: 7.00%\n- 1yr FD: 7.25%. Zero fees, zero min balance. Free intl transfers Year 1.\n- RBI regulated. DICGC insured up to Rs 5L (banks pay 0.12% premium per year).\n- 100% digital, ~15 min. UK/US/UAE/Australia/Canada/SG/more supported.\n- NRE: tax-free interest India, 100% repatriable. No RBI approval needed.\n- Competitors: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3%, IDFC First up to 7% tiered.\n- Process: Form -> 3 docs -> Video KYC (5min) -> Notary (10min, RBI mandatory) -> SIM binding -> Active.\n- RFI calling strategy: wait 1-2 hours after notification before calling (banking = long-term, not transactional).\n- CSAT is PRIMARY metric. Collect always, even if issue unresolved. Empathy + clarity = good CSAT.\n- DICGC: banks pay 0.12% of deposits as annual premium. Rs 5L covers 97% of individual depositors in India.\n- Customer mood: '+{pos:'WARM - push for commitment now',neu:'NEUTRAL - value first, then low-commitment ask',neg:'RESISTANT - acknowledge empathy first, THEN solve'}[mood]+'\n\nFormat:\nSCRIPT: "[exact words to say]"\nTIPS:\n- ...\n- ...';
+  var SYSTEM='You are an expert NRI banking assistant for Aspora Bank. Agents use you LIVE on customer calls.\n\nRULE: Reply with 3-5 bullet points ONLY. No paragraphs. No preamble. Start bullets with •. Be specific and factual.\n\nABOUT ASPORA:\n• Series B fintech, RBI-regulated, 100% digital NRI bank (not a legacy bank side-product)\n• Founded for NRIs in UK, US, UAE, Australia, Canada, Singapore, EU\n• DICGC insured up to ₹5L per depositor (same as HDFC/SBI/ICICI)\n• Zero fees, zero minimum balance, free international transfers Year 1\n\nRATES:\n• NRE savings: ₹0-1L→2.5% | ₹1-5L→3.25% | ₹5-10L→3.5% | ₹10-25L→6.5% | ₹25-50L→7%\n• FD rates: 1yr=7.25%, 2yr=7.10% | ALL NRE interest is TAX-FREE in India\n• Competitors: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3.5%, IDFC First up to 7%\n• On ₹20L: Aspora earns ₹70,000 MORE per year than HDFC\n\nDICGC (Deposit Insurance & Credit Guarantee Corporation):\n• Statutory body under RBI. All scheduled banks are members.\n• Banks pay 0.12% of total deposits annually as insurance premium\n• ₹5L limit covers 97%+ of individual depositors in India\n• Same protection at Aspora as at HDFC, ICICI, SBI\n\nPROCESS (15-20 min total):\n• Fill form → upload Passport + PAN + Address proof → Video KYC (5 min) → Notary (10 min, RBI-mandatory) → SIM binding → Active\n\nSTRATEGY:\n• CSAT = primary performance metric. Collect after EVERY call regardless of outcome.\n• RFI calls: wait 1-2 hours after notification (customer needs time to read it)\n• Empathy before solution: acknowledge → listen → then solve\n• Banking = long-term relationship, not transactional\n\nCustomer mood: '+{pos:'• WARM — push for specific commitment now (date, amount, account type)',neu:'• NEUTRAL — give value comparison first, then low-commitment ask',neg:'• RESISTANT — acknowledge fully first, DO NOT pitch until tension drops'}[mood]+';\n  var res
   var resp=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
