@@ -117,6 +117,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wc-chip:hover{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
 .wc-chip.gold{background:#fef9c3;border-color:#fde68a;color:#92400e}
 .wc-chip.gold:hover{background:#d97706;border-color:#d97706;color:#fff}
+.kb-card{border-radius:8px;padding:10px 12px;margin-top:2px}
+.kb-card strong{display:block;margin-bottom:6px;font-size:13px;color:#1e3a5f}
+.bdr-blue{background:#f0f7ff;border-left:4px solid #3b82f6}
+.bdr-gold{background:#fffbeb;border-left:4px solid #f59e0b}
+.bdr-green{background:#f0fdf4;border-left:4px solid #22c55e}
+.pts{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px}
+.pts li{font-size:13px;color:#1e293b;line-height:1.4;padding-left:14px;position:relative}
+.pts li::before{content:"•";position:absolute;left:0;color:#3b82f6;font-weight:700}
+.bdr-gold .pts li::before{color:#f59e0b}
+.bdr-green .pts li::before{color:#22c55e}
+.stage-script{background:#fff;border-radius:5px;padding:6px 9px;margin-bottom:6px;font-style:italic;font-size:12px;color:#374151;line-height:1.4;border:1px solid #e2e8f0}
+.script-box{display:none}
+.tips-list{display:none}
 .lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
 .lb-overlay.open{display:flex}
 .lb-overlay img{max-width:90vw;max-height:88vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
@@ -299,179 +312,140 @@ var STAGES=[
   {n:30,title:'Account Closed / Churned',script:'"I\'m sorry to hear you\'ve decided to close the account. Before I process the request, may I ask what led to this decision?" [listen] "Thank you for sharing that. Is there anything specific we could have done differently that might have changed this? And if you ever want to come back, reopening is very straightforward - we\'d be genuinely glad to have you."',tips:['Churn recovery: always ask why before processing - one good answer can save the account','If it\'s a fixable issue: offer to escalate right now, don\'t just accept the closure','If irrecoverable: process smoothly and professionally - they may refer others or return','Capture churn reason accurately in your notes - this is valuable ops data']}
 ];
 var KB=[
-  // ── OBJECTIONS ──────────────────────────────────────────────────────────────
-  {id:'obj-time',cat:'Objections',emoji:'⏰',title:'Too busy / No time',
-   triggers:['busy','time','later','rush','hurry','call back','callback','not now','can\'t talk'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"I completely understand - and I respect your time. One quick question before I let you go: what rate is your current bank paying on NRE savings right now? [pause] If it\'s under 7%, Aspora is giving you Rs 40,000 extra per year on Rs 10 lakh - automatically, zero effort. That\'s money that\'s already yours, you\'re just not collecting it yet. Can I take 90 seconds to explain how?"',
-   tips:['Acknowledge first - never argue with "I\'m busy"','Give a concrete Rs figure immediately - makes it real','Ask for 90 seconds not 2 minutes - feels much smaller','If still resistant: "Completely fine. Is Tuesday at 4pm good? I\'ll send a WhatsApp reminder now."']},
-  {id:'obj-callbk',cat:'Objections',emoji:'📞',title:'Will call back later',
-   triggers:['call back','later','another time','tomorrow','next week','think about','will call','let me think'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"Of course - I want to make sure I reach you at the right time. Before I let you go, can I ask what\'s making you want to think it over? Is it the process, the safety, or something else entirely?" [listen] "Got it. Let me book a specific slot right now - would [day] at [time] work? I\'ll send a WhatsApp with the key points so you\'re prepared."',
-   tips:['Always anchor callback to a SPECIFIC day and time - vague callbacks don\'t happen','Ask WHY they need more time - uncover the real objection underneath','Send a WhatsApp with 3 key facts before the callback call','Max 3-day callback window - "Rates are reviewed quarterly, so locking this in now saves you money"']},
-  {id:'obj-existing',cat:'Objections',emoji:'🏦',title:'Already has another bank',
-   triggers:['already have','hdfc','icici','axis','sbi','kotak','other bank','existing account','current account'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"That\'s great - it means you already understand the value of an NRI account. The question is: what rate are you getting today? [let them answer] HDFC/ICICI typically pays 3-3.5% on NRE savings. Aspora pays up to 7% - that\'s literally double. And you don\'t need to close anything. Many of our customers keep HDFC for bill payments and use Aspora specifically for savings. Would it make sense to put your savings where they earn the most?"',
-   tips:['Never ask them to close their existing account - frame as "add Aspora alongside"','Exact rates to use: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3%','Use social proof: "Many of our customers do exactly this - two accounts, one purpose each"','The gap on Rs 20L = Rs 70,000 per year more with Aspora - use this number']},
-  {id:'obj-safety',cat:'Objections',emoji:'🔒',title:'Online safety / Trust concern',
-   triggers:['safe','safety','trust','secure','data','privacy','hack','fraud','regulated','worry','is it safe'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"That is the most important question you could ask, and I\'m glad you asked it. Aspora is regulated by the RBI - the exact same regulator that governs HDFC and ICICI. Your deposits are insured up to Rs 5 lakh under the DICGC - that\'s the Deposit Insurance and Credit Guarantee Corporation, a government body. If you\'d like, I can explain exactly how that insurance works."',
-   tips:['RBI regulation = most powerful reassurance. Use the full name.','DICGC = government-backed insurance. Banks pay a premium to fund it.','Lead with confidence, not defensiveness - your tone matters as much as the words','If they want DICGC details: use the DICGC deep-dive script']},
-  {id:'obj-trust',cat:'Objections',emoji:'🤔',title:'7% seems too good to be true',
-   triggers:['too good','suspicious','scam','genuine','real','doubt','7%','how is it possible','really','don\'t believe'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"I completely get that reaction - 7% does sound extraordinary when you\'re used to 3%. Here\'s the real reason it\'s possible: Aspora has zero physical branches, zero ATMs to maintain. That entire overhead saving - which for big banks runs into thousands of crores - gets passed directly to you as higher interest. It\'s the same reason IDFC First Bank can offer 7% - no branches equals higher rates for customers. We\'re RBI-regulated, DICGC-insured, and you can start with Rs 10,000 and watch the interest arrive in your first quarter."',
-   tips:['Explain the economics - no branches = lower cost = higher rates for customer','Reference IDFC First Bank - well-known, same model, validates Aspora\'s approach','"Start small to test" is the most powerful objection remover - no commitment required','Offer to walk through the interest calculation in real time if they\'re still unsure']},
-  {id:'obj-family',cat:'Objections',emoji:'👨‍👩‍👧',title:'Need to discuss with family',
-   triggers:['family','wife','husband','spouse','parents','discuss','consult','ask','partner','together','at home'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"That makes complete sense - important financial decisions should involve the family. Can I ask, is there a specific concern your family might have? [listen] Let me do this: I\'ll send you a clear 2-page summary on WhatsApp right now covering the interest rates, the safety protection, and how to withdraw money whenever you want. That way your family conversation is well-informed. Then we can reconnect. When would you and your family be free for a 10-minute call - maybe I can answer their questions directly?"',
-   tips:['Send the WhatsApp summary IMMEDIATELY - don\'t wait for the family call','Offer a 3-way call with spouse/family present - very effective','Probe: "Is it a genuine family conversation or is there a specific concern I can address now?"','Book the family call with a specific time before hanging up']},
-  {id:'obj-fees',cat:'Objections',emoji:'💳',title:'Fees and charges',
-   triggers:['fee','fees','charge','cost','free','annual','maintenance','deduct','hidden','minimum balance','amc'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"Zero maintenance fees. Zero minimum balance requirement. Zero annual charges. Zero hidden costs. International transfers are also free in your first year. The account is completely free to open and completely free to maintain. Compare that to HDFC which requires Rs 10,000 minimum average balance and charges Rs 5,000 per year if you fall below that. Aspora: absolutely zero."',
-   tips:['Zero fees is a major competitive advantage - lead with it confidently','Free international transfers in Year 1 = very powerful for NRIs who send money regularly','No minimum balance = open with any amount, even Rs 1,000 to start','HDFC AMB penalty comparison is very effective - people don\'t realise they pay this']},
-  {id:'obj-complicated',cat:'Objections',emoji:'😓',title:'Process too complicated',
-   triggers:['complicated','complex','difficult','too much','long','tedious','confusing','steps','don\'t understand','overwhelming'],
-   tag:'objection',tagLabel:'Objection',
-   script:'"I completely understand that feeling. But here\'s what the process actually is when you break it down: fill a short form, upload 3 document photos, do 2 brief video calls. That\'s it. Most customers complete it in 15 minutes. And I will personally guide you through every single step on WhatsApp - you never have to figure anything out alone. Shall we try just the very first step together right now, while we\'re on the call?"',
-   tips:['Start the process WITH them on the call - the single biggest drop-off reducer','State "15 minutes" with complete confidence - it\'s based on real data','Simplify: "Fill form + 3 photos + 2 video calls = done"','WhatsApp guidance removes the fear of "what if I get stuck and can\'t reach anyone"']},
-  // ── DEEP KNOWLEDGE (from meeting notes) ────────────────────────────────────
-  {id:'dicgc',cat:'Deep Knowledge',emoji:'🏛️',title:'DICGC Insurance — Full Explanation',
-   triggers:['dicgc','deposit insurance','insurance','five lakh','5 lakh','why 5 lakh','cover','insured','guarantee','safe my money','government protection','deposit protection'],
-   tag:'kyc',tagLabel:'Value Prop',
-   extra:'case-study',
-   script:'"Great question - this is important and I want to explain it properly. DICGC stands for the Deposit Insurance and Credit Guarantee Corporation - it\'s a statutory body under the RBI, backed by the Government of India. Here is exactly how it works: every bank that accepts public deposits - including Aspora, HDFC, SBI, and every other scheduled commercial bank - is required by law to pay a premium to DICGC. That premium is 0.12% of their total deposit base, paid every year. DICGC collects this across thousands of banks and builds up a large insurance pool. If any bank were to fail, DICGC uses this pool to pay every depositor up to Rs 5 lakh per person per bank. The reason the limit is Rs 5 lakh specifically is that the government conducted an analysis and found that this threshold covers over 97% of all individual depositors in India. Most people keep less than Rs 5 lakh per bank. So Aspora customers with up to Rs 5 lakh are 100% protected - same as HDFC, ICICI, or any other scheduled bank."',
-   tips:['This level of detail is what separates professional PBMs from basic support','Exact figure: 0.12% of deposits = bank\'s DICGC premium per year','Rs 5L threshold covers 97%+ of individual depositors in India','After explaining: "Any amount above Rs 5L at Aspora earns 7% - the risk-reward is exceptional"','NEVER say "your money is 100% safe" - say "insured up to Rs 5 lakh per DICGC regulations"']},
-  {id:'rfi-strategy',cat:'Deep Knowledge',emoji:'⏱️',title:'RFI Calling Strategy — When to Call',
-   triggers:['rfi','request for information','when to call','immediate call','outreach timing','follow up when','notification','sweet spot','delay calling'],
-   tag:'strategy',tagLabel:'Strategy',
-   script:'"When a customer submits an RFI or receives a notification from us, the right approach is NOT to call immediately. Give them a 1-2 hour window first. Why? Because banking is a long-term engagement, not a transactional product. When you call someone the moment they receive a notification, they haven\'t even had time to read it yet - you\'re adding pressure before they\'ve had a chance to think. The sweet spot is 1-2 hours after the notification. By then they\'ve seen it, processed it, and your call feels like helpful follow-up rather than a sales push. This is first-principles thinking: what does the customer actually need? Time to think. Then a knowledgeable, empathetic person to help them act."',
-   tips:['Wait 1-2 hours after RFI notification before calling - this is official strategy','Use the waiting time to prepare: review their account history, identify their stage, anticipate their questions','Your opening: "Hi [Name], I see you received our update - I wanted to personally call to see if you have any questions or if I can help you with the next step"','Banking = long-term relationship. A patient, well-timed call builds more trust than an immediate one.']},
+  // OBJECTIONS
+  {id:'obj-time',cat:'Objections',emoji:'⏰',title:'Too Busy / No Time',
+   triggers:['busy','time','later','rush','hurry','call back','callback','not now'],tag:'objection',tagLabel:'Objection',
+   pts:['Ask: "What rate is your current bank giving on NRE savings?"','HDFC/ICICI pays 3% — Aspora pays up to 7%. That\'s ₹40,000 extra/yr on ₹10L','Ask for 90 seconds, not 2 minutes — sounds smaller','If still busy: lock a specific callback day and time before hanging up']},
+
+  {id:'obj-callbk',cat:'Objections',emoji:'📞',title:'Call Back Later',
+   triggers:['call back','later','another time','tomorrow','next week','think about','will call'],tag:'objection',tagLabel:'Objection',
+   pts:['Ask WHY before accepting — "Is it process, safety, or something else?"','Lock a specific time slot: "Is Tuesday 4pm good for you?"','Send WhatsApp with 3 key facts before the callback','Max 3-day gap — "Rates reviewed quarterly, best to lock in now"']},
+
+  {id:'obj-existing',cat:'Objections',emoji:'🏦',title:'Already Has Another Bank',
+   triggers:['already have','hdfc','icici','axis','sbi','other bank','existing account'],tag:'objection',tagLabel:'Objection',
+   pts:['Never ask them to close it — say "add Aspora alongside"','HDFC/ICICI: 3%. Aspora: up to 7%. Double the rate.','₹20L example: Aspora earns ₹70,000 MORE per year than HDFC','Social proof: "Many customers keep HDFC for bills, Aspora for savings"']},
+
+  {id:'obj-safety',cat:'Objections',emoji:'🔒',title:'Safety / Trust Concern',
+   triggers:['safe','safety','trust','secure','data','privacy','hack','fraud','regulated','worry'],tag:'objection',tagLabel:'Objection',
+   pts:['RBI regulated — same regulator as HDFC and ICICI','DICGC insured up to ₹5 lakh — government-backed scheme','256-bit bank-grade encryption on all transactions','KYC done by licensed notary — same process as international agreements']},
+
+  {id:'obj-trust',cat:'Objections',emoji:'🤔',title:'7% Sounds Too Good to Be True',
+   triggers:['too good','suspicious','scam','genuine','real','doubt','7%','how is it possible','really'],tag:'objection',tagLabel:'Objection',
+   pts:['Why 7%: no physical branches, no ATMs = savings passed to customer','IDFC First Bank also offers 7% — same model, well-known bank','Start with ₹10,000 to test — see interest in first quarter','RBI regulated + DICGC insured = same protection as any big bank']},
+
+  {id:'obj-family',cat:'Objections',emoji:'👨‍👩‍👧',title:'Need Family Discussion',
+   triggers:['family','wife','husband','spouse','parents','discuss','consult','ask','partner'],tag:'objection',tagLabel:'Objection',
+   pts:['Send WhatsApp summary IMMEDIATELY — don\'t wait','Ask: "What specific concern will your family have?"','Offer a 3-way call with family on the line','Book the family call with a specific time before hanging up']},
+
+  {id:'obj-fees',cat:'Objections',emoji:'💳',title:'Fees & Charges',
+   triggers:['fee','fees','charge','cost','free','annual','maintenance','minimum balance','amc'],tag:'objection',tagLabel:'Objection',
+   pts:['Zero fees. Zero minimum balance. Zero annual charges.','Free international transfers in Year 1','HDFC requires ₹10,000 min balance — penalty ₹5,000/yr if below','No hidden costs — the account is completely free to maintain']},
+
+  {id:'obj-complicated',cat:'Objections',emoji:'😓',title:'Process Too Complicated',
+   triggers:['complicated','complex','difficult','too much','long','tedious','confusing','steps'],tag:'objection',tagLabel:'Objection',
+   pts:['It\'s: fill a form + upload 3 photos + 2 short video calls','Most customers done in 15 minutes','You guide them on WhatsApp through every step','Start Step 1 together NOW on the call — biggest drop-off reducer']},
+
+  // DEEP KNOWLEDGE
+  {id:'dicgc',cat:'Deep Knowledge',emoji:'🏛️',title:'DICGC Insurance — Why ₹5 Lakh?',
+   triggers:['dicgc','deposit insurance','insurance','five lakh','5 lakh','why 5 lakh','cover','insured','guarantee','deposit protection'],tag:'kyc',tagLabel:'Value Prop',extra:'coaching',
+   pts:['DICGC = government body under RBI. All scheduled banks are members.','Banks pay 0.12% of total deposits annually as insurance premium','That pool insures every depositor up to ₹5 lakh per bank','₹5L limit covers 97%+ of individual depositors in India','Say: "Same protection as HDFC or SBI — backed by Government of India"']},
+
+  {id:'rfi-strategy',cat:'Deep Knowledge',emoji:'⏱️',title:'RFI Calling — When to Call',
+   triggers:['rfi','request for information','when to call','outreach timing','follow up when','notification','sweet spot','delay calling'],tag:'strategy',tagLabel:'Strategy',extra:'coaching',
+   pts:['Wait 1–2 hours after notification before calling','Customer hasn\'t read the notification yet if you call immediately','Banking = long-term relationship, not a transactional product','Opening: "Hi, I saw you received our update — calling to personally help with the next step"']},
+
   {id:'csat-guide',cat:'Deep Knowledge',emoji:'⭐',title:'CSAT — The Primary Metric',
-   triggers:['csat','satisfaction','survey','metric','performance','measure','how am i judged','kpi','closing call','end call'],
-   tag:'csat',tagLabel:'CSAT',
-   extra:'coaching',
-   script:'"CSAT - Customer Satisfaction - is the primary metric for every PBM. Here is the key principle: you ALWAYS send a CSAT survey after a call, even if the specific issue was not resolved during that call. Why? Because CSAT is not measuring whether you solved the problem - it\'s measuring the quality of the interaction. Did you listen with empathy? Did you explain clearly? Did the customer feel heard and respected? A PBM who handles a difficult policy issue with complete empathy and clarity - even if the answer was \'we can\'t do this right now\' - should score high on CSAT. Skipping the survey when an issue isn\'t resolved would manipulate the metrics. Collect CSAT consistently, every time, regardless of outcome."',
-   tips:['CSAT captures empathy and clarity - not just outcomes. Always collect it.','Best time for CSAT ask: at the very end of the call, before hanging up','Script: "Before we close, I\'d like to send you a quick 1-question satisfaction survey - it takes 10 seconds and helps us improve"','Your CSAT score = your performance score. Own it every call.','If CSAT is low: review your empathy, not just your information accuracy']},
-  {id:'empathy',cat:'Deep Knowledge',emoji:'💙',title:'Empathy Handling — Frustrated Customer',
-   triggers:['frustrated','angry','upset','annoyed','terrible','worst','hate','complaint','rude','stressed','not happy','disappointed','fed up'],
-   tag:'coaching',tagLabel:'Empathy',
-   extra:'coaching',
-   script:'"[STOP. Do not solve immediately. Acknowledge first.] \'I can hear that this has been really frustrating, and I want to start by saying - you\'re completely right to feel this way. This should have been easier, and I\'m sorry it hasn\'t been.\' [Let them finish completely. Do not interrupt.] \'Thank you for explaining that so clearly - it really helps me understand what happened. Here\'s what I\'m going to do right now...\' [Then solve]"',
-   tips:['ACKNOWLEDGE before you SOLVE - always. Empathy first, solution second.','Active listening phrases: "I hear you", "That makes complete sense", "You\'re right to be frustrated"','Do NOT say: "I understand" without meaning it. Do NOT rush to the solution before they feel heard.','Mirror their language back: if they say "I\'ve been waiting for weeks", say "I understand - 3 weeks is a long time, and that\'s not okay"','After resolving: "I want to make sure you feel this was handled properly. Is there anything else I can clarify?"']},
+   triggers:['csat','satisfaction','survey','metric','performance','kpi','closing call','end call','how am i judged'],tag:'csat',tagLabel:'CSAT',extra:'coaching',
+   pts:['Send CSAT survey on EVERY call — even if issue wasn\'t resolved','CSAT measures empathy and clarity, NOT just outcomes','A call handled with empathy = good CSAT even if answer was "we can\'t do this"','Script: "Quick 1-question survey, 10 seconds — I\'ll send it on WhatsApp now"']},
+
+  {id:'empathy',cat:'Deep Knowledge',emoji:'💙',title:'Empathy — Frustrated Customer',
+   triggers:['frustrated','angry','upset','annoyed','terrible','hate','complaint','rude','stressed','not happy','disappointed'],tag:'coaching',tagLabel:'Empathy',extra:'coaching',
+   pts:['STOP — acknowledge BEFORE you solve. Always.','Say: "You\'re completely right to feel this way. I\'m sorry."','Let them finish fully — don\'t interrupt to give a solution','Mirror their words: "I understand — 3 weeks is a long time, that\'s not okay"','Only then: "Here\'s what I\'m doing right now to fix this..."']},
+
   {id:'first-principles',cat:'Deep Knowledge',emoji:'🧠',title:'First Principles Thinking',
-   triggers:['first principles','think differently','why are we doing','industry standard','table stakes','how to think','problem solving','approach','strategy'],
-   tag:'strategy',tagLabel:'Strategy',
-   extra:'coaching',
-   script:'"First principles thinking means: don\'t assume the standard way is the right way. Ask why at every step. Example: Why do we call RFI customers immediately? Because that\'s what most call centres do. But IS that actually best for the customer? No - they haven\'t even read the notification yet. First principles: what does the customer actually need? Time to process, then a well-timed, helpful call. Apply this to every process: start from what the CUSTOMER needs, not what industry standard says. That\'s how you move from table stakes to excellence."',
-   tips:['Ask "why do we do this?" for every standard process - the answer might be "because everyone else does"','What does the customer actually need right now? Start there.','Your goal: make the PBM team indispensable to customers - not replaceable by an AI bot','Excellence = linking every single action back to customer satisfaction (CSAT)','Ashutosh\'s principle: "Spend 70% of your time structuring the problem, 30% executing the solution"']},
-  {id:'passport-rejected',cat:'Case Studies',emoji:'🛂',title:'Case Study: Passport Photo Rejected',
-   triggers:['passport rejected','photo rejected','passport blurry','passport issue','document rejected','id rejected','why rejected','rejection reason','failed document'],
-   tag:'tech',tagLabel:'Case Study',
-   extra:'case-study',
-   script:'"Passport photo rejections almost always fall into one of these specific categories: 1) Fingers or hands partially covering the document edges - very common when people hold the passport while photographing. Solution: lay the passport flat on a white desk and take the photo from directly above. 2) Incomplete pages - all pages must be captured, including completely blank pages. 3) Blurry or low resolution - the machine-readable zone at the bottom must be sharp enough to read. 4) Glare from a laminated cover - use natural light instead of flash. 5) Photo and address pages submitted but validity/visa pages missing. Ask the customer: what specific rejection message did they see? Use that to diagnose the exact fix."',
-   tips:['Always ask for the SPECIFIC rejection message - diagnose before prescribing a solution','Lay flat on white surface + photo from above = fixes fingers/glare issues in one step','For blurry images: switch camera to portrait mode and ensure lighting is good','Passport must have all pages - even pages with only a blank watermark. This is an RBI requirement.','If passport is damaged/faded: a new biometric passport must be obtained before KYC can proceed']},
-  {id:'name-mismatch',cat:'Case Studies',emoji:'🆔',title:'Case Study: Name Mismatch (Passport vs PAN)',
-   triggers:['name mismatch','name doesn\'t match','different name','passport name','pan name','spelling different','name issue','name problem','discrepancy'],
-   tag:'tech',tagLabel:'Case Study',
-   extra:'case-study',
-   script:'"Name mismatches between passport and PAN are a common issue, especially for customers with middle names, initials, or names that were anglicised differently. Here\'s how to diagnose: 1) If the name on PAN is a shortened version (e.g., \"Raj Kumar\" vs \"Rajkumar\") - this is usually resolvable at the verification stage with supporting explanation. 2) If the names are genuinely different due to a legal name change or marriage - you\'ll need a gazette notification or marriage certificate as supporting evidence. 3) If the PAN was issued with an error - the customer needs to correct their PAN name at incometaxindia.gov.in first, which takes 7-10 working days. The best approach: flag this early (at Stage 3) rather than discovering it at verification."',
-   tips:['Catch name discrepancies early - ask at profile stage, not document upload stage','Small spelling differences (Raj vs Raj Kumar): explain to customer what document to submit as supplementary','Legal name change: requires gazette notification - rare but it happens','Marriage-related name change: marriage certificate resolves it','Always document the specific discrepancy in your notes for the verification team']},
-  {id:'video-kyc-fail',cat:'Case Studies',emoji:'📹',title:'Case Study: Video KYC Recurring Failure',
-   triggers:['video kyc fail','kyc failed again','second time fail','kyc not working','keeps failing','kyc issue','video call issue','vcip failed'],
-   tag:'tech',tagLabel:'Case Study',
-   extra:'case-study',
-   script:'"If Video KYC has failed more than once, use this diagnostic checklist before rescheduling: 1) Lighting - are they in a well-lit room facing natural light? Dark rooms or backlit setups cause camera failure. 2) VPN - is it completely OFF? VPNs cause video call routing issues that drop the connection. 3) Internet speed - minimum 4Mbps upload needed. Ask them to do a speed test. 4) Device camera - front camera only, good quality. Older devices sometimes struggle. 5) Background noise - quiet room, the KYC agent needs to hear them clearly. 6) Passport readability - when they hold the passport to the camera, is the text in the MRZ zone clearly visible? If all 6 are addressed and it still fails twice: escalate to the ops team for a manual KYC pathway. Don\'t reschedule a third time without escalation."',
-   tips:['Two failures = escalate. Don\'t reschedule a third time without ops review.','Speed test: ask them to run speedtest.net and tell you the upload speed','Window lighting tip: sit facing a window, not with a window behind them (backlit = dark face)','Quiet room check: if they\'re in a busy office, ask them to step outside or find a quiet corner','Escalation path: raise a manual KYC ticket with ops, explaining the specific failure reasons']},
-  // ── STANDARD KYC / PROCESS ─────────────────────────────────────────────────
-  {id:'docs',cat:'Process & KYC',emoji:'📄',title:'Documents required',
-   triggers:['document','passport','pan','proof','id','identity','require','need','what to bring','what do i need'],
-   tag:'kyc',tagLabel:'KYC / Docs',
-   script:'"Three documents only: 1) Passport - all pages including photo page, address page, and all blank pages. 2) PAN card - front side, clear photo. 3) Overseas address proof - utility bill, bank statement, or driving licence from your current country of residence, dated within the last 3 months. Everything is uploaded digitally - no physical copies, no courier, no branch visit."',
-   tips:['Three documents only - keep it simple and confident','Passport: ALL pages - this is the most common upload mistake','Address proof: within 3 months AND must match the address you entered','No PAN: guide to incometaxindia.gov.in - e-PAN takes 2-5 days, completely online']},
-  {id:'fatca',cat:'Process & KYC',emoji:'📋',title:'FATCA / CRS Explained',
-   triggers:['fatca','crs','tax','declaration','reporting','compliance','us citizen','uk resident','foreign tax'],
-   tag:'kyc',tagLabel:'FATCA / CRS',
-   script:'"FATCA and CRS are international tax transparency regulations - India is required to report NRI accounts to the tax authorities of the account holder\'s country of residence. Every Indian bank does this - HDFC, ICICI, SBI, and Aspora. It does NOT mean you\'ll be taxed more. NRE account interest is completely tax-free in India. Whether your home country taxes it depends on their rules. Your Tax ID is your National Insurance number if you\'re in the UK, or Social Security Number if in the US."',
-   tips:['FATCA = US compliance, CRS = all other countries. Same form on screen.','NRE interest: TAX-FREE in India. This is non-negotiable and must be clear.','Reporting does NOT equal extra taxation - a common misconception to address','UAE residents: no TIN required. Just select UAE and leave TIN blank.']},
+   triggers:['first principles','think differently','why are we doing','industry standard','how to think','strategy','approach'],tag:'strategy',tagLabel:'Strategy',extra:'coaching',
+   pts:['Ask "why do we do this?" for every standard process','Start from what the CUSTOMER needs — not what industry says','Don\'t assume immediate outreach = best (it often isn\'t)','Link every action back to CSAT — that\'s the one metric that matters','Spend 70% of time structuring the problem, 30% executing']},
+
+  // CASE STUDIES
+  {id:'passport-rejected',cat:'Case Studies',emoji:'🛂',title:'Passport Photo Rejected',
+   triggers:['passport rejected','photo rejected','passport blurry','passport issue','document rejected','id rejected','why rejected'],tag:'tech',tagLabel:'Case Study',extra:'case-study',
+   pts:['Lay passport FLAT on white surface — don\'t hold it while photographing','All pages required — including blank pages (RBI rule)','MRZ zone at bottom must be clearly readable — no blur','No flash/glare — use natural window light instead','If faded/damaged passport: new biometric passport required before KYC']},
+
+  {id:'name-mismatch',cat:'Case Studies',emoji:'🆔',title:'Name Mismatch: Passport vs PAN',
+   triggers:['name mismatch','name doesn\'t match','different name','passport name','pan name','spelling different','name issue'],tag:'tech',tagLabel:'Case Study',extra:'case-study',
+   pts:['Small spelling difference (Raj vs Rajkumar): usually resolvable with explanation note','Legal name change: requires gazette notification','Marriage name change: marriage certificate resolves it','PAN issued with error: correct at incometaxindia.gov.in — takes 7–10 days','CATCH THIS EARLY at Stage 3 — not at document upload stage']},
+
+  {id:'video-kyc-fail',cat:'Case Studies',emoji:'📹',title:'Video KYC Fails Repeatedly',
+   triggers:['video kyc fail','kyc failed again','second time fail','kyc not working','keeps failing','vcip failed'],tag:'tech',tagLabel:'Case Study',extra:'case-study',
+   pts:['VPN must be completely OFF — most common hidden cause','Face a window (natural light on face) — not with window behind','Internet: minimum 4Mbps upload. Run speedtest.net to check.','Quiet room — KYC agent must hear clearly','2 failures = escalate to ops. Don\'t schedule a 3rd without ops review.']},
+
+  // PROCESS & KYC
+  {id:'docs',cat:'Process & KYC',emoji:'📄',title:'Documents Required',
+   triggers:['document','passport','pan','proof','id','identity','require','need','what to bring'],tag:'kyc',tagLabel:'KYC / Docs',
+   pts:['3 docs only: Passport + PAN + Overseas address proof','Passport: ALL pages including blank ones','Address proof: within last 3 months, matches entered address','Everything digital — no physical copies, no courier, no branch','No PAN: apply at incometaxindia.gov.in — takes 2–5 days']},
+
+  {id:'fatca',cat:'Process & KYC',emoji:'📋',title:'FATCA / CRS',
+   triggers:['fatca','crs','tax','declaration','reporting','compliance','us citizen','uk resident'],tag:'kyc',tagLabel:'FATCA / CRS',
+   pts:['Just a reporting requirement — all Indian banks do this','Does NOT mean extra taxes for the customer','NRE interest is tax-free in India regardless','UK TIN = National Insurance number. US = Social Security Number.','UAE residents: no TIN required']},
+
   {id:'notary',cat:'Process & KYC',emoji:'📜',title:'Digital Notary',
-   triggers:['notary','notarize','attest','certify','notarisation','why notary','what is notary','why do i need'],
-   tag:'kyc',tagLabel:'KYC',
-   script:'"The notary step is mandated by the RBI for NRI account opening - it\'s how your overseas identity gets formally verified. With Aspora it\'s done completely digitally: a licensed notary does a 5-10 minute video call with you, verifies your passport and address proof, and certifies your identity. No courier, no consulate visit, no physical appointment. Our team books this for you and provides support throughout."',
-   tips:['RBI mandatory = not Aspora\'s choice. This removes ownership of the friction from Aspora.','Digital = no courier, no consulate, from your living room','Aspora team handles scheduling - customer doesn\'t have to find a notary themselves','Typical: 5-10 minutes. Simple, quick, one-time.']},
-  {id:'sim',cat:'Process & KYC',emoji:'📱',title:'SIM Binding Explained',
-   triggers:['sim','mobile','phone number','india','binding','link','why sim','indian number','why do i need indian'],
-   tag:'kyc',tagLabel:'KYC',
-   script:'"SIM binding links your account to a verified Indian mobile number for security. This number receives all transaction OTPs - it\'s the final verification step before any money movement. If you don\'t have an active Indian SIM, a family member\'s number (spouse, parent, sibling in India) works completely fine. It\'s a one-time setup and doesn\'t change unless you ask to update it."',
-   tips:['Security feature = protects the customer from unauthorised transactions','Family member Indian SIM is accepted - spouse, parent, or sibling','Virtual number option if truly no family has an Indian SIM','One-time only - no ongoing effort from the customer after setup']},
-  {id:'video-kyc',cat:'Process & KYC',emoji:'📹',title:'Video KYC Drop-off Recovery',
-   triggers:['video kyc','video call','face','selfie','live','vcip','dropped','incomplete','stuck on kyc','kyc pending'],
-   tag:'kyc',tagLabel:'KYC',
-   script:'"Video KYC is just 5 minutes. If you\'ve had difficulty before, let\'s quickly go through the checklist: good lighting - face a window, not have one behind you. Stable WiFi or 4G. VPN must be completely off. Passport - original, in hand, all pages visible when held up. No background noise. If all of that is in order, we can reschedule right now and it almost always goes through. Want me to book a slot while we\'re on the line?"',
-   tips:['Diagnose before rescheduling - ask what happened in the previous attempt','VPN off is the most commonly missed step','Two failures: escalate to ops before scheduling a third attempt','Lighting tip: "Sit facing a window - not with a window behind you. Natural light on your face."']},
-  // ── ACCOUNT INFO ───────────────────────────────────────────────────────────
+   triggers:['notary','notarize','attest','certify','why notary','what is notary'],tag:'kyc',tagLabel:'KYC',
+   pts:['RBI-mandated — not Aspora\'s choice (removes their ownership of friction)','100% digital — 5–10 min video call from home','Licensed notary verifies passport + address proof','No courier, no consulate, no physical appointment','Aspora team books and assists throughout']},
+
+  {id:'sim',cat:'Process & KYC',emoji:'📱',title:'SIM Binding',
+   triggers:['sim','mobile','phone number','india','binding','link','why sim','indian number'],tag:'kyc',tagLabel:'KYC',
+   pts:['Security feature — links account to verified Indian number for OTPs','Family member\'s Indian SIM is fine (spouse, parent, sibling)','DND must be OFF on that number','One-time setup — never needs to change','No Indian SIM: virtual number option available']},
+
+  {id:'video-kyc',cat:'Process & KYC',emoji:'📹',title:'Video KYC Drop-off',
+   triggers:['video kyc','video call','face','selfie','vcip','dropped','stuck on kyc','kyc pending'],tag:'kyc',tagLabel:'KYC',
+   pts:['Face a window — natural light on face, not behind','VPN completely OFF before joining','Stable WiFi or 4G. No hotspot if possible.','Original passport ready to hold up to camera','Book immediately — don\'t let them wait and forget']},
+
+  // ACCOUNT INFO
   {id:'nre-nro',cat:'Account Info',emoji:'🔄',title:'NRE vs NRO',
-   triggers:['nre','nro','difference','which one','type of account','what is nre','what is nro','which account'],
-   tag:'kyc',tagLabel:'Account Type',
-   script:'"NRE account: for money you earn ABROAD. It\'s converted to INR when deposited. The interest is completely tax-free in India. And you can repatriate - take back overseas - every single rupee, including interest, at any time with no restrictions. NRO account: for income earned IN India - rent from property, pension, dividends. Interest is taxable in India. Repatriation has regulatory limits. For most NRIs who work and earn abroad and want to grow their savings in India - NRE is the right choice. That\'s what Aspora offers."',
-   tips:['NRE = Foreign earnings, tax-free in India, 100% repatriable','NRO = India income, taxable, capped repatriation','Aspora = NRE account (best fit for most NRIs working abroad)','Repatriation: NRE = fully free always; NRO = up to USD 1M per year with CA certificate']},
-  {id:'repatriation',cat:'Account Info',emoji:'🌍',title:'Repatriation of funds',
-   triggers:['repatriate','withdraw','take out','send back','transfer abroad','access money','move money','locked','get money back'],
-   tag:'kyc',tagLabel:'Account Info',
-   script:'"With an NRE account, repatriation is 100% unrestricted - every rupee, every paisa, anytime, with no RBI approval required and no paperwork. There is no cap on how much you can repatriate. In Year 1 with Aspora, international transfers are also free of Aspora fees. Your money is as accessible as if it were sitting in your UK/US bank account - you are never locked in."',
-   tips:['NRE = zero restrictions on repatriation. This is a core legal feature, not just Aspora policy.','No RBI approval needed for NRE repatriation - important distinction from NRO','Year 1: free international transfers - emphasise this','If asking about NRO: USD 1M per year limit, requires CA-signed Form 15CA/15CB']},
-  {id:'interest',cat:'Account Info',emoji:'💰',title:'Interest rates - full details',
-   triggers:['interest','rate','how much earn','return','percent','per annum','quarterly','calculate','how does interest work','7 percent'],
-   tag:'rate',tagLabel:'Interest Rate',
-   script:'"Aspora NRE savings account interest is tiered: Rs 0 to Rs 1 lakh: 2.50%. Rs 1 to 5 lakh: 3.25%. Rs 5 to 10 lakh: 3.50%. Rs 10 to 25 lakh: 6.50%. Rs 25 to 50 lakh: 7.00%. Interest is calculated on your balance every single day and credited to your account every quarter. So on Rs 30 lakh maintained consistently, you earn 7% = Rs 2.1 lakh per year, completely tax-free in India. That\'s Rs 52,500 appearing in your account every three months, automatically, with zero effort."',
-   tips:['Daily calculation, quarterly credit - explain both clearly','Tax-free in India = 7% net rate, no tax deducted at source','Use the quarterly Rs figure: Rs 52,500 every 3 months on Rs 30L feels very real','Compare: HDFC at 3% on same Rs 30L = Rs 90,000 per year. Aspora = Rs 2.1L. The gap = Rs 1.2L extra.']},
-  {id:'rates-compare',cat:'Account Info',emoji:'📊',title:'Competitor bank comparison',
-   triggers:['hdfc rate','icici rate','sbi rate','axis','idfc','compare','better rate','other bank','how compare'],
-   tag:'rate',tagLabel:'Rate Compare',
-   script:'"Current NRE savings rates: HDFC Bank: 3.0-3.5%. ICICI Bank: 3.0-3.5%. SBI: 2.7-3.0%. Axis Bank: 3.0-3.5%. IDFC First Bank: up to 7%, but most NRIs with average balances get 4-6% due to the tiering structure. Aspora: 6.50% for Rs 10L-25L and 7.00% for balances above Rs 25L. For Fixed Deposits: Aspora offers 7.25% for a 1-year term versus HDFC at 6.5% and SBI at 6.8%. On a Rs 20 lakh savings balance, Aspora earns you Rs 70,000 more per year than HDFC. That\'s a fact."',
-   tips:['Rs 70,000 gap on Rs 20L per year = use this number, it\'s powerful','IDFC First comparison: "similar top rate, but most NRIs qualify for less due to their tiering"','FD: 7.25% vs HDFC 6.5% - strongest pitch for high-balance customers','Never disparage competitors - just use the factual numbers']},
-  // ── TECHNICAL ─────────────────────────────────────────────────────────────
-  {id:'otp',cat:'Technical Help',emoji:'📲',title:'OTP not received',
-   triggers:['otp','one time','code','not received','sms','not getting','not coming','no message'],
-   tag:'tech',tagLabel:'Tech',
-   script:'"OTP not arriving is almost always one of these reasons: 1) DND is activated on the Indian mobile number - this blocks marketing AND transactional SMS on some networks. Ask the person holding the SIM to check this. 2) The SIM is not in an active, signal-connected phone - it needs to be in a phone with active mobile signal, not just WiFi. 3) Network delay - wait 2 full minutes before requesting a resend. 4) Wrong number entered - double-check the Indian mobile number in the app. If none of these work, we can switch to WhatsApp OTP as the backup - want to try that now?"',
-   tips:['DND off = fixes the issue in most cases. Check this first.','WhatsApp OTP backup: offer immediately if SMS fails','2-minute wait before resending - network routing sometimes takes time','Escalate to tech team if WhatsApp OTP also fails - rare but happens']},
-  {id:'app-issue',cat:'Technical Help',emoji:'📱',title:'App / platform not working',
-   triggers:['app','loading','crash','error','stuck','freeze','slow','not working','broken','page','button'],
-   tag:'tech',tagLabel:'Tech',
-   script:'"Let\'s fix this quickly: 1) Close the app completely and reopen it. 2) Switch from WiFi to mobile data or vice versa - this resolves connectivity issues. 3) Clear browser cache if you\'re using the web version. 4) Try Google Chrome if you\'re on another browser - Chrome has the highest compatibility. If still stuck, take a screenshot of exactly what you see and send it to me on WhatsApp right now - our tech team resolves issues within the hour. What step exactly are you stuck on?"',
-   tips:['Get the EXACT step first - "stuck" is too vague for tech team to diagnose','WiFi to mobile data switch resolves approximately 40% of app issues','Screenshot via WhatsApp = fastest route to tech resolution','If urgent: suggest trying on a different device (laptop, different phone)']},
-  {id:'upload',cat:'Technical Help',emoji:'📤',title:'Document upload issues',
-   triggers:['upload','photo','scan','file','pdf','image','picture','size','format','attach','too large','upload failed'],
-   tag:'tech',tagLabel:'Tech',
-   script:'"Document upload requirements: file format must be JPEG, PNG, or PDF. Maximum file size is 5MB per document. If the file is too large: for images, use tinypng.com - free and instant compression. For PDFs, use ilovepdf.com. For passport: all pages must be included in one upload. Make sure all text is clearly readable and the document is not cropped at the edges."',
-   tips:['Max 5MB. Formats: JPG/PNG/PDF only - no HEIC, no WebP','tinypng.com for images, ilovepdf.com for PDFs - both free','Passport: ALL pages in single upload - most common cause of rejection','Photo quality: text in MRZ zone at bottom must be clearly legible']},
-  // ── VALUE PROPOSITION ─────────────────────────────────────────────────────
-  {id:'why-aspora',cat:'Value Proposition',emoji:'⭐',title:'Why choose Aspora?',
-   triggers:['why aspora','why this bank','why should i','benefit','advantage','reason','different','unique','what makes aspora'],
-   tag:'kyc',tagLabel:'Value Prop',
-   script:'"Aspora was built exclusively for NRIs - not as an afterthought feature, but as the entire purpose of the bank. Here\'s what you get: 1) Up to 7% savings interest, completely tax-free in India - double what most big banks pay. 2) Zero fees, zero minimum balance requirement. 3) Free international transfers in Year 1. 4) 100% digital process - open from anywhere in the world in approximately 15 minutes. 5) RBI-regulated and DICGC-insured up to Rs 5 lakh. 6) Dedicated NRI team available 24/7. Big banks have NRI products as a side feature. We were built specifically for you."',
-   tips:['Seven features - use them as a structured framework if you have time','The "built for NRIs" narrative is emotionally differentiating','End with 24/7 human support - competitors are notoriously bad at this','Match the pitch to their top concern: high-balance? Lead with interest rates. Safety? Lead with DICGC.']},
-  {id:'how-open',cat:'Value Proposition',emoji:'🚀',title:'How to open - step by step',
-   triggers:['how to open','steps','process','apply','start','begin','what to do','how long','whole process','15 minutes'],
-   tag:'kyc',tagLabel:'Process',
-   script:'"The complete process: Step 1 - Fill a short form with personal details. Step 2 - Upload 3 document photos. Step 3 - Video KYC: 5-minute live verification. Step 4 - Digital Notary: 10-minute video call. Step 5 - SIM binding: one-time Indian mobile link. Step 6 - Account is active. Total time for most customers: 15 to 20 minutes across the form and calls. I\'ll personally guide you through every step on WhatsApp. Shall we start Step 1 right now while we\'re talking?"',
-   tips:['Always try to start Step 1 during the live call - biggest drop-off reducer','15-20 minutes - say it with confidence, it\'s based on actual data','Pause after each step description and ask if they have questions','WhatsApp support: "You\'ll never be stuck - I\'ll respond within minutes at any step"']},
-  {id:'stuck',cat:'Value Proposition',emoji:'📍',title:'Customer stuck on a stage',
-   triggers:['stuck','step','where am i','stopped','paused','halfway','incomplete','pending','continue','my application'],
-   tag:'kyc',tagLabel:'Drop-off',
-   script:'"No problem at all - your progress is completely saved, no need to restart anything. Can you tell me which stage you\'re on, or take a screenshot and send it to me on WhatsApp? The most common places where customers pause are the notary scheduling step and document upload. Wherever you are, I\'ll walk you through the next step right now."',
-   tips:['Progress is ALWAYS saved - reassure them immediately with this','Get exact stage: ask for a screenshot via WhatsApp','Most drop-offs: notary scheduling complexity or video KYC technical issues','Offer to do the next step together on the call - this is the highest-converting approach']},
-  {id:'country',cat:'Value Proposition',emoji:'🌏',title:'Opening from abroad',
-   triggers:['uk','us','usa','uae','dubai','australia','canada','abroad','outside india','singapore','germany','from my country'],
-   tag:'kyc',tagLabel:'Global',
-   script:'"Aspora is available for NRIs across the world - UK, US, UAE, Australia, Canada, Singapore, Germany, and many more countries. The entire process is 100% online - no India trip required, no branch, no courier. Your overseas address proof from your current country is fully accepted. The notary is done on a video call. You can complete the entire account opening from your living room in London, New York, Dubai, or Sydney."',
-   tips:['100% online - no India visit. This is a core differentiator.','Supported countries: check the latest list for any specific edge cases','Overseas address proof from their country is accepted as-is','US NRIs: there is an additional FATCA declaration - completely normal and handled in-app']}
+   triggers:['nre','nro','difference','which one','type of account','what is nre','what is nro'],tag:'kyc',tagLabel:'Account Type',
+   pts:['NRE = Money earned ABROAD → tax-free in India, 100% repatriable','NRO = Income earned IN India (rent, pension) → taxable, capped repatriation','For most NRIs working abroad: NRE is the right choice','Aspora offers NRE accounts']},
+
+  {id:'repatriation',cat:'Account Info',emoji:'🌍',title:'Repatriation / Moving Money',
+   triggers:['repatriate','withdraw','take out','send back','transfer abroad','access money','locked'],tag:'kyc',tagLabel:'Account Info',
+   pts:['NRE: 100% free, no cap, no RBI approval, no paperwork','Any amount, any time — fully unrestricted','Year 1: international transfers free on Aspora','Never locked in — money as accessible as a local account']},
+
+  {id:'interest',cat:'Account Info',emoji:'💰',title:'Interest Rate Details',
+   triggers:['interest','rate','how much earn','return','percent','quarterly','calculate','how does interest'],tag:'rate',tagLabel:'Interest Rate',
+   pts:['Tiers: ₹0–1L: 2.5% | ₹1–5L: 3.25% | ₹5–10L: 3.5% | ₹10–25L: 6.5% | ₹25–50L: 7%','Calculated DAILY, credited every QUARTER','₹30L balance = 7% = ₹2.1L/year TAX-FREE','That\'s ₹52,500 appearing in account every 3 months','HDFC at 3% on same ₹30L = only ₹90,000/year']},
+
+  {id:'rates-compare',cat:'Account Info',emoji:'📊',title:'Compare With Other Banks',
+   triggers:['hdfc rate','icici rate','sbi rate','axis','idfc','compare','better rate'],tag:'rate',tagLabel:'Rate Compare',
+   pts:['HDFC: 3% | ICICI: 3% | SBI: 2.7% | Axis: 3% | IDFC First: up to 7% (tiered)','Aspora: 6.5% for ₹10–25L, 7% for ₹25L+','₹20L gap vs HDFC = ₹70,000 MORE per year with Aspora','FD: Aspora 7.25% vs HDFC 6.5% vs SBI 6.8%']},
+
+  // TECH
+  {id:'otp',cat:'Technical Help',emoji:'📲',title:'OTP Not Received',
+   triggers:['otp','one time','code','not received','sms','not getting','not coming'],tag:'tech',tagLabel:'Tech',
+   pts:['Check DND is OFF on the Indian SIM — most common cause','SIM must be in an active phone with mobile signal (not just WiFi)','Wait 2 full minutes before requesting resend','Wrong number? Double-check in the app','Backup: switch to WhatsApp OTP — offer this immediately']},
+
+  {id:'app-issue',cat:'Technical Help',emoji:'📱',title:'App / Platform Not Working',
+   triggers:['app','loading','crash','error','stuck','freeze','slow','not working','broken'],tag:'tech',tagLabel:'Tech',
+   pts:['Close app fully and reopen','Switch WiFi ↔ mobile data — fixes ~40% of issues','Try Google Chrome if on another browser','Screenshot the error → WhatsApp to you → tech team resolves in 1 hour','Get EXACT step they\'re stuck on before escalating']},
+
+  {id:'upload',cat:'Technical Help',emoji:'📤',title:'Document Upload Issues',
+   triggers:['upload','photo','scan','file','pdf','image','size','format','too large','failed'],tag:'tech',tagLabel:'Tech',
+   pts:['Format: JPEG / PNG / PDF only. Max 5MB per file.','File too large: compress at tinypng.com (images) or ilovepdf.com (PDFs)','Passport: ALL pages in one upload','Text must be sharp — no blur, no cropped edges','Take in standard quality mode, not "original" or "RAW"']},
+
+  // VALUE PROP
+  {id:'why-aspora',cat:'Value Proposition',emoji:'⭐',title:'Why Choose Aspora?',
+   triggers:['why aspora','why this bank','why should i','benefit','advantage','different','unique'],tag:'kyc',tagLabel:'Value Prop',
+   pts:['Up to 7% savings — double most big banks. TAX-FREE in India.','Zero fees. Zero minimum balance. Free intl transfers Year 1.','100% digital — open in ~15 mins from anywhere in the world','RBI regulated + DICGC insured (same as HDFC, SBI)','Built for NRIs — not a side feature like at big banks']},
+
+  {id:'how-open',cat:'Value Proposition',emoji:'🚀',title:'How to Open — Steps',
+   triggers:['how to open','steps','process','apply','start','begin','what to do','how long'],tag:'kyc',tagLabel:'Process',
+   pts:['Step 1: Fill personal details form','Step 2: Upload 3 documents','Step 3: Video KYC — 5 min live call','Step 4: Digital Notary — 10 min video','Step 5: SIM binding → Account active!','Total: ~15 minutes. Start Step 1 NOW on the call.']},
+
+  {id:'stuck',cat:'Value Proposition',emoji:'📍',title:'Customer Stuck on a Stage',
+   triggers:['stuck','step','where am i','stopped','paused','halfway','incomplete','pending','continue'],tag:'kyc',tagLabel:'Drop-off',
+   pts:['Progress always saved — no restart needed','Ask for screenshot via WhatsApp to see exact stage','Most common stucks: notary scheduling or video KYC technical','Walk through next step together on the call right now','Most drop-offs recover with one guided call']},
+
+  {id:'country',cat:'Value Proposition',emoji:'🌏',title:'Opening From Abroad',
+   triggers:['uk','us','usa','uae','dubai','australia','canada','abroad','outside india','singapore'],tag:'kyc',tagLabel:'Global',
+   pts:['Available in UK, US, UAE, Australia, Canada, Singapore + more','100% online — no India trip, no branch, no courier','Overseas address proof from their country accepted','Notary is a video call — done from home','US NRIs: FATCA declaration — standard, handled in-app']}
 ];
 var SIDEBAR_CFG=[
   {label:'Onboarding Stages',ids:STAGES.map(function(s){return 'stage-'+s.n;}),type:'stages'},
@@ -558,15 +532,12 @@ function loadStage(n){
     });
     imgHtml+='</div>';
   }
-  var tipsHtml='';
-  if(s.tips&&s.tips.length){
-    tipsHtml='<ul class="tips-list">';
-    s.tips.forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
-    tipsHtml+='</ul>';
-  }
-  var content='<strong>Stage '+n+' &mdash; '+s.title+'</strong>'
-    +(s.script?'<div class="script-box">'+s.script+'</div>':'')
-    +tipsHtml+imgHtml;
+  var tipsHtml='<ul class="pts">';
+  (s.tips||[]).forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
+  tipsHtml+='</ul>';
+  var content='<div class="kb-card bdr-blue"><strong>Stage '+n+' &mdash; '+s.title+'</strong>'
+    +(s.script?'<div class="stage-script">'+s.script+'</div>':'')
+    +tipsHtml+'</div>'+imgHtml;
   addMsg('assistant',content,'<span class="tag stage">Stage '+n+'</span><br>');
   updateCtx(s.tips,'Stage '+n);
 }
@@ -576,24 +547,19 @@ function loadKB(id){
 }
 function displayKB(item,query){
   if(query){history.push({role:'user',content:query});addMsg('user',query);}
-  var tipsHtml='';
-  if(item.tips&&item.tips.length){
-    tipsHtml='<ul class="tips-list">';
-    item.tips.forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
-    tipsHtml+='</ul>';
-  }
-  var boxClass=item.extra==='coaching'?'coaching-box':item.extra==='case-study'?'case-study':'script-box';
-  var content='<strong>'+item.emoji+' '+item.title+'</strong>'
-    +(item.script?'<div class="'+boxClass+'">'+item.script+'</div>':'')
-    +tipsHtml;
+  var ptsHtml='<ul class="pts">';
+  (item.pts||[]).forEach(function(p){ptsHtml+='<li>'+p+'</li>';});
+  ptsHtml+='</ul>';
+  var bdrClass=item.extra==='coaching'?'bdr-gold':item.extra==='case-study'?'bdr-green':'bdr-blue';
+  var content='<div class="kb-card '+bdrClass+'"><strong>'+item.emoji+' '+item.title+'</strong>'+ptsHtml+'</div>';
   var msgType=item.extra==='coaching'?'coaching':null;
   addMsg('assistant',content,'<span class="tag '+item.tag+'">'+item.tagLabel+'</span><br>',msgType);
-  updateCtx(item.tips,item.title);
+  updateCtx(item.pts,item.title);
 }
 function updateCtx(tips,title){
   var html='';
   if(tips&&tips.length){
-    html+='<div class="ctx-card"><div class="ctx-card-title">&#128161; '+title+'</div><ul>';
+    html+='<div class="ctx-card"><div class="ctx-card-title">&#128161; '+title+'</div><ul style="margin-top:0">';
     tips.forEach(function(t){html+='<li>'+t+'</li>';});
     html+='</ul></div>';
   }
