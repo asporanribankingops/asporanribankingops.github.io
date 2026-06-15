@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chat Test</title>
+<style>
+body{font-family:sans-serif;max-width:600px;margin:40px auto;padding:20px}
+#msgs{border:1px solid #ccc;border-radius:8px;height:300px;overflow-y:auto;padding:10px;margin-bottom:10px}
+.user{color:blue;margin:5px 0}
+.bot{color:green;margin:5px 0}
+#inp{width:100%;padding:8px;font-size:15px;border:1px solid #ccc;border-radius:6px}
+button{padding:8px 16px;margin-top:5px;cursor:pointer}
+</style>
+</head>
+<body>
+<h2>Aspora Chat Test</h2>
+<div id="msgs"><p style="color:#999">Type a message and press Enter or click Send</p></div>
+<textarea id="inp" rows="2" placeholder="Type here and press Enter..."></textarea>
+<button onclick="send()">Send</button>
+<script>
+function send(){
+  var inp=document.getElementById('inp');
+  var q=inp.value.trim();
+  if(!q)return;
+  inp.value='';
+  var msgs=document.getElementById('msgs');
+  msgs.innerHTML+='<div class="user">You: '+q+'</div>';
+  // Simple KB
+  var ans='No match — in the real tool, Claude AI would answer this.';
+  if(q.toLowerCase().includes('aspora'))ans='Aspora is a Series B RBI-regulated NRI bank. 7% NRE savings rate, 100% digital, zero fees.';
+  if(q.toLowerCase().includes('dicgc'))ans='DICGC = Deposit Insurance & Credit Guarantee Corporation. Covers ₹5L per depositor. Aspora deposits are DICGC insured — same as HDFC/SBI.';
+  if(q.toLowerCase().includes('fee'))ans='Zero fees. Zero minimum balance. Zero annual charges. Free international transfers Year 1.';
+  msgs.innerHTML+='<div class="bot">Bot: '+ans+'</div>';
+  msgs.scrollTop=msgs.scrollHeight;
+}
+document.getElementById('inp').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+});
+</script>
+</body>
+</html>
