@@ -522,8 +522,12 @@ var KB=[
    pts:['🔴 <b>VPN OFF</b> — most common hidden cause','💡 Face a window — <b>natural light on face</b>, not behind you','📶 Min <b>4Mbps upload</b> — check at speedtest.net','🔇 <b>Quiet room</b> — agent must hear clearly','🚨 2 failures = <b>escalate to ops</b> — no 3rd attempt without review']},
 
   // PROCESS & KYC
+  {id:'address-verify',cat:'Process & KYC',emoji:'🏠',title:'Address Verification',
+   triggers:['address','address verification','address page','overseas address','indian address','postcode','postal','what address','which address','address proof','enter address','confirm address'],tag:'kyc',tagLabel:'KYC / Address',
+   pts:['🌍 <b>Overseas address:</b> enter EXACTLY as on your utility bill or bank statement','🏠 <b>Indian address:</b> permanent address as per existing bank records','📮 Use correct country postal code format (e.g. W3 3GH for UK)','📅 Address proof must be <b>within last 3 months</b> — utility bill or bank statement','✅ Foreign language documents accepted — no translation needed','⚠️ Address on proof must match what you enter — character for character']},
+
   {id:'docs',cat:'Process & KYC',emoji:'📄',title:'Documents Required',
-   triggers:['document','passport','pan','proof','id','identity','require','need','what to bring'],tag:'kyc',tagLabel:'KYC / Docs',
+   triggers:['document','passport','pan','what documents','documents needed','id proof','identity proof','what to bring','what do i need'],tag:'kyc',tagLabel:'KYC / Docs',
    pts:['📋 <b>3 docs only:</b> Passport · PAN · Overseas address proof','📑 Passport: <b>ALL pages</b> including blank ones','📅 Address proof: <b>within last 3 months</b>, must match address entered','✅ 100% digital — no physical copies, no courier, no branch','⚠️ No PAN: apply at incometaxindia.gov.in — takes <b>2–5 days</b>']},
 
   {id:'fatca',cat:'Process & KYC',emoji:'📋',title:'FATCA / CRS',
