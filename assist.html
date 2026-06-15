@@ -598,38 +598,37 @@ async function sendMessage(){
   var inp=document.getElementById('chat-input');
   var q=inp.value.trim();if(!q)return;
   inp.value='';autoResize(inp);
-  var apiKey=localStorage.getItem('aspora_apikey');
-  var model=localStorage.getItem('aspora_model')||'claude-haiku-4-5-20251001';
-  var kbMatch=searchKB(q);
   history.push({role:'user',content:q});
   addMsg('user',q);
-  if(apiKey){
-    var previewEl=null;
-    if(kbMatch){
-      var ptsHtml='<ul class="pts">';
-      (kbMatch.pts||[]).forEach(function(p){ptsHtml+='<li>'+p+'</li>';});
-      ptsHtml+='</ul>';
-      var bdrClass=kbMatch.extra==='coaching'?'bdr-gold':kbMatch.extra==='case-study'?'bdr-green':'bdr-blue';
-      previewEl=addMsg('assistant','<div class="kb-card '+bdrClass+'"><strong>'+kbMatch.emoji+' '+kbMatch.title+'</strong>'+ptsHtml+'</div>','<span class="tag '+kbMatch.tag+'" style="opacity:.55">Quick ref</span><br>');
-      updateCtx(kbMatch.pts,kbMatch.title);
-    }
-    var thinking=addThinking();
-    try{
-      var reply=await callClaude(apiKey,model);
-      thinking.remove();
-      if(previewEl)previewEl.style.opacity='0.4';
-      addMsg('assistant',reply.replace(/\n/g,'<br>'),'<span class="tag ai">&#10024; AI Answer</span><br>');
-      history.push({role:'assistant',content:reply});
-    }catch(e){
-      thinking.remove();
-      if(!kbMatch)addMsg('assistant','&#9888; AI error: '+e.message);
-    }
-  } else if(kbMatch){
+  var kbMatch=searchKB(q);
+  if(kbMatch){
     displayKB(kbMatch,null);
   } else {
-    addMsg('assistant','&#128161; No local match. Add Anthropic API key in &#9881; Settings for AI answers to any question.');
+    // Try fuzzy: lower threshold to 1 for partial help
+    var fuzzy=searchKBFuzzy(q);
+    if(fuzzy){
+      var ptsHtml='<ul class="pts">';
+      (fuzzy.pts||[]).forEach(function(p){ptsHtml+='<li>'+p+'</li>';});
+      ptsHtml+='</ul>';
+      var bdrClass=fuzzy.extra==='coaching'?'bdr-gold':fuzzy.extra==='case-study'?'bdr-green':'bdr-blue';
+      addMsg('assistant','<div class="kb-card '+bdrClass+'"><strong>'+fuzzy.emoji+' '+fuzzy.title+'</strong>'+ptsHtml+'</div>','<span class="tag '+fuzzy.tag+'" style="opacity:.7">Related</span><br>');
+      updateCtx(fuzzy.pts,fuzzy.title);
+    } else {
+      addMsg('assistant','<div class="kb-card bdr-blue"><strong>&#128161; Try one of these topics:</strong><ul class="pts"><li>Too busy / call back later</li><li>Already has HDFC/ICICI</li><li>Is it safe / trust</li><li>What documents needed</li><li>DICGC insurance</li><li>Interest rates / fees</li><li>How to open account</li><li>Video KYC help</li></ul></div>','');
+    }
   }
   inp.focus();
+}
+function searchKBFuzzy(q){
+  q=q.toLowerCase();var best=null,bestScore=0;
+  KB.forEach(function(item){
+    var score=0;
+    item.triggers.forEach(function(t){if(q.includes(t))score+=3;});
+    if(q.includes(item.title.toLowerCase()))score+=5;
+    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>3&&q.includes(w))score+=1;});});
+    if(score>bestScore){bestScore=score;best=item;}
+  });
+  return bestScore>=1?best:null;
 }
 async function callClaude(apiKey,model){
   var SYSTEM='You are an expert NRI banking assistant for Aspora Bank. Agents use you LIVE on customer calls.\n\nRULE: Reply with 3-5 bullet points ONLY. No paragraphs. No preamble. Start bullets with •. Be specific and factual.\n\nABOUT ASPORA:\n• Series B fintech, RBI-regulated, 100% digital NRI bank (not a legacy bank side-product)\n• Founded for NRIs in UK, US, UAE, Australia, Canada, Singapore, EU\n• DICGC insured up to ₹5L per depositor (same as HDFC/SBI/ICICI)\n• Zero fees, zero minimum balance, free international transfers Year 1\n\nRATES:\n• NRE savings: ₹0-1L→2.5% | ₹1-5L→3.25% | ₹5-10L→3.5% | ₹10-25L→6.5% | ₹25-50L→7%\n• FD rates: 1yr=7.25%, 2yr=7.10% | ALL NRE interest is TAX-FREE in India\n• Competitors: HDFC 3%, ICICI 3%, SBI 2.7%, Axis 3.5%, IDFC First up to 7%\n• On ₹20L: Aspora earns ₹70,000 MORE per year than HDFC\n\nDICGC (Deposit Insurance & Credit Guarantee Corporation):\n• Statutory body under RBI. All scheduled banks are members.\n• Banks pay 0.12% of total deposits annually as insurance premium\n• ₹5L limit covers 97%+ of individual depositors in India\n• Same protection at Aspora as at HDFC, ICICI, SBI\n\nPROCESS (15-20 min total):\n• Fill form → upload Passport + PAN + Address proof → Video KYC (5 min) → Notary (10 min, RBI-mandatory) → SIM binding → Active\n\nSTRATEGY:\n• CSAT = primary performance metric. Collect after EVERY call regardless of outcome.\n• RFI calls: wait 1-2 hours after notification (customer needs time to read it)\n• Empathy before solution: acknowledge → listen → then solve\n• Banking = long-term relationship, not transactional\n\nCustomer mood: '+{pos:'• WARM — push for specific commitment now (date, amount, account type)',neu:'• NEUTRAL — give value comparison first, then low-commitment ask',neg:'• RESISTANT — acknowledge fully first, DO NOT pitch until tension drops'}[mood];
@@ -679,7 +678,71 @@ function updateStatus(){
   document.getElementById('status-text').textContent=key?'AI + Local KB':'Local KB';
 }
 function resetAll(){
-  history=[];
+  history=[,
+  {id:'rates',cat:'Rates',emoji:'📈',title:'Interest Rates',
+   triggers:['rate','interest','percent','7%','how much','return','yield','savings rate','fd rate','fixed deposit rate','what rate'],
+   tag:'kyc',tagLabel:'Rates',
+   pts:['NRE Savings: ₹0-1L→2.5% | ₹1-5L→3.25% | ₹5-10L→3.5% | ₹10-25L→6.5% | ₹25-50L→7%',
+        'FD: 1yr=7.25% | 2yr=7.10% — ALL NRE interest is TAX-FREE in India',
+        'HDFC pays 3%, ICICI 3%, SBI 2.7% — Aspora pays up to 7%',
+        'On ₹20L: Aspora earns ₹70,000 MORE per year than HDFC',
+        'Rate is tiered — higher balance = higher rate automatically']},
+  {id:'what-aspora',cat:'About',emoji:'🏦',title:'What is Aspora',
+   triggers:['what is aspora','about aspora','who is aspora','aspora bank','tell me about aspora','what does aspora do','why aspora'],
+   tag:'kyc',tagLabel:'About',
+   pts:['Aspora is a Series B RBI-regulated digital bank built specifically for NRIs',
+        'Not a legacy bank with NRI as a side product — NRI banking is the ONLY focus',
+        '100% digital — no branch visits, no courier, ~15 minutes to open',
+        'Serves NRIs in UK, US, UAE, Australia, Canada, Singapore, EU and more',
+        'Zero fees, zero minimum balance, DICGC insured up to ₹5 lakh']},
+  {id:'nre-account',cat:'Products',emoji:'💰',title:'NRE Account',
+   triggers:['nre','non resident external','what is nre','nre account','nre savings','nre fd'],
+   tag:'kyc',tagLabel:'NRE',
+   pts:['NRE = Non-Resident External — for parking foreign earnings in India',
+        'Interest is 100% TAX-FREE in India — no TDS deducted',
+        'Fully repatriable — move money back abroad anytime, no RBI approval needed',
+        'Joint account allowed with another NRI only',
+        'Best for NRIs who want to save in India and earn tax-free returns']},
+  {id:'nro-account',cat:'Products',emoji:'💵',title:'NRO Account',
+   triggers:['nro','non resident ordinary','what is nro','nro account','india income','rental income','nro vs nre'],
+   tag:'kyc',tagLabel:'NRO',
+   pts:['NRO = Non-Resident Ordinary — for Indian income (rent, pension, dividends)',
+        'Interest is TAXABLE in India — TDS applies at 30%',
+        'Repatriation limited to $1M per year with CA certificate',
+        'Joint account allowed with resident Indian',
+        'Use NRO for Indian income sources, NRE for foreign earnings']},
+  {id:'transfer',cat:'Transfers',emoji:'💸',title:'How to Transfer Money',
+   triggers:['transfer','send money','remit','wire','swift','how to add money','fund account','top up','deposit money'],
+   tag:'kyc',tagLabel:'Transfer',
+   pts:['Transfer from your foreign bank account via SWIFT/wire to Aspora NRE account',
+        'Free international transfers in Year 1 — no remittance fee',
+        'SWIFT details provided in app after account activation',
+        'Typical transfer time: 1-3 business days depending on sending bank',
+        'No limit on inward remittances to NRE account']},
+  {id:'open-account',cat:'Process',emoji:'🚀',title:'How to Open Account',
+   triggers:['how to open','open account','apply','start','steps','process','how long','opening process','account opening'],
+   tag:'kyc',tagLabel:'Process',
+   pts:['Step 1: Fill profile form in app (5 min)',
+        'Step 2: Upload 3 docs — Passport + PAN + Overseas address proof (3 min)',
+        'Step 3: Video KYC call — 5 minutes, agent verifies documents',
+        'Step 4: Digital Notary — 10 min video call, RBI mandatory',
+        'Step 5: SIM binding → Account active. Total: ~15-20 minutes']},
+  {id:'kyc-process',cat:'KYC',emoji:'📹',title:'Video KYC',
+   triggers:['video kyc','vcip','kyc call','verification call','kyc process','kyc failed','kyc not working'],
+   tag:'kyc',tagLabel:'KYC',
+   pts:['Video KYC is a 5-minute live video call with an Aspora agent',
+        'Have original Passport and PAN card ready — hold them up to camera',
+        'Good lighting and stable internet required',
+        'Call happens within 24-48 hours of booking slot in app',
+        'If it fails: common reasons are poor lighting, document blur, or name mismatch']},
+  {id:'tax',cat:'Tax',emoji:'🧾',title:'Tax Benefits',
+   triggers:['tax','tds','tax free','taxation','tax benefit','income tax','tax on interest'],
+   tag:'kyc',tagLabel:'Tax',
+   pts:['NRE account interest: 100% tax-free in India, no TDS deducted',
+        'NRO account interest: taxable at 30% TDS in India',
+        'No wealth tax or gift tax on NRE deposits',
+        'DTAA (Double Taxation Avoidance Agreement) may reduce tax in home country',
+        'Consult CA for full tax picture in your country of residence']}];
   document.getElementById('chat-msgs').innerHTML='<div class="welcome-card"><h3>&#128075; Ready for your call &mdash; CSAT is the primary metric</h3><p>Click any stage to see app screenshot + script. Type any customer question for an instant answer. Every call ends with a CSAT survey regardless of outcome.</p><div class="wc-chips"><div class="wc-chip" onclick="loadStage(0)">Stage 0 &mdash; New Lead</div><div class="wc-chip" onclick="loadStage(5)">Stage 5 &mdash; App Download</div><div class="wc-chip" onclick="loadStage(9)">Stage 9 &mdash; Documents</div><div class="wc-chip" onclick="loadStage(15)">Stage 15 &mdash; Video KYC</div><div class="wc-chip" onclick="loadStage(20)">Stage 20 &mdash; Pending</div><div class="wc-chip gold" onclick="askChip(\'Explain DICGC deposit insurance in detail why five lakh coverage\')">&#127981; DICGC Deep Dive</div><div class="wc-chip gold" onclick="askChip(\'Customer is very frustrated and angry how do I handle empathy\')">&#129505; Empathy Mode</div><div class="wc-chip gold" onclick="askChip(\'How should I close this call and capture CSAT properly\')">&#9733; Close + CSAT</div></div></div>';
   document.getElementById('ctx-scroll').innerHTML='<div class="ctx-empty">Select a stage or ask a question</div>';
   clearInterval(timerInt);timerOn=false;timerSecs=0;
