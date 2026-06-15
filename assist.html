@@ -130,7 +130,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pts li::before{content:"•";position:absolute;left:0;color:#3b82f6;font-weight:700}.pts li:has(table)::before{content:none}.pts li:has(table){padding-left:0}
 .bdr-gold .pts li::before{color:#f59e0b}
 .bdr-green .pts li::before{color:#22c55e}
-.stage-script{background:#fff;border-radius:5px;padding:6px 9px;margin-bottom:6px;font-style:italic;font-size:12px;color:#374151;line-height:1.4;border:1px solid #e2e8f0}
+.stage-card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:4px}
+.stage-card-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #f1f5f9}
+.stage-card-num-wrap{display:flex;align-items:center;gap:10px}
+.stage-card-num{width:32px;height:32px;border-radius:50%;background:#1e3a5f;color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stage-card-name{font-weight:600;font-size:13px;color:#1e3a5f}
+.stage-card-tech{font-size:10px;color:#94a3b8;font-family:monospace;margin-top:1px}
+.stage-cat-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.stage-card-info-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #f1f5f9}
+.stage-info-box{padding:10px 14px;border-right:1px solid #f1f5f9}
+.stage-info-box:last-child{border-right:none}
+.stage-info-label{font-size:9px;font-weight:700;letter-spacing:.06em;color:#94a3b8;text-transform:uppercase;margin-bottom:4px}
+.stage-info-box p{margin:0;font-size:11px;color:#374151;line-height:1.4}
+.stage-script-wrap{padding:10px 14px;border-bottom:1px solid #f1f5f9}
+.stage-script-label{font-size:9px;font-weight:700;letter-spacing:.06em;color:#94a3b8;text-transform:uppercase;margin-bottom:6px}
+.stage-script{background:#f8fafc;border-radius:6px;padding:10px 12px;font-style:italic;font-size:12px;color:#374151;line-height:1.5;border-left:3px solid #3b82f6}
+.stage-tips-label{font-size:9px;font-weight:700;letter-spacing:.06em;color:#94a3b8;text-transform:uppercase;padding:10px 14px 4px}
 .script-box{display:none}
 .tips-list{display:none}
 .lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
@@ -282,128 +297,160 @@ var STAGE_IMGS={
   28:['stage-28-1781274206057-73305.png'],29:['stage-29-1781274237296-46692.png'],30:['stage-30-1781274437225-62619.png']
 };
 var STAGES=[
-  {n:0,cat:'Not Started',title:'Not Started / New Lead',tech:'not-started',
+  {n:0,cat:'Not Started',title:'Not started',tech:'not-started',
+   means:'Customer created a lead or expressed interest but never opened the app.',
+   reasons:'Forgot, unsure which documents to keep ready, or did not trust the digital process.',
    script:'Hi [Name], this is [PBM Name] from Aspora NRI Banking. I\'ll be assisting you with your NRI account opening. Just 2 minutes — the process is fully digital, no branch visit needed, about 20-25 minutes from your phone. You\'ll need your passport, overseas address proof, and PAN card. Shall I send the application link now?',
    tips:['📲 Send app link via WhatsApp immediately','📋 Share document checklist','🎯 Goal: confirm right person + get them started']},
-
-  {n:1,cat:'Basic Details',title:'Account Type Selection',tech:'nri_onboarding_account_type_selection_page',
+  {n:1,cat:'Basic details',title:'Account type selection',tech:'nri_onboarding_account_type_selection_page',
+   means:'Customer opened the app but did not select an account type (NRE / NRO / FCNR).',
+   reasons:'Confused about the difference between NRE, NRO, and FCNR accounts.',
    script:'I can see the process paused at account type selection — very common confusion. Simplified: NRE = foreign earnings, tax-free in India, 100% repatriable. NRO = income from India (rent/pension), taxable. FCNR = savings in foreign currency (GBP/USD). For most NRIs working abroad — NRE is the right fit. Shall we proceed?',
    tips:['💰 NRE = foreign earnings → tax-free + repatriable','🏠 NRO = India income (rent/pension) → taxable','💵 FCNR = foreign currency savings (GBP/USD)','✅ Most NRIs abroad → recommend NRE']},
-
-  {n:2,cat:'Basic Details',title:'What You Need Page',tech:'nri_onboarding_what_you_need_page',
+  {n:2,cat:'Basic details',title:'What you need page',tech:'nri_onboarding_what_you_need_page',
+   means:'Customer saw the document requirements list and dropped off.',
+   reasons:'Didn\'t have documents ready, found the list overwhelming, or unsure if overseas docs are acceptable.',
    script:'Process paused at documents checklist. Simplified — only 3 things needed: Passport + overseas address proof (utility bill or bank statement) + PAN card. No physical copies — clear phone photos work. Do you have those accessible right now?',
    tips:['📋 Only 3 docs: Passport · Address proof · PAN','📸 Clear phone photos accepted — no physical copies','🌍 Foreign language docs accepted','⚠️ No PAN: can use Form 60 as alternative']},
-
-  {n:3,cat:'Basic Details',title:'Email Verification',tech:'nri_onboarding_email_page',
+  {n:3,cat:'Basic details',title:'Email page',tech:'nri_onboarding_email_page',
+   means:'Customer dropped off while entering or verifying their email address.',
+   reasons:'OTP not received, used wrong email, or email landed in spam folder.',
    script:'Process stalled at email verification. Quick fix — OTP sometimes lands in spam/promotions folder, or there\'s a brief delay. Can you open the app now? I\'ll stay on the line and help clear this in under a minute.',
    tips:['📧 Check spam/promotions folder first','🔄 Offer to resend OTP','✏️ Can update email address from our side if needed']},
-
-  {n:4,cat:'Basic Details',title:'Personal Details',tech:'nri_onboarding_user_basics_page',
+  {n:4,cat:'Basic details',title:'User basics page',tech:'nri_onboarding_user_basics_page',
+   means:'Customer dropped off while filling in basic personal details (name, DOB, mobile).',
+   reasons:'Unsure which name to use (as per passport), mobile number mismatch, or technical glitch.',
    script:'Process paused at personal details. Key clarification: enter name EXACTLY as on your passport — including middle name if listed. Mobile number must be your Indian registered number used for authentication. Can you pull up the application now?',
    tips:['📄 Name must match passport EXACTLY (including middle name)','📱 Mobile = Indian registered number','⚠️ Mismatch here causes KYC delays later']},
-
-  {n:5,cat:'Basic Details',title:'Journey Stepper Intro',tech:'nri_journey_stepper_intro',
+  {n:5,cat:'Basic details',title:'Journey stepper intro',tech:'nri_journey_stepper_intro',
+   means:'Customer saw the onboarding journey overview screen and dropped off.',
+   reasons:'Got overwhelmed seeing the number of steps, or had second thoughts about time commitment.',
    script:'Process paused after the journey overview. Seeing all steps at once can feel like a lot — in reality most customers complete in under 20 minutes. Progress is saved automatically at every stage. You\'ve cleared the first part already. Shall we continue?',
    tips:['✅ Progress always saved — no restart needed','⏱ Most customers finish in under 20 min','💬 Reassure: biggest section is personal details']},
-
-  {n:6,cat:'Basic Details',title:'Address Page',tech:'nri_onboarding_address_page',
+  {n:6,cat:'Basic details',title:'Address page',tech:'nri_onboarding_address_page',
+   means:'Customer dropped off while entering their overseas or Indian address.',
+   reasons:'Confusion about which address to enter, postal code format issues, or address proof mismatch.',
    script:'Process stalled at address section. Overseas address: enter exactly as on your address proof document, including the country postal code format. Indian address: use your permanent address as per existing records. I\'ll personally guide you through each field.',
    tips:['🌍 Overseas address must match proof doc exactly','🏠 Indian address = permanent address on record','📮 Use country-specific postal code format']},
-
-  {n:7,cat:'Basic Details',title:'Marital Status',tech:'nri_marital_step',
+  {n:7,cat:'Basic details',title:'Marital status step',tech:'nri_marital_step',
+   means:'Customer dropped off at the marital status question.',
+   reasons:'Technical glitch or privacy concern about sharing marital details.',
    script:'Process paused at marital status — this is a standard RBI KYC requirement across all bank accounts. It has no bearing on account features or eligibility. Completely confidential. It\'s a single selection — takes 10 seconds.',
    tips:['🏛 RBI KYC regulatory requirement only','✅ Zero impact on account features or limits','🔒 Completely confidential']},
-
-  {n:8,cat:'Basic Details',title:'Occupation Step',tech:'nri_occupation_step',
+  {n:8,cat:'Basic details',title:'Occupation step',tech:'nri_occupation_step',
+   means:'Customer dropped off while selecting or entering their occupation details.',
+   reasons:'Unsure which occupation category applies - especially self-employed, freelancers, or between jobs.',
    script:'Process paused at occupation. This is a standard KYC source-of-funds field — doesn\'t affect your account. Employed by a company = Salaried. Own business/freelance = Self-employed. Between jobs/retired = Others. What\'s your situation?',
    tips:['💼 Employed = Salaried','🏢 Freelance/business = Self-employed','📝 Between jobs/retired = Others']},
-
-  {n:9,cat:'Basic Details',title:'Annual Income Step',tech:'nri_annual_income_step',
+  {n:9,cat:'Basic details',title:'Annual income step',tech:'nri_annual_income_step',
+   means:'Customer dropped off at the income declaration step.',
+   reasons:'Privacy concerns, unsure whether to declare foreign or Indian income, uncomfortable sharing financials.',
    script:'Process paused at annual income. This is a range-based RBI KYC declaration — not an exact figure, fully confidential, no impact on account limits. Select the bracket that broadly reflects your total annual income — overseas + Indian earnings combined.',
    tips:['📊 It\'s a bracket range — not an exact figure','🔒 Fully confidential, no impact on account','💰 Combined overseas + India income is fine']},
-
-  {n:10,cat:'Basic Details',title:'Education Step',tech:'nri_education_step',
+  {n:10,cat:'Basic details',title:'Education step',tech:'nri_education_step',
+   means:'Customer dropped off at the education qualification step.',
+   reasons:'Unsure why education is being asked, minor technical issue.',
    script:'Process paused at education field — this is a SEBI and RBI KYC requirement for all bank accounts. Single dropdown, takes 10 seconds. You\'re right at the end of the personal details section — one tap away.',
    tips:['🎓 SEBI/RBI KYC requirement — all banks ask this','⚡ Single dropdown, takes 10 seconds','✅ End of personal details section — almost done']},
-
-  {n:11,cat:'Basic Details',title:'Personal Details Complete',tech:'nri_journey_stepper_after_life',
+  {n:11,cat:'Basic details',title:'Journey stepper after life',tech:'nri_journey_stepper_after_life',
+   means:'Customer completed basic details but did not proceed to the KYC / persona phase.',
+   reasons:'Needed a break, felt they\'d done enough for the day, or unsure what comes next.',
    script:'Great news — you\'ve completed personal details, which is the most detailed section of the entire process. Next phase is identity verification — about 5 minutes. You\'ll just need your passport nearby and a well-lit space.',
    tips:['🎉 Biggest section done — acknowledge it!','📹 Next: identity verification (~5 min)','💡 Need: good lighting + passport nearby']},
-
-  {n:12,cat:'Persona Stage',title:'Verification / KYC',tech:'nri_onboarding_verification_sdk_page',
+  {n:12,cat:'Persona Stage',title:'Verification SDK page',tech:'nri_onboarding_verification_sdk_page',
+   means:'Customer reached the KYC verification step but dropped off without completing it.',
+   reasons:'Not in a suitable environment, technical issue with camera, or unsure of the process.',
    script:'Application is at identity verification — secure 3-5 minute process. Passport + brief camera check needed. For best results: well-lit quiet space, WiFi connection preferred, passport in hand. Want to do it now or schedule a specific time?',
    tips:['📶 WiFi preferred for stability','💡 Good lighting + quiet room essential','📄 Original passport ready to hold up','⏱ 3-5 minutes total']},
-
-  {n:13,cat:'Persona Stage',title:'Missing Details / KYC Fix',tech:'nri_onboarding_persona_missing_details_page',
+  {n:13,cat:'Persona Stage',title:'Persona missing details page',tech:'nri_onboarding_persona_missing_details_page',
+   means:'KYC system flagged missing or mismatched information and customer did not complete the correction.',
+   reasons:'Confused about what was missing, or frustrated by the re-submission request.',
    script:'System flagged a minor discrepancy — very common and straightforward to fix. Usually a small difference between name or DOB on the form vs passport. I can tell you exactly what needs correcting. Can you open the application now?',
    tips:['🔍 Usually name or DOB mismatch','✏️ Guide through exact correction needed','⏱ Fix takes about 3 minutes']},
-
-  {n:14,cat:'Persona Stage',title:'Tax Residency / FATCA',tech:'nri_tax_residency_page',
+  {n:14,cat:'Persona Stage',title:'Tax residency page',tech:'nri_tax_residency_page',
+   means:'Customer dropped off at the FATCA / CRS tax residency declaration step.',
+   reasons:'Confused about FATCA, worried about tax implications, or unsure of their tax residency status.',
    script:'Application paused at tax residency. This is FATCA/CRS compliance — a global requirement for all international bank accounts. Simply declare which country you are a tax resident of. This creates NO new tax liability — purely a reporting requirement.',
    tips:['🏛 FATCA = reporting only — zero new tax','🌍 Declare the country where taxes are paid','💚 NRE interest stays tax-free regardless','UK: NI number · US: SSN · UAE: no TIN needed']},
-
-  {n:15,cat:'Persona Stage',title:'Terms & Conditions',tech:'nri_onboarding_terms_and_conditions',
+  {n:15,cat:'Persona Stage',title:'Terms and conditions',tech:'nri_onboarding_terms_and_conditions',
+   means:'Customer saw T&Cs but dropped off without accepting.',
+   reasons:'Concerned about clauses, general hesitation, or wanted to consult someone first.',
    script:'Application is at the final step of KYC phase — reviewing and accepting T&Cs. Key points: standard account operation terms, NRE/NRO repatriation guidelines, and digital KYC consent. If there\'s any clause you\'d like explained in plain English, I\'m happy to do that.',
    tips:['📋 Offer to explain any clause in plain English','🔑 Key points: account operation, repatriation, KYC consent','✅ Final KYC step — very close to done']},
-
-  {n:16,cat:'Persona Stage',title:'KYC Completed',tech:'RTL_journey_completed',
+  {n:16,cat:'Persona Stage',title:'RTL journey completed',tech:'RTL_journey_completed',
+   means:'Customer completed the persona/KYC stage but did not proceed to SIM binding.',
+   reasons:'Thought the process was complete, or confused about why SIM binding is needed.',
    script:'Great news — KYC has been successfully verified! Next step is SIM binding, which links your registered mobile number for secure two-factor authentication. It\'s a 2-minute step needed to activate mobile banking access. You\'ll need your Indian SIM active.',
    tips:['🎉 KYC done — acknowledge the milestone!','📱 SIM binding = 2FA for mobile banking','⏱ 2 minutes — very close to done']},
-
-  {n:17,cat:'SIM Binding',title:'SIM Registration',tech:'sim_registration_screen_loaded',
+  {n:17,cat:'SIM Binding',title:'SIM registration screen',tech:'sim_registration_screen_loaded',
+   means:'Customer reached SIM binding but did not complete the registration step.',
+   reasons:'NRI does not have Indian SIM active, confused about which number, or travelling.',
    script:'This step needs your registered Indian mobile number active on your phone. If you\'re abroad and that SIM isn\'t accessible — no problem, your application stays active. I\'ll help you schedule this step for when you have the number available.',
    tips:['✅ Application stays active for 30 days','🌍 Can complete when back in India or SIM is active','👨‍👩‍👧 Family member\'s Indian SIM is fine']},
-
-  {n:18,cat:'SIM Binding',title:'SIM Verification Success',tech:'sim_verification_success_screen_loaded',
+  {n:18,cat:'SIM Binding',title:'SIM verification success screen',tech:'sim_verification_success_screen_loaded',
+   means:'SIM was verified successfully, but the customer dropped off right after without proceeding.',
+   reasons:'Thought it was done, app crashed, or got distracted.',
    script:'SIM has been successfully verified! Next step is PAN verification — takes about a minute. If you can open the app now and tap Continue, I\'ll stay on the line. You are very close.',
    tips:['✅ SIM done — just tap Continue','📄 PAN verification is next — 1 minute','⚡ Very close to completing!']},
-
-  {n:19,cat:'SIM Binding',title:'PAN Verification',tech:'pan_screen_loaded',
+  {n:19,cat:'SIM Binding',title:'PAN screen',tech:'pan_screen_loaded',
+   means:'Customer dropped off at the PAN card verification step.',
+   reasons:'PAN not linked to Aadhaar, PAN details mismatch, or PAN card not handy.',
    script:'Application paused at PAN verification. Usually quick — enter PAN number and it auto-verifies. Check that name on PAN matches exactly what was entered earlier. If PAN not handy, DigiLocker or the Income Tax portal shows it in under a minute.',
    tips:['📱 DigiLocker or IT portal for quick PAN access','⚠️ Name mismatch between PAN and form is common','✏️ Guide correction if mismatch found']},
-
-  {n:20,cat:'Digital Notary',title:'Digital Notary Intro',tech:'digital_notarization_intro_screen_loaded',
+  {n:20,cat:'Digital Notary',title:'Digital notarization intro',tech:'digital_notarization_intro_screen_loaded',
+   means:'Customer reached the digital notary step but did not start it.',
+   reasons:'Did not understand what a digital notary is, concerned about the video call, or not prepared.',
    script:'Application is at digital notarization — a short 5-7 minute video call with a licensed notary who verifies your passport. The notary speaks English and the session is fully guided. You\'ll need original passport, good lighting, quiet space. Slots available today — shall I schedule one?',
    tips:['📹 5-7 min video call with licensed notary','📄 Original passport + good lighting needed','🔇 Quiet room required','🏛 RBI-mandated — not Aspora\'s choice (use this to remove friction)']},
-
-  {n:21,cat:'Digital Notary',title:'Notary Live — In Progress',tech:'notarylive_sdk_open',
+  {n:21,cat:'Digital Notary',title:'Notary live SDK open',tech:'notarylive_sdk_open',
+   means:'Customer opened the notary live session but dropped off during it - possibly got disconnected.',
+   reasons:'Technical issue, call dropped, passport not ready, or poor internet connectivity.',
    script:'I can see the notary session was interrupted — easy to sort. For the rescheduled session: stable WiFi preferred, passport open to photo page before joining, well-lit space. I have slots available today. Shall I help you book one now?',
    tips:['📶 WiFi strongly preferred','📄 Passport open to photo page before joining','💡 Good lighting essential','📅 Book immediately — don\'t let them wait']},
-
-  {n:22,cat:'Digital Notary',title:'Notary Session Done',tech:'notarylive_sdk_close',
+  {n:22,cat:'Digital Notary',title:'Notary live SDK close',tech:'notarylive_sdk_close',
+   means:'The notary session was completed or closed, but customer did not proceed to the next screen.',
+   reasons:'Thought the process was done, or app issue after session ended.',
    script:'Notarization session has been recorded and is being processed — well done! Next step is the review and declaration screen — just a summary of everything submitted, final confirmation before processing. Open the app and tap Continue.',
    tips:['✅ Session recorded — just tap Continue','📋 Review screen only — no more data entry','⚡ Almost at the finish line!']},
-
-  {n:23,cat:'Digital Notary',title:'Review & Declaration',tech:'Onboarding_review_and_declaration_screen_loaded',
+  {n:23,cat:'Digital Notary',title:'Review and declaration screen',tech:'Onboarding_review_and_declaration_screen_loaded',
+   means:'Customer saw the final review summary but did not submit or declare.',
+   reasons:'Spotted an error to fix, nervous about final submission, or unsure what happens after.',
    script:'Application is at the final review screen — last step before submission. Confirm details are correct and submit. Once submitted, account is typically activated within 24-48 hours. Any detail to verify or correct before submitting?',
    tips:['⏱ Account activates in <b>24-48 hours</b> post-submit','✏️ Can correct any detail before submitting','🎯 Final step — confirm and submit!']},
-
-  {n:24,cat:'E-signing',title:'E-Signing Documents',tech:'zohosign_sdk_open',
+  {n:24,cat:'E-signing',title:'ZohoSign SDK open',tech:'zohosign_sdk_open',
+   means:'Customer reached the e-signing step but did not complete signing the account opening documents.',
+   reasons:'Unfamiliar with e-signing, wanted to read documents first, or technical issue.',
    script:'Application is at the e-signature step. Digital signature is legally equivalent to a physical signature. Document displays on screen — scroll through and sign with your finger or stylus. Takes about 2 minutes. You are very close to completing.',
    tips:['✍️ E-sign = legally equivalent to physical signature','👆 Sign with finger or stylus on screen','⏱ About 2 minutes']},
-
-  {n:25,cat:'E-signing',title:'E-Signing Complete',tech:'zohosign_sdk_close',
+  {n:25,cat:'E-signing',title:'ZohoSign SDK close',tech:'zohosign_sdk_close',
+   means:'E-signing session closed but the customer did not proceed further.',
+   reasons:'Signing completed but app did not auto-navigate, or customer confused about next steps.',
    script:'Account opening documents have been successfully signed! One final step: setting up your MPIN and biometric login for mobile banking access. Takes about 2 minutes and activates secure account access.',
    tips:['✅ Documents signed — MPIN setup is last step','⏱ 2 minutes left — nearly done!','🔐 MPIN activates mobile banking access']},
-
-  {n:26,cat:'E-signing',title:'Welcome Screen',tech:'welcome_screen_loaded',
+  {n:26,cat:'E-signing',title:'Welcome screen',tech:'welcome_screen_loaded',
+   means:'Customer saw the post-signing welcome screen but dropped off before setting up MPIN.',
+   reasons:'Thought the process was complete, or did not understand why MPIN setup is needed.',
    script:'Account opening is at the final setup step — create your MPIN, which is a 6-digit security PIN to access mobile banking. Think of it as setting up a debit card PIN. Takes under 2 minutes. I\'ll walk you through it now.',
    tips:['🔢 MPIN = 6-digit login PIN for mobile banking','💳 Analogy: like setting up a debit card PIN','⏱ Under 2 minutes']},
-
-  {n:27,cat:'E-signing',title:'MPIN Creation',tech:'mpin_creation_screen_loaded',
+  {n:27,cat:'E-signing',title:'MPIN creation screen',tech:'mpin_creation_screen_loaded',
+   means:'Customer started creating their MPIN but did not complete it.',
+   reasons:'Unsure what MPIN to set, technical glitch, or OTP issue.',
    script:'MPIN is a 6-digit PIN of your choice. Avoid sequential numbers like 123456 or your birth year. Keep it something memorable — it\'s required each time you log in. If you got an error previously, it was likely a mismatch during confirmation. Try again now.',
    tips:['🚫 Avoid 123456 or birth year','💡 Choose something memorable','⚠️ Previous error = likely PIN mismatch during confirmation']},
-
-  {n:28,cat:'E-signing',title:'MPIN Confirmation',tech:'mpin_confirmation_screen_loaded',
+  {n:28,cat:'E-signing',title:'MPIN confirmation screen',tech:'mpin_confirmation_screen_loaded',
+   means:'Customer entered their MPIN but did not confirm it on the confirmation screen.',
+   reasons:'Forgot the PIN they just entered, or minor app glitch.',
    script:'You\'re at the very last step — just re-enter the same 6-digit PIN to confirm it. If you\'ve forgotten the PIN you just set, you can reset it and create a new one — takes 30 seconds.',
    tips:['🔢 Re-enter the same PIN to confirm','🔄 Forgotten? Reset takes 30 seconds','⚡ Absolute final step!']},
-
-  {n:29,cat:'E-signing',title:'Biometric Setup',tech:'biometric_setup_screen_loaded',
+  {n:29,cat:'E-signing',title:'Biometric setup screen',tech:'biometric_setup_screen_loaded',
+   means:'Customer reached biometric (fingerprint/Face ID) setup but did not enable it.',
+   reasons:'Privacy concerns about biometric data, thought it was optional, or technical issue.',
    script:'Account setup is essentially complete — just the biometric setup screen. This is entirely optional. It allows login via fingerprint or Face ID instead of MPIN. Most customers find it convenient, but completely your preference. Account activates regardless.',
    tips:['✅ Biometric is <b>optional</b> — can always skip','🤳 Face ID or fingerprint for easy login','💚 Account activates regardless of choice']},
-
-  {n:30,cat:'Account Opened',title:'Account Open — Initial Funding',tech:'account_summary_screen_loaded',
-   script:'Congratulations — your NRI account is now fully set up! Calling to assist with initial funding. To enable transactions, make a first deposit — any amount you\'re comfortable with. Depositing 2,000 GBP+ unlocks our 6.5% rate. Perks: 1-year free remittance, virtual debit card, UPI via international number.',
+  {n:30,cat:'Account opened',title:'Account summary - initial funding',tech:'account_summary_screen_loaded',
+   means:'Customer completed ALL steps - account is open. This is the initial funding activation call.',
+   reasons:'N/A - welcome and funding call.',
+   script:'Hi [Name], this is [PBM Name] from Aspora NRI Banking. Thank you for completing your onboarding journey - your NRI account is now fully set up. I\'m calling to assist you with the initial funding of your account. To enable transactions, you\'ll need to make a first deposit - you\'re welcome to fund any amount you\'re comfortable with, and I can assist you through the transfer process right now if you\'d like. A quick note on interest rates - the more you save, the higher the rate you earn. We offer up to 7% interest, and depositing 2,000 GBP or above unlocks our maximum rate of 6.5%. On top of that, your account comes with one year of free remittance, a virtual debit card, and UPI access via your international number - all available as soon as your account is funded. There\'s no minimum amount required - the right starting point is entirely up to you. Shall I walk you through the transfer process now?',
    tips:['🎉 Welcome call — funding activation, not recovery','💰 2,000+ GBP unlocks <b style="color:#16a34a">6.5% rate</b>','🎁 1-year free remittance + virtual debit card + UPI','⚠️ Never mention a specific amount unprompted']}
 ]
 var KB=[
@@ -667,17 +714,34 @@ function loadStage(n){
   if(imgs.length>0){
     imgHtml='<div class="stage-imgs'+(imgs.length===1?' single':'')+'">';
     imgs.forEach(function(fn){
-      var url='https://'+BASE+fn;
+      var url=BASE+fn;
       imgHtml+='<img src="'+url+'" alt="Stage '+n+'" onclick="openLB(\''+url+'\')" loading="lazy">';
     });
     imgHtml+='</div>';
   }
+  var catColor={
+    'Not Started':'#6b7280','Basic details':'#3b82f6','Persona Stage':'#8b5cf6',
+    'SIM Binding':'#f59e0b','Digital Notary':'#14b8a6','E-signing':'#ec4899','Account opened':'#16a34a'
+  };
+  var cc=catColor[s.cat]||'#3b82f6';
   var tipsHtml='<ul class="pts">';
   (s.tips||[]).forEach(function(t){tipsHtml+='<li>'+t+'</li>';});
   tipsHtml+='</ul>';
-  var content='<div class="kb-card bdr-blue"><strong>Stage '+n+' &mdash; '+s.title+'</strong>'
-    +(s.script?'<div class="stage-script">'+s.script+'</div>':'')
-    +tipsHtml+'</div>'+imgHtml;
+  var content=''
+    +'<div class="stage-card">'
+    +'<div class="stage-card-header">'
+    +'<div class="stage-card-num-wrap"><span class="stage-card-num">'+n+'</span><div><div class="stage-card-name">'+s.title+'</div><div class="stage-card-tech">'+s.tech+'</div></div></div>'
+    +'<span class="stage-cat-badge" style="background:'+cc+'20;color:'+cc+'">'+s.cat+'</span>'
+    +'</div>'
+    +(s.means||s.reasons?'<div class="stage-card-info-row">'
+      +(s.means?'<div class="stage-info-box"><div class="stage-info-label">WHAT THIS MEANS</div><p>'+s.means+'</p></div>':'')
+      +(s.reasons?'<div class="stage-info-box"><div class="stage-info-label">LIKELY REASONS FOR DROP-OFF</div><p>'+s.reasons+'</p></div>':'')
+    +'</div>':'')
+    +(s.script?'<div class="stage-script-wrap"><div class="stage-script-label">CALL SCRIPT</div><div class="stage-script">'+s.script+'</div></div>':'')
+    +'<div class="stage-tips-label">TIPS &amp; OBJECTIONS</div>'
+    +tipsHtml
+    +'</div>'
+    +imgHtml;
   addMsg('assistant',content,'<span class="tag stage">Stage '+n+'</span><br>');
   updateCtx(s.tips,'Stage '+n);
 }
