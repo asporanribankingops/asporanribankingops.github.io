@@ -127,7 +127,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bdr-green{background:#f0fdf4;border-left:4px solid #22c55e}
 .pts{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
 .pts li{font-size:13px;color:#1e293b;line-height:1.6;padding-left:14px;position:relative;word-break:keep-all}
-.pts li::before{content:"•";position:absolute;left:0;color:#3b82f6;font-weight:700}
+.pts li::before{content:"•";position:absolute;left:0;color:#3b82f6;font-weight:700}.pts li:has(table)::before{content:none}.pts li:has(table){padding-left:0}
 .bdr-gold .pts li::before{color:#f59e0b}
 .bdr-green .pts li::before{color:#22c55e}
 .stage-script{background:#fff;border-radius:5px;padding:6px 9px;margin-bottom:6px;font-style:italic;font-size:12px;color:#374151;line-height:1.4;border:1px solid #e2e8f0}
@@ -318,23 +318,23 @@ var KB=[
   // OBJECTIONS
   {id:'obj-time',cat:'Objections',emoji:'⏰',title:'Too Busy / No Time',
    triggers:['busy','time','later','rush','hurry','call back','callback','not now'],tag:'objection',tagLabel:'Objection',
-   pts:['Ask: "What rate is your current bank giving on NRE savings?"','HDFC/ICICI pays 3% — Aspora pays up to 7%. That\'s ₹40,000 extra/yr on ₹10L','Ask for 90 seconds, not 2 minutes — sounds smaller','If still busy: lock a specific callback day and time before hanging up']},
+   pts:['🎯 <b>Ask first:</b> "What rate is your bank giving on NRE savings?"','<b style="color:#16a34a">Aspora: up to 7%</b> vs HDFC/ICICI 3% → <b style="color:#16a34a">₹40,000 extra/yr</b> on ₹10L','⏱ Ask for <b>90 seconds</b> (not 2 min) — sounds smaller','📅 If still busy → lock <b>exact day + time</b> before hanging up']},
 
   {id:'obj-callbk',cat:'Objections',emoji:'📞',title:'Call Back Later',
    triggers:['call back','later','another time','tomorrow','next week','think about','will call'],tag:'objection',tagLabel:'Objection',
-   pts:['Ask WHY before accepting — "Is it process, safety, or something else?"','Lock a specific time slot: "Is Tuesday 4pm good for you?"','Send WhatsApp with 3 key facts before the callback','Max 3-day gap — "Rates reviewed quarterly, best to lock in now"']},
+   pts:['❓ Ask WHY: "Is it process, safety, or something else?"','📅 Lock it: <b>"Is Tuesday 4pm good?"</b> — specific beats vague','📲 Send WhatsApp with <b>3 facts</b> before callback','⚠️ <b style="color:#dc2626">Max 3-day gap</b> — "Rates reviewed quarterly, best to lock in now"']},
 
   {id:'obj-existing',cat:'Objections',emoji:'🏦',title:'Already Has Another Bank',
    triggers:['already have','hdfc','icici','axis','sbi','other bank','existing account'],tag:'objection',tagLabel:'Objection',
-   pts:['Never ask them to close it — say "add Aspora alongside"','HDFC/ICICI: 3%. Aspora: up to 7%. Double the rate.','₹20L example: Aspora earns ₹70,000 MORE per year than HDFC','Social proof: "Many customers keep HDFC for bills, Aspora for savings"']},
+   pts:['✅ Never say close it — say <b>"add Aspora alongside"</b>','<b>HDFC/ICICI: 3%</b> → <b style="color:#16a34a">Aspora: up to 7%</b> = double the rate','💰 ₹20L → <b style="color:#16a34a">₹70,000 MORE/yr</b> than HDFC','👥 "Most NRIs keep HDFC for bills, Aspora for savings"']},
 
   {id:'obj-safety',cat:'Objections',emoji:'🔒',title:'Safety / Trust Concern',
    triggers:['safe','safety','trust','secure','data','privacy','hack','fraud','regulated','worry'],tag:'objection',tagLabel:'Objection',
-   pts:['RBI regulated — same regulator as HDFC and ICICI','DICGC insured up to ₹5 lakh — government-backed scheme','256-bit bank-grade encryption on all transactions','KYC done by licensed notary — same process as international agreements']},
+   pts:['🏛 <b>RBI regulated</b> — same as HDFC & ICICI','🛡 <b>DICGC insured</b> up to <b style="color:#16a34a">₹5 lakh</b> — government-backed','🔒 256-bit bank-grade encryption on all transactions','📋 KYC by licensed notary — same as international agreements']},
 
   {id:'obj-trust',cat:'Objections',emoji:'🤔',title:'7% Sounds Too Good to Be True',
    triggers:['too good','suspicious','scam','genuine','real','doubt','7%','how is it possible','really'],tag:'objection',tagLabel:'Objection',
-   pts:['Why 7%: no physical branches, no ATMs = savings passed to customer','IDFC First Bank also offers 7% — same model, well-known bank','Start with ₹10,000 to test — see interest in first quarter','RBI regulated + DICGC insured = same protection as any big bank']},
+   pts:['💡 Why 7%: <b>no branches, no ATMs</b> = savings passed to YOU','🏦 IDFC First Bank also gives 7% — same model, well-known bank','✅ Start with <b>₹10,000 to test</b> — see interest first quarter','🛡 RBI + DICGC = <b>same protection as HDFC/SBI</b>']},
 
   {id:'obj-family',cat:'Objections',emoji:'👨‍👩‍👧',title:'Need Family Discussion',
    triggers:['family','wife','husband','spouse','parents','discuss','consult','ask','partner'],tag:'objection',tagLabel:'Objection',
@@ -342,20 +342,20 @@ var KB=[
 
   {id:'obj-fees',cat:'Objections',emoji:'💳',title:'Fees & Charges',
    triggers:['fee','fees','charge','cost','free','annual','maintenance','minimum balance','amc'],tag:'objection',tagLabel:'Objection',
-   pts:['Zero fees. Zero minimum balance. Zero annual charges.','Free international transfers in Year 1','HDFC requires ₹10,000 min balance — penalty ₹5,000/yr if below','No hidden costs — the account is completely free to maintain']},
+   pts:['<b style="color:#16a34a">Zero fees · Zero minimum balance · Zero annual charges</b>','<b style="color:#16a34a">Free</b> international transfers in Year 1','⚠️ HDFC needs ₹10K min → <b style="color:#dc2626">₹5,000/yr penalty</b> if below','✅ <b>100% free</b> to maintain — no hidden costs']},
 
   {id:'obj-complicated',cat:'Objections',emoji:'😓',title:'Process Too Complicated',
    triggers:['complicated','complex','difficult','too much','long','tedious','confusing','steps'],tag:'objection',tagLabel:'Objection',
-   pts:['It\'s: fill a form + upload 3 photos + 2 short video calls','Most customers done in 15 minutes','You guide them on WhatsApp through every step','Start Step 1 together NOW on the call — biggest drop-off reducer']},
+   pts:['📋 Form → 📄 3 docs → 📹 Video KYC → ✍️ Notary → 📱 SIM → <b style="color:#16a34a">Active!</b>','⏱ <b>15–20 min total</b> — fully digital, no branch visit','💬 You guide on WhatsApp through every step','🚀 <b>Start Step 1 NOW</b> on the call — biggest drop-off reducer']},
 
   // DEEP KNOWLEDGE
   {id:'dicgc',cat:'Deep Knowledge',emoji:'🏛️',title:'DICGC Insurance — Why ₹5 Lakh?',
    triggers:['dicgc','deposit insurance','insurance','five lakh','5 lakh','why 5 lakh','cover','insured','guarantee','deposit protection'],tag:'kyc',tagLabel:'Value Prop',extra:'coaching',
-   pts:['DICGC = government body under RBI. All scheduled banks are members.','Banks pay 0.12% of total deposits annually as insurance premium','That pool insures every depositor up to ₹5 lakh per bank','₹5L limit covers 97%+ of individual depositors in India','Say: "Same protection as HDFC or SBI — backed by Government of India"']},
+   pts:['🏛 <b>DICGC</b> = government body under RBI — all banks are members','Banks pay 0.12% of deposits/yr as premium into an insurance pool','🛡 Covers every depositor up to <b style="color:#16a34a">₹5 lakh per bank</b>','<b style="color:#16a34a">97%+</b> of Indian individual depositors are fully covered','📢 Script: "<b>Same as HDFC or SBI — Government of India backed</b>"']},
 
   {id:'rfi-strategy',cat:'Deep Knowledge',emoji:'⏱️',title:'RFI Calling — When to Call',
    triggers:['rfi','request for information','when to call','outreach timing','follow up when','notification','sweet spot','delay calling'],tag:'strategy',tagLabel:'Strategy',extra:'coaching',
-   pts:['Wait 1–2 hours after notification before calling','Customer hasn\'t read the notification yet if you call immediately','Banking = long-term relationship, not a transactional product','Opening: "Hi, I saw you received our update — calling to personally help with the next step"']},
+   pts:['⏱ Wait <b>1–2 hours</b> after notification before calling','📵 Calling immediately = customer hasn\'t read it yet','💼 Banking = <b>long-term relationship</b>, not transactional','📢 Script: "Hi, I saw you received our update — calling to personally help with the next step"']},
 
   {id:'csat-guide',cat:'Deep Knowledge',emoji:'⭐',title:'CSAT — The Primary Metric',
    triggers:['csat','satisfaction','survey','metric','performance','kpi','closing call','end call','how am i judged'],tag:'csat',tagLabel:'CSAT',extra:'coaching',
@@ -452,11 +452,9 @@ var KB=[
   {id:'rates',cat:'Rates',emoji:'📈',title:'Interest Rates',
    triggers:['rate','interest','percent','7%','how much','return','yield','savings rate','fd rate','fixed deposit rate','what rate'],
    tag:'kyc',tagLabel:'Rates',
-   pts:['<b>NRE Savings</b> — up to <b style="color:#16a34a">7% tax-free</b>',
-        '&lt;₹10L → 2.5–3.5% &nbsp;|&nbsp; ₹10–25L → 6.5% &nbsp;|&nbsp; ₹25L+ → <b>7%</b>',
-        '<b>FD:</b> 1yr = 7.25% &nbsp;|&nbsp; 2yr = 7.10% — interest TAX-FREE',
-        '<b>vs competitors:</b> HDFC 3% · ICICI 3% · SBI 2.7%',
-        '₹20L with Aspora = <b style="color:#16a34a">₹70,000 more/yr</b> than HDFC']},
+   pts:['<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="background:#e0f2fe"><th style="padding:4px 8px;text-align:left;font-weight:600;color:#0369a1">Balance</th><th style="padding:4px 8px;text-align:center;font-weight:600;color:#0369a1">Aspora</th><th style="padding:4px 8px;text-align:center;font-weight:600;color:#64748b">HDFC</th></tr><tr><td style="padding:4px 8px;color:#475569">Below ₹10L</td><td style="padding:4px 8px;text-align:center;color:#16a34a;font-weight:600">2.5–3.5%</td><td style="padding:4px 8px;text-align:center;color:#64748b">3%</td></tr><tr style="background:#f0fdf4"><td style="padding:4px 8px;color:#475569">₹10–25L</td><td style="padding:4px 8px;text-align:center;color:#16a34a;font-weight:700">6.5%</td><td style="padding:4px 8px;text-align:center;color:#64748b">3%</td></tr><tr style="background:#dcfce7"><td style="padding:4px 8px;color:#475569">₹25L+</td><td style="padding:4px 8px;text-align:center;color:#16a34a;font-weight:700">7.0% ⭐</td><td style="padding:4px 8px;text-align:center;color:#64748b">3%</td></tr></table>',
+        'FD: 1yr → <b style="color:#16a34a">7.25%</b> &nbsp;|&nbsp; 2yr → <b style="color:#16a34a">7.10%</b> &nbsp;·&nbsp; <b>ALL tax-free in India</b>',
+        '💡 ₹20L with Aspora = <b style="color:#16a34a;font-size:14px">₹70,000 MORE</b> per year vs HDFC']},
   {id:'what-aspora',cat:'About',emoji:'🏦',title:'What is Aspora',
    triggers:['what is aspora','about aspora','who is aspora','aspora bank','tell me about aspora','aspora'],
    tag:'kyc',tagLabel:'About',
