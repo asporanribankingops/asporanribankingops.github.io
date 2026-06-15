@@ -489,7 +489,7 @@ var KB=[
 
   // DEEP KNOWLEDGE
   {id:'dicgc',cat:'Deep Knowledge',emoji:'🏛️',title:'DICGC Insurance — Why ₹5 Lakh?',
-   triggers:['dicgc','deposit insurance','insurance','five lakh','5 lakh','why 5 lakh','cover','insured','guarantee','deposit protection'],tag:'kyc',tagLabel:'Value Prop',extra:'coaching',
+   triggers:['dicgc','digcc','dicgc insurance','deposit insurance','insurance','five lakh','5 lakh','why 5 lakh','cover','insured','guarantee','deposit protection'],tag:'kyc',tagLabel:'Value Prop',extra:'coaching',
    pts:['🏛 <b>DICGC</b> = government body under RBI — all banks are members','Banks pay 0.12% of deposits/yr as premium into an insurance pool','🛡 Covers every depositor up to <b style="color:#16a34a">₹5 lakh per bank</b>','<b style="color:#16a34a">97%+</b> of Indian individual depositors are fully covered','📢 Script: "<b>Same as HDFC or SBI — Government of India backed</b>"']},
 
   {id:'rfi-strategy',cat:'Deep Knowledge',emoji:'⏱️',title:'RFI Calling — When to Call',
@@ -794,7 +794,7 @@ function searchKB(q){
     var score=0;
     item.triggers.forEach(function(t){if(q.includes(t))score+=3;});
     if(q.includes(item.title.toLowerCase()))score+=5;
-    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>3&&q.includes(w))score+=1;});});
+    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>4&&q.includes(w))score+=1;});});
     if(score>bestScore){bestScore=score;best=item;}
   });
   return bestScore>=3?best:null;
@@ -834,7 +834,7 @@ function searchKBFuzzy(q){
     var score=0;
     item.triggers.forEach(function(t){if(q.includes(t))score+=3;});
     if(q.includes(item.title.toLowerCase()))score+=5;
-    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>3&&q.includes(w))score+=1;});});
+    item.triggers.forEach(function(t){t.split(' ').forEach(function(w){if(w.length>4&&q.includes(w))score+=1;});});
     if(score>bestScore){bestScore=score;best=item;}
   });
   return bestScore>=1?best:null;
