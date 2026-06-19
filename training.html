@@ -7,142 +7,134 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
-/* HEADER */
-.hdr{background:#1e3a5f;color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.hdr-logo{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.hdr{background:#1e3a5f;color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr-logo{font-size:18px;font-weight:800;letter-spacing:-.3px}
 .hdr-logo span{color:#4ade80}
 .hdr-sub{font-size:11px;color:#94a3b8;margin-top:1px}
 .hdr-right{display:flex;gap:8px;align-items:center}
-.score-badge{background:#16a34a;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;display:none}
-/* LAYOUT */
+.score-pill{background:#16a34a;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;display:none}
 .layout{display:flex;min-height:calc(100vh - 56px)}
-/* SIDEBAR */
-.sidebar{width:240px;background:#fff;border-right:1px solid #e2e8f0;padding:16px 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
-.sb-section{padding:4px 0 8px}
-.sb-section-label{font-size:10px;font-weight:700;letter-spacing:.06em;color:#94a3b8;text-transform:uppercase;padding:0 16px 6px}
-.sb-item{padding:8px 16px;font-size:13px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;border-left:3px solid transparent;transition:all .15s}
+.sidebar{width:230px;background:#fff;border-right:1px solid #e2e8f0;padding:12px 0;flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sb-group{padding:4px 0 10px}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:.07em;color:#94a3b8;text-transform:uppercase;padding:0 16px 5px}
+.sb-item{padding:7px 14px;font-size:12.5px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:9px;border-left:3px solid transparent;transition:all .12s;user-select:none}
 .sb-item:hover{background:#f8fafc;color:#1e3a5f}
 .sb-item.active{background:#eff6ff;color:#1e40af;border-left-color:#3b82f6;font-weight:600}
-.sb-item .sb-check{width:16px;height:16px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s}
-.sb-item.done .sb-check{background:#16a34a;border-color:#16a34a;color:#fff}
-/* MAIN */
-.main{flex:1;padding:24px;max-width:860px}
-/* SECTION */
+.sb-dot{width:15px;height:15px;border-radius:50%;border:2px solid #d1d5db;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;transition:all .2s}
+.sb-item.done .sb-dot{background:#16a34a;border-color:#16a34a;color:#fff}
+.main{flex:1;padding:24px 28px;max-width:900px}
 .section{display:none}
 .section.active{display:block}
-.section-hero{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);color:#fff;border-radius:12px;padding:28px 32px;margin-bottom:24px}
-.section-hero h1{font-size:22px;font-weight:700;margin-bottom:6px}
-.section-hero p{font-size:13px;opacity:.85;line-height:1.5}
-.section-hero .hero-meta{display:flex;gap:16px;margin-top:14px}
-.hero-pill{background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
-/* CARD */
-.card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:16px;overflow:hidden}
-.card-header{padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px}
-.card-icon{font-size:20px;flex-shrink:0}
-.card-title{font-weight:700;font-size:14px;color:#1e3a5f}
-.card-sub{font-size:11px;color:#94a3b8;margin-top:1px}
-.card-body{padding:16px 18px}
-.card-body p{font-size:13px;line-height:1.6;color:#374151;margin-bottom:8px}
-.card-body p:last-child{margin-bottom:0}
-/* LEARN LIST */
-.learn-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.learn-list li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:#374151}
-.learn-list li .bullet{flex-shrink:0;margin-top:1px}
-/* KEY FACT */
-.key-facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:16px}
-.kf{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:14px;text-align:center}
-.kf-val{font-size:22px;font-weight:800;color:#1e40af;margin-bottom:4px}
-.kf-label{font-size:11px;color:#64748b;line-height:1.3}
-.kf.green .kf-val{color:#16a34a}
-.kf.red .kf-val{color:#dc2626}
+/* HERO */
+.hero{border-radius:12px;padding:28px 32px;margin-bottom:22px;color:#fff}
+.hero-blue{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%)}
+.hero-green{background:linear-gradient(135deg,#065f46 0%,#059669 100%)}
+.hero-purple{background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 100%)}
+.hero-teal{background:linear-gradient(135deg,#134e4a 0%,#0d9488 100%)}
+.hero-rose{background:linear-gradient(135deg,#881337 0%,#e11d48 100%)}
+.hero h1{font-size:21px;font-weight:800;margin-bottom:5px}
+.hero p{font-size:12.5px;opacity:.88;line-height:1.5}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hp{background:rgba(255,255,255,.15);padding:3px 11px;border-radius:20px;font-size:11px;font-weight:600}
+/* CARDS */
+.card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:14px;overflow:hidden}
+.ch{padding:13px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px;background:#fafafa}
+.ci{font-size:19px;flex-shrink:0}
+.ct{font-weight:700;font-size:13.5px;color:#1e3a5f}
+.cs{font-size:11px;color:#94a3b8;margin-top:1px}
+.cb{padding:14px 16px}
+/* LIST */
+.ll{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ll li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:#374151}
+.ll li .ic{flex-shrink:0;margin-top:1px}
 /* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:4px}
-.tbl th{background:#e0f2fe;padding:7px 10px;text-align:left;font-weight:600;color:#0369a1;border:1px solid #bae6fd}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{background:#dbeafe;padding:7px 10px;text-align:left;font-weight:700;color:#1e40af;border:1px solid #bfdbfe}
 .tbl td{padding:7px 10px;border:1px solid #e2e8f0;color:#374151;vertical-align:top}
 .tbl tr:nth-child(even) td{background:#f8fafc}
-.tbl .hi{color:#16a34a;font-weight:700}
-.tbl .lo{color:#dc2626}
-/* COMPARE */
-.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.compare-box{border-radius:8px;padding:14px}
-.compare-box.green{background:#f0fdf4;border:1px solid #86efac}
-.compare-box.red{background:#fef2f2;border:1px solid #fca5a5}
-.compare-box .cb-title{font-weight:700;font-size:13px;margin-bottom:8px}
-.compare-box .cb-title span{font-size:16px;margin-right:6px}
-.compare-box ul{list-style:none;display:flex;flex-direction:column;gap:5px}
-.compare-box ul li{font-size:12px;color:#374151}
-/* STAGE FLOW */
-.stage-flow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.sf-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:12px}
-.sf-num{width:22px;height:22px;border-radius:50%;background:#1e3a5f;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sf-cat{font-size:9px;color:#94a3b8;margin-top:1px}
+.tbl .g{color:#16a34a;font-weight:700}
+.tbl .r{color:#dc2626;font-weight:600}
 /* CALLOUT */
-.callout{border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.5}
-.callout.blue{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af}
-.callout.green{background:#f0fdf4;border-left:4px solid #16a34a;color:#166534}
-.callout.orange{background:#fff7ed;border-left:4px solid #f97316;color:#9a3412}
-.callout.red{background:#fef2f2;border-left:4px solid #dc2626;color:#991b1b}
-.callout strong{display:block;margin-bottom:4px}
-/* SCRIPT BOX */
-.script-box{background:#f8fafc;border-radius:8px;padding:12px 14px;border-left:3px solid #3b82f6;font-style:italic;font-size:12.5px;color:#374151;line-height:1.5;margin-bottom:12px}
-/* OBJECTION CARD */
-.obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.obj-card{background:#fff;border-radius:8px;border:1px solid #e2e8f0;padding:14px}
-.obj-card .obj-title{font-weight:700;font-size:13px;margin-bottom:8px;color:#1e3a5f}
-.obj-card ul{list-style:none;display:flex;flex-direction:column;gap:5px}
-.obj-card ul li{font-size:12px;color:#374151;line-height:1.4}
-/* QUIZ */
-.quiz-progress{background:#e2e8f0;border-radius:99px;height:6px;margin-bottom:20px;overflow:hidden}
-.quiz-progress-bar{height:100%;background:linear-gradient(90deg,#3b82f6,#16a34a);border-radius:99px;transition:width .4s}
-.quiz-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:24px;margin-bottom:16px}
-.quiz-qnum{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-.quiz-q{font-size:15px;font-weight:600;color:#1e3a5f;line-height:1.4;margin-bottom:20px}
-.quiz-options{display:flex;flex-direction:column;gap:10px}
-.quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:#374151}
-.quiz-opt:hover:not(:disabled){background:#eff6ff;border-color:#93c5fd}
-.quiz-opt.correct{background:#f0fdf4;border-color:#16a34a;color:#166534;font-weight:600}
-.quiz-opt.wrong{background:#fef2f2;border-color:#dc2626;color:#991b1b}
-.quiz-opt.reveal{background:#f0fdf4;border-color:#16a34a;color:#166534}
-.quiz-feedback{padding:12px 14px;border-radius:8px;font-size:13px;margin-top:12px;line-height:1.5;display:none}
-.quiz-feedback.show{display:block}
-.quiz-feedback.pass{background:#f0fdf4;color:#166534;border:1px solid #86efac}
-.quiz-feedback.fail{background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
-.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-.btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
-.btn-primary{background:#1e3a5f;color:#fff}
-.btn-primary:hover{background:#1e40af}
-.btn-outline{background:#fff;color:#1e3a5f;border:2px solid #e2e8f0}
-.btn-outline:hover{border-color:#93c5fd}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-/* QUIZ RESULTS */
-.results-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:32px;text-align:center;display:none}
-.results-card.show{display:block}
-.results-score{font-size:52px;font-weight:800;margin-bottom:4px}
-.results-score.pass{color:#16a34a}
-.results-score.fail{color:#dc2626}
-.results-msg{font-size:15px;color:#64748b;margin-bottom:20px}
-.results-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
-.rb-box{background:#f8fafc;border-radius:8px;padding:14px;text-align:center}
-.rb-val{font-size:24px;font-weight:700;margin-bottom:4px}
-.rb-label{font-size:11px;color:#64748b}
-/* SECTION NAV */
-.section-nav{display:flex;gap:10px;margin-top:20px}
+.co{border-radius:8px;padding:11px 14px;margin-bottom:12px;font-size:12.5px;line-height:1.5}
+.co strong{display:block;margin-bottom:3px;font-size:12px}
+.co-blue{background:#eff6ff;border-left:4px solid #3b82f6;color:#1e40af}
+.co-green{background:#f0fdf4;border-left:4px solid #16a34a;color:#166534}
+.co-orange{background:#fff7ed;border-left:4px solid #f97316;color:#9a3412}
+.co-red{background:#fef2f2;border-left:4px solid #dc2626;color:#991b1b}
+.co-purple{background:#f5f3ff;border-left:4px solid #7c3aed;color:#5b21b6}
+/* SCRIPT */
+.script{background:#f8fafc;border-radius:8px;padding:11px 14px;border-left:3px solid #3b82f6;font-style:italic;font-size:12.5px;color:#374151;line-height:1.5;margin-bottom:10px}
+/* KF */
+.kfg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.kf{background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:13px;text-align:center}
+.kfv{font-size:21px;font-weight:800;color:#1e40af;margin-bottom:3px}
+.kfl{font-size:10.5px;color:#64748b;line-height:1.3}
+.kf.g .kfv{color:#16a34a}
+.kf.r .kfv{color:#dc2626}
+/* GRID 2 */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+/* BOX */
+.box-g{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:13px}
+.box-r{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:13px}
+.box-b{background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:13px}
+.box-title{font-weight:700;font-size:12.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.box-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.box-list li{font-size:12px;color:#374151}
 /* BADGE */
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
-.badge-blue{background:#dbeafe;color:#1e40af}
-.badge-green{background:#dcfce7;color:#166534}
-.badge-purple{background:#f3e8ff;color:#7e22ce}
-.badge-orange{background:#fff7ed;color:#c2410c}
-/* RESPONSIVE */
-@media(max-width:768px){
-  .sidebar{display:none}
-  .obj-grid{grid-template-columns:1fr}
-  .compare-row{grid-template-columns:1fr}
-  .key-facts{grid-template-columns:1fr 1fr}
-}
-/* MARK DONE BTN */
-.mark-done-btn{background:#16a34a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;margin-top:4px}
-.mark-done-btn:disabled{background:#86efac;cursor:not-allowed}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.bd-b{background:#dbeafe;color:#1e40af}
+.bd-g{background:#dcfce7;color:#166534}
+.bd-r{background:#fee2e2;color:#991b1b}
+.bd-o{background:#fff7ed;color:#c2410c}
+.bd-p{background:#f3e8ff;color:#7e22ce}
+/* QUIZ */
+.qprog{background:#e2e8f0;border-radius:99px;height:5px;margin-bottom:18px;overflow:hidden}
+.qprog-bar{height:100%;background:linear-gradient(90deg,#3b82f6,#16a34a);border-radius:99px;transition:width .4s}
+.qcard{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:22px;margin-bottom:14px}
+.qnum{font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.qq{font-size:14.5px;font-weight:700;color:#1e3a5f;line-height:1.4;margin-bottom:18px}
+.qopts{display:flex;flex-direction:column;gap:9px}
+.qopt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:8px;padding:11px 15px;font-size:13px;cursor:pointer;transition:all .12s;text-align:left;color:#374151;width:100%}
+.qopt:hover:not(:disabled){background:#eff6ff;border-color:#93c5fd}
+.qopt.correct{background:#f0fdf4;border-color:#16a34a;color:#166534;font-weight:600}
+.qopt.wrong{background:#fef2f2;border-color:#dc2626;color:#991b1b}
+.qopt.reveal{background:#f0fdf4;border-color:#16a34a;color:#166534}
+.qfb{padding:11px 14px;border-radius:8px;font-size:12.5px;margin-top:10px;line-height:1.5;display:none}
+.qfb.show{display:block}
+.qfb.pass{background:#f0fdf4;color:#166534;border:1px solid #86efac}
+.qfb.fail{background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+/* BUTTONS */
+.btn{padding:9px 19px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .12s}
+.btn-p{background:#1e3a5f;color:#fff}
+.btn-p:hover{background:#1e40af}
+.btn-o{background:#fff;color:#1e3a5f;border:2px solid #e2e8f0}
+.btn-o:hover{border-color:#93c5fd;background:#eff6ff}
+.btn-g{background:#16a34a;color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+/* RESULTS */
+.rcard{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:30px;text-align:center;display:none}
+.rcard.show{display:block}
+.rscore{font-size:52px;font-weight:800;margin-bottom:4px}
+.rscore.pass{color:#16a34a}
+.rscore.fail{color:#dc2626}
+.rmsg{font-size:14px;color:#64748b;margin-bottom:18px}
+.rbg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.rbb{background:#f8fafc;border-radius:8px;padding:13px;text-align:center}
+.rbbv{font-size:22px;font-weight:700;margin-bottom:3px}
+.rbbl{font-size:11px;color:#64748b}
+/* MARK DONE */
+.done-bar{display:flex;gap:10px;margin-top:16px;align-items:center}
+.btn-done{background:#16a34a;color:#fff;padding:9px 19px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
+.btn-done:disabled{background:#86efac;cursor:not-allowed}
+/* DISP CODE */
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:12px}
+.dc-card{border-radius:8px;padding:11px 13px;border:1px solid #e2e8f0;background:#fff}
+.dc-code{font-weight:800;font-size:15px;margin-bottom:3px}
+.dc-label{font-size:12px;color:#374151;margin-bottom:3px}
+.dc-sla{font-size:11px;color:#64748b}
+@media(max-width:768px){.sidebar{display:none}.g2,.g3{grid-template-columns:1fr}.kfg{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -150,440 +142,509 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="hdr">
   <div>
     <div class="hdr-logo">aspora <span>TRAINING</span></div>
-    <div class="hdr-sub">PBM Onboarding Programme — 4 Modules</div>
+    <div class="hdr-sub">PBM Onboarding Programme · 5 Modules · 50 Questions</div>
   </div>
   <div class="hdr-right">
-    <span class="score-badge" id="score-badge">Quiz: 0/0</span>
-    <button class="btn btn-outline" onclick="window.open('https://asporanribankingops.github.io/assist.html','_blank')" style="font-size:12px;padding:6px 14px">Open ASSIST ↗</button>
+    <span class="score-pill" id="score-pill">Avg: 0%</span>
+    <button class="btn btn-o" style="font-size:11.5px;padding:5px 13px" onclick="window.open('https://asporanribankingops.github.io/assist.html','_blank')">Open ASSIST ↗</button>
   </div>
 </div>
 
 <div class="layout">
-
-<!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sb-section">
-    <div class="sb-section-label">Modules</div>
-    <div class="sb-item active" onclick="goSection('intro')" id="nav-intro"><span class="sb-check" id="chk-intro">✓</span> Introduction</div>
-    <div class="sb-item" onclick="goSection('aspora')" id="nav-aspora"><span class="sb-check" id="chk-aspora"></span> 1 · Aspora Overview</div>
-    <div class="sb-item" onclick="goSection('nri')" id="nav-nri"><span class="sb-check" id="chk-nri"></span> 2 · NRI Products</div>
-    <div class="sb-item" onclick="goSection('process')" id="nav-process"><span class="sb-check" id="chk-process"></span> 3 · Onboarding Process</div>
-    <div class="sb-item" onclick="goSection('calls')" id="nav-calls"><span class="sb-check" id="chk-calls"></span> 4 · Call Handling</div>
+  <div class="sb-group">
+    <div class="sb-label">Getting Started</div>
+    <div class="sb-item active" onclick="go('intro')" id="nav-intro"><span class="sb-dot" id="dot-intro">✓</span>Welcome</div>
   </div>
-  <div class="sb-section">
-    <div class="sb-section-label">Knowledge Test</div>
-    <div class="sb-item" onclick="goSection('quiz-aspora')" id="nav-quiz-aspora"><span class="sb-check" id="chk-quiz-aspora"></span> Quiz: Aspora Basics</div>
-    <div class="sb-item" onclick="goSection('quiz-nri')" id="nav-quiz-nri"><span class="sb-check" id="chk-quiz-nri"></span> Quiz: NRI Products</div>
-    <div class="sb-item" onclick="goSection('quiz-process')" id="nav-quiz-process"><span class="sb-check" id="chk-quiz-process"></span> Quiz: Process & KYC</div>
-    <div class="sb-item" onclick="goSection('quiz-calls')" id="nav-quiz-calls"><span class="sb-check" id="chk-quiz-calls"></span> Quiz: Call Handling</div>
+  <div class="sb-group">
+    <div class="sb-label">Learning Modules</div>
+    <div class="sb-item" onclick="go('m1')" id="nav-m1"><span class="sb-dot" id="dot-m1"></span>1 · Aspora &amp; Platform</div>
+    <div class="sb-item" onclick="go('m2')" id="nav-m2"><span class="sb-dot" id="dot-m2"></span>2 · NRI Products</div>
+    <div class="sb-item" onclick="go('m3')" id="nav-m3"><span class="sb-dot" id="dot-m3"></span>3 · Onboarding Process</div>
+    <div class="sb-item" onclick="go('m4')" id="nav-m4"><span class="sb-dot" id="dot-m4"></span>4 · Call Handling</div>
+    <div class="sb-item" onclick="go('m5')" id="nav-m5"><span class="sb-dot" id="dot-m5"></span>5 · Compliance &amp; Ops</div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-label">Knowledge Tests</div>
+    <div class="sb-item" onclick="go('q1')" id="nav-q1"><span class="sb-dot" id="dot-q1"></span>Quiz 1 · Aspora Basics</div>
+    <div class="sb-item" onclick="go('q2')" id="nav-q2"><span class="sb-dot" id="dot-q2"></span>Quiz 2 · NRI Products</div>
+    <div class="sb-item" onclick="go('q3')" id="nav-q3"><span class="sb-dot" id="dot-q3"></span>Quiz 3 · Process &amp; KYC</div>
+    <div class="sb-item" onclick="go('q4')" id="nav-q4"><span class="sb-dot" id="dot-q4"></span>Quiz 4 · Call Handling</div>
+    <div class="sb-item" onclick="go('q5')" id="nav-q5"><span class="sb-dot" id="dot-q5"></span>Quiz 5 · Compliance</div>
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="main">
 
 <!-- INTRO -->
 <div class="section active" id="section-intro">
-  <div class="section-hero">
+  <div class="hero hero-blue">
     <h1>Welcome to Aspora PBM Training 👋</h1>
-    <p>This programme will prepare you to handle NRI customer calls with confidence. Work through each module in order, then test your knowledge with the quizzes.</p>
-    <div class="hero-meta">
-      <div class="hero-pill">📚 4 Learning Modules</div>
-      <div class="hero-pill">🧪 4 Knowledge Tests</div>
-      <div class="hero-pill">⏱ ~60 minutes total</div>
+    <p>This programme prepares you to handle NRI customer calls with confidence. Read every module carefully — then prove your knowledge with the quiz.</p>
+    <div class="hero-pills">
+      <div class="hp">5 Modules</div><div class="hp">50 Questions</div><div class="hp">80% to pass each quiz</div><div class="hp">~75 min total</div>
     </div>
   </div>
-  <div class="key-facts">
-    <div class="kf green"><div class="kf-val">7%</div><div class="kf-label">Max savings rate — our primary USP</div></div>
-    <div class="kf"><div class="kf-val">31</div><div class="kf-label">Onboarding stages you need to know</div></div>
-    <div class="kf green"><div class="kf-val">~15min</div><div class="kf-label">Full digital onboarding time</div></div>
-    <div class="kf"><div class="kf-val">UK·US·UAE</div><div class="kf-label">Countries we currently serve</div></div>
+  <div class="kfg">
+    <div class="kf g"><div class="kfv">7%</div><div class="kfl">Max NRE savings rate</div></div>
+    <div class="kf"><div class="kfv">SSFB</div><div class="kfl">Regulated banking partner</div></div>
+    <div class="kf g"><div class="kfv">~15 min</div><div class="kfl">Full digital onboarding</div></div>
+    <div class="kf"><div class="kfv">UK·US·UAE·EU</div><div class="kfl">Countries we serve</div></div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-icon">🎯</span><div><div class="card-title">Your primary metric: CSAT</div><div class="card-sub">Everything you do links back to this</div></div></div>
-    <div class="card-body">
-      <p>Customer Satisfaction (CSAT) is your <strong>#1 performance metric</strong> — not conversion rate, not call volume. CSAT measures whether the customer felt heard and helped.</p>
-      <ul class="learn-list">
-        <li><span class="bullet">⭐</span> Send the CSAT survey on <strong>every single call</strong> — even if the issue wasn't resolved</li>
-        <li><span class="bullet">💬</span> Good CSAT = empathy + clarity. A customer who got bad news but felt heard will still give 5 stars</li>
-        <li><span class="bullet">📢</span> Closing script: <em>"Quick 1-question survey, 10 seconds — sending on WhatsApp now"</em></li>
+    <div class="ch"><span class="ci">🎯</span><div><div class="ct">Your #1 metric: CSAT</div><div class="cs">Everything links back to this</div></div></div>
+    <div class="cb">
+      <div class="co co-blue"><strong>What CSAT measures</strong>Empathy and clarity of your interaction — NOT just whether the problem was solved. A customer who got bad news but felt heard will still give 5 stars.</div>
+      <ul class="ll">
+        <li><span class="ic">⭐</span>Send CSAT survey on <strong>every single call</strong> — even if unresolved</li>
+        <li><span class="ic">📱</span>Send via WhatsApp while still on the call — response rates drop after hang up</li>
+        <li><span class="ic">📢</span>Script: <em>"Quick 1-question survey, 10 seconds — sending on WhatsApp now"</em></li>
       </ul>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-icon">📋</span><div><div class="card-title">How to use this training</div></div></div>
-    <div class="card-body">
-      <ul class="learn-list">
-        <li><span class="bullet">1️⃣</span> Read each module carefully — don't skim</li>
-        <li><span class="bullet">2️⃣</span> Click <strong>"Mark Complete"</strong> at the end of each module</li>
-        <li><span class="bullet">3️⃣</span> Complete the quiz for that module — aim for 80%+</li>
-        <li><span class="bullet">4️⃣</span> Use the <strong>ASSIST tool</strong> during real calls — it has all this info live</li>
-      </ul>
-    </div>
-  </div>
-  <div class="section-nav">
-    <button class="btn btn-primary" onclick="goSection('aspora')">Start Module 1 →</button>
-  </div>
-</div>
-
-<!-- MODULE 1: ASPORA OVERVIEW -->
-<div class="section" id="section-aspora">
-  <div class="section-hero">
-    <h1>Module 1 — Aspora Overview</h1>
-    <p>Who we are, what makes us different, and the key numbers every PBM must know by heart.</p>
-    <div class="hero-meta">
-      <div class="hero-pill">⏱ ~15 minutes</div>
-      <div class="hero-pill">🎯 Know our USPs cold</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🏦</span><div><div class="card-title">What is Aspora?</div></div></div>
-    <div class="card-body">
-      <ul class="learn-list">
-        <li><span class="bullet">🏦</span> <strong>Series B RBI-regulated digital bank</strong> built exclusively for Non-Resident Indians</li>
-        <li><span class="bullet">🎯</span> Unlike HDFC or SBI, NRI banking is not a side product — it is <strong>our only product</strong></li>
-        <li><span class="bullet">🌍</span> Currently serving: <strong>UK · US · UAE · EU</strong></li>
-        <li><span class="bullet">✅</span> 100% digital — no branches, no couriers, no India trip needed</li>
-        <li><span class="bullet">🛡</span> RBI regulated + DICGC insured — <strong>same protection as HDFC or SBI</strong></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">📈</span><div><div class="card-title">Interest Rates — Know These Numbers</div><div class="card-sub">The most important thing a customer asks about</div></div></div>
-    <div class="card-body">
-      <table class="tbl">
-        <tr><th>Balance</th><th>Aspora Rate</th><th>HDFC / ICICI / SBI</th><th>Difference</th></tr>
-        <tr><td>₹0 – 1 Lakh</td><td class="hi">2.50%</td><td>3.00%</td><td>—</td></tr>
-        <tr><td>₹1L – 5L</td><td class="hi">3.25%</td><td>3.00%</td><td class="hi">+0.25%</td></tr>
-        <tr><td>₹5L – 10L</td><td class="hi">3.50%</td><td>3.00%</td><td class="hi">+0.50%</td></tr>
-        <tr><td>₹10L – 25L</td><td class="hi">6.50%</td><td>3.00%</td><td class="hi">+3.50%</td></tr>
-        <tr><td>₹25L – 50L</td><td class="hi">7.00% ⭐</td><td>3.00%</td><td class="hi">+4.00%</td></tr>
-      </table>
-      <div class="callout green" style="margin-top:12px"><strong>💰 The headline number</strong>₹20 Lakh with Aspora = ₹1,30,000/yr · ₹20L with HDFC = ₹60,000/yr → <strong>Aspora earns ₹70,000 MORE per year</strong></div>
-      <ul class="learn-list" style="margin-top:8px">
-        <li><span class="bullet">📅</span> Interest calculated <strong>daily</strong>, credited every <strong>quarter</strong></li>
-        <li><span class="bullet">💚</span> NRE interest is <strong>completely tax-free</strong> in India — no TDS deducted</li>
-        <li><span class="bullet">📊</span> FD rate: Aspora <strong>7.25%</strong> vs HDFC 6.5% vs SBI 6.8%</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🎁</span><div><div class="card-title">Key Features & Benefits</div></div></div>
-    <div class="card-body">
-      <div class="compare-row">
-        <div class="compare-box green">
-          <div class="cb-title"><span>✅</span>What Aspora Offers</div>
-          <ul>
-            <li>💰 Up to 7% savings — tax-free</li>
-            <li>🎁 Free international transfers — Year 1</li>
-            <li>💳 Virtual debit card — instant</li>
-            <li>📱 UPI via international number</li>
-            <li>✅ Zero fees, zero minimum balance</li>
-            <li>⚡ Open in ~15 minutes from anywhere</li>
+    <div class="ch"><span class="ci">🚫</span><div><div class="ct">Critical: What you must NEVER do</div></div></div>
+    <div class="cb">
+      <div class="g2">
+        <div class="box-r">
+          <div class="box-title">❌ Never</div>
+          <ul class="box-list">
+            <li>Provide tax advice or DTAA guidance</li>
+            <li>Share internal system/vendor details</li>
+            <li>Handle passwords, PINs, or OTPs</li>
+            <li>Override AML/sanctions rejections</li>
+            <li>Share one customer's info with another</li>
+            <li>Tell customers they were flagged for sanctions</li>
+            <li>Promise specific compliance timelines</li>
+            <li>Process changes without identity verification</li>
           </ul>
         </div>
-        <div class="compare-box red">
-          <div class="cb-title"><span>❌</span>What Big Banks Charge</div>
-          <ul>
-            <li>💸 HDFC requires ₹10K min balance</li>
-            <li>⚠️ ₹5,000/yr penalty if below minimum</li>
-            <li>🏦 Branch visit often needed for NRIs</li>
-            <li>📮 Physical document courier required</li>
-            <li>😴 NRI banking is a side product</li>
-            <li>📉 Only 3% savings rate</li>
+        <div class="box-g">
+          <div class="box-title">✅ Always</div>
+          <ul class="box-list">
+            <li>Verify identity before sharing account info</li>
+            <li>Use the customer's name in responses</li>
+            <li>Set clear timelines ("within 24 hours" not "soon")</li>
+            <li>Log every interaction with resolution status</li>
+            <li>Recommend both NRE and NRO where applicable</li>
+            <li>Sound calm, confident, consultative</li>
+            <li>Send CSAT at end of every call</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
+  <div class="done-bar"><button class="btn btn-p" onclick="go('m1')">Start Module 1 →</button></div>
+</div>
+
+<!-- MODULE 1: ASPORA & PLATFORM -->
+<div class="section" id="section-m1">
+  <div class="hero hero-blue">
+    <h1>Module 1 — Aspora &amp; the Platform</h1>
+    <p>What Aspora is, who we partner with, our products, interest rates, and key numbers you must know by heart.</p>
+    <div class="hero-pills"><div class="hp">⏱ ~15 min</div><div class="hp">Know our USPs cold</div></div>
+  </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">🛡</span><div><div class="card-title">Safety & Regulation — Handle Trust Objections</div></div></div>
-    <div class="card-body">
-      <div class="callout blue"><strong>Why do customers doubt 7%?</strong> They think "if it sounds too good, it must be risky." Your job is to explain WHY we can offer it.</div>
-      <ul class="learn-list">
-        <li><span class="bullet">🏛</span> <strong>RBI regulated</strong> — same regulatory body as HDFC, ICICI, SBI</li>
-        <li><span class="bullet">🛡</span> <strong>DICGC insured</strong> — government body under RBI, covers up to ₹5 lakh per depositor per bank</li>
-        <li><span class="bullet">💡</span> <strong>Why 7%?</strong> No branches + no ATMs = massive cost savings passed directly to the customer</li>
-        <li><span class="bullet">🔒</span> 256-bit bank-grade encryption on all transactions</li>
-        <li><span class="bullet">📋</span> KYC by licensed notary — same process as international banking agreements</li>
-        <li><span class="bullet">🏦</span> IDFC First Bank also gives 7% on the same model — well-known, no one doubts them</li>
+    <div class="ch"><span class="ci">🚀</span><div><div class="ct">What is Aspora?</div></div></div>
+    <div class="cb">
+      <div class="co co-blue"><strong>Core definition — memorise this</strong>Aspora is a <strong>fintech platform</strong> (Series B startup) helping NRIs open and manage NRE/NRO accounts digitally. <strong>Aspora is NOT a bank.</strong></div>
+      <ul class="ll">
+        <li><span class="ic">🏦</span><strong>Banking partner: Shivalik Small Finance Bank (SSFB)</strong> — holds the RBI licence. SSFB manages actual bank accounts, deposits, compliance, cards, and regulatory reporting</li>
+        <li><span class="ic">📱</span>Aspora handles: app experience, digital onboarding, customer support, and value-added services</li>
+        <li><span class="ic">🎯</span>NRI banking is our <strong>only focus</strong> — not a side product like at HDFC or SBI</li>
+        <li><span class="ic">🌍</span>Currently live: <strong>UK · US · UAE · EU</strong></li>
+        <li><span class="ic">⚡</span>100% digital — no branch visit, no courier, no India trip needed</li>
       </ul>
-      <div class="callout green" style="margin-top:12px"><strong>📢 Script when customer says "7% seems suspicious"</strong><em>"Completely valid concern. We can offer 7% because we have no branches and no ATMs — those savings go directly to you as interest. IDFC First Bank does the same. And we're RBI regulated, DICGC insured — same government protection as HDFC."</em></div>
     </div>
   </div>
 
-  <div style="margin-top:8px;display:flex;gap:12px">
-    <button class="mark-done-btn" onclick="markDone('aspora')" id="done-aspora">✓ Mark Complete</button>
-    <button class="btn btn-primary" onclick="goSection('quiz-aspora')">Take Quiz →</button>
+  <div class="card">
+    <div class="ch"><span class="ci">🤝</span><div><div class="ct">Partner Ecosystem</div><div class="cs">Know these — do NOT share with customers</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>Partner</th><th>What They Do</th></tr>
+        <tr><td><strong>Shivalik Small Finance Bank (SSFB)</strong></td><td>Regulated banking partner — holds RBI licence, manages accounts &amp; compliance</td></tr>
+        <tr><td>Persona SDK</td><td>Document verification &amp; liveness checks (KYC)</td></tr>
+        <tr><td>NotaryLive</td><td>Remote Online Notarization (RON)</td></tr>
+        <tr><td>Zoho Sign</td><td>Digital signatures on account documents</td></tr>
+        <tr><td>NSDL</td><td>PAN validation</td></tr>
+        <tr><td>UAEPass</td><td>UAE government digital identity verification</td></tr>
+        <tr><td>PSE (UK)</td><td>Welcome pack printing &amp; dispatch</td></tr>
+      </table>
+      <div class="co co-red" style="margin-top:10px"><strong>🚫 Never mention partner names to customers</strong>If asked about the notary or KYC provider, just say "our licensed verification partner."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">📈</span><div><div class="ct">Interest Rates — Know Every Number</div><div class="cs">Most important topic customers ask about</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>INR Balance</th><th>GBP Equivalent</th><th>Aspora Rate</th><th>vs HDFC/ICICI/SBI</th></tr>
+        <tr><td>₹0 – ₹1 Lakh</td><td>£0 – £870</td><td>2.50%</td><td class="r">3.00% (HDFC higher here)</td></tr>
+        <tr><td>₹1L – ₹5L</td><td>£870 – £4,348</td><td class="g">3.25%</td><td>3.00%</td></tr>
+        <tr><td>₹5L – ₹10L</td><td>£4,348 – £8,696</td><td class="g">3.50%</td><td>3.00%</td></tr>
+        <tr><td>₹10L – ₹25L</td><td>£8,696 – £21,739</td><td class="g">6.50% ⭐</td><td>3.00%</td></tr>
+        <tr><td>₹25L – ₹50L</td><td>£21,739 – £43,478</td><td class="g">7.00% ⭐⭐</td><td>3.00%</td></tr>
+      </table>
+      <div class="co co-green" style="margin-top:10px"><strong>💰 The headline comparison</strong>₹20 Lakh at Aspora = ~₹1,30,000/yr · ₹20L at HDFC = ₹60,000/yr → <strong>Aspora earns ₹70,000 MORE per year</strong></div>
+      <ul class="ll" style="margin-top:8px">
+        <li><span class="ic">📅</span>Calculated <strong>daily</strong>, credited every <strong>quarter</strong></li>
+        <li><span class="ic">💚</span>NRE interest = <strong>100% tax-free in India</strong> — zero TDS</li>
+        <li><span class="ic">📊</span>FD rate: Aspora <strong>7.25% (1yr)</strong> vs HDFC 6.5% vs SBI 6.8%</li>
+        <li><span class="ic">⚠️</span>Below ₹1L: HDFC offers more (3% vs our 2.5%) — be honest if asked</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">🎁</span><div><div class="ct">Key Features &amp; What We Offer</div></div></div>
+    <div class="cb">
+      <div class="g2">
+        <div class="box-g">
+          <div class="box-title"><span>✅</span>What Aspora Offers</div>
+          <ul class="box-list">
+            <li>Up to 7% NRE savings (tax-free)</li>
+            <li>FD at 7.25% (1yr)</li>
+            <li>Zero fees · Zero minimum balance</li>
+            <li>Free international transfers — Year 1</li>
+            <li>Virtual debit card (RuPay, instant)</li>
+            <li>UPI via international number</li>
+            <li>Physical card (optional, fee applies)</li>
+            <li>Open in ~15 minutes, fully digital</li>
+          </ul>
+        </div>
+        <div class="box-r">
+          <div class="box-title"><span>⚠️</span>What HDFC/SBI Charge</div>
+          <ul class="box-list">
+            <li>Only 3% savings rate for NRIs</li>
+            <li>₹10K+ minimum balance (HDFC)</li>
+            <li>₹5,000/yr penalty if below minimum</li>
+            <li>Often needs branch visit or courier</li>
+            <li>NRI banking is a side product</li>
+            <li>Physical docs, slow process</li>
+          </ul>
+        </div>
+      </div>
+      <div class="co co-orange" style="margin-top:8px"><strong>⚠️ RuPay card is India-domestic only</strong>International card support is planned for Q3 2026. Do not promise international card use to customers right now.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">💳</span><div><div class="ct">Transaction Limits to Know</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>Transaction Type</th><th>Per Transaction</th><th>Daily Limit</th></tr>
+        <tr><td>ATM Withdrawal</td><td>₹20,000</td><td>₹50,000</td></tr>
+        <tr><td>POS (merchant)</td><td>₹2,00,000</td><td>—</td></tr>
+        <tr><td>Online shopping</td><td>₹1,00,000</td><td>—</td></tr>
+        <tr><td>Tap-to-Pay</td><td>₹5,000</td><td>—</td></tr>
+        <tr><td>Third-party transfers (total)</td><td>—</td><td>₹30,00,000</td></tr>
+        <tr><td>Total daily transactions</td><td>—</td><td>30 transactions max</td></tr>
+        <tr><td>AML review threshold</td><td colspan="2">₹25,00,000</td></tr>
+        <tr><td>Minimum remittance</td><td colspan="2">₹1,000</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="done-bar">
+    <button class="btn-done" onclick="markDone('m1')" id="done-m1">✓ Mark Complete</button>
+    <button class="btn btn-p" onclick="go('q1')">Take Quiz 1 →</button>
   </div>
 </div>
 
 <!-- MODULE 2: NRI PRODUCTS -->
-<div class="section" id="section-nri">
-  <div class="section-hero">
+<div class="section" id="section-m2">
+  <div class="hero hero-green">
     <h1>Module 2 — NRI Products</h1>
-    <p>Deep dive into NRE, NRO, and FCNR accounts. You must be able to explain the difference in under 30 seconds.</p>
-    <div class="hero-meta">
-      <div class="hero-pill">⏱ ~15 minutes</div>
-      <div class="hero-pill">🎯 NRE vs NRO in your sleep</div>
-    </div>
+    <p>NRE vs NRO vs FCNR — explained clearly. FATCA, repatriation, and tax rules you must know cold.</p>
+    <div class="hero-pills"><div class="hp">⏱ ~15 min</div><div class="hp">NRE vs NRO in your sleep</div></div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">🔑</span><div><div class="card-title">The 3 Account Types at a Glance</div></div></div>
-    <div class="card-body">
+    <div class="ch"><span class="ci">🔑</span><div><div class="ct">Account Types — Full Comparison</div></div></div>
+    <div class="cb">
       <table class="tbl">
-        <tr><th>Feature</th><th>NRE</th><th>NRO</th><th>FCNR</th></tr>
-        <tr><td><strong>Source of money</strong></td><td class="hi">Foreign earnings</td><td>India income (rent, pension)</td><td>Foreign currency</td></tr>
-        <tr><td><strong>Currency</strong></td><td>Indian Rupees (INR)</td><td>Indian Rupees (INR)</td><td class="hi">GBP / USD / EUR</td></tr>
-        <tr><td><strong>Tax in India</strong></td><td class="hi">Tax-free ✅</td><td class="lo">Taxable ⚠️</td><td class="hi">Tax-free ✅</td></tr>
-        <tr><td><strong>Repatriation</strong></td><td class="hi">100% free, unlimited</td><td class="lo">Capped, needs RBI approval</td><td class="hi">100% free</td></tr>
-        <tr><td><strong>Who it's for</strong></td><td class="hi">Most NRIs — default choice</td><td>Those with India-based income</td><td>Forex risk averse</td></tr>
-        <tr><td><strong>Aspora offers</strong></td><td class="hi">✅ Yes</td><td>—</td><td>—</td></tr>
+        <tr><th>Feature</th><th>NRE</th><th>NRO</th></tr>
+        <tr><td><strong>What it's for</strong></td><td class="g">Foreign earnings — money earned abroad</td><td>India-based income (rent, pension, dividends)</td></tr>
+        <tr><td><strong>Currency</strong></td><td>Indian Rupees (INR)</td><td>Indian Rupees (INR)</td></tr>
+        <tr><td><strong>Tax on interest</strong></td><td class="g">Tax-free in India ✅</td><td class="r">30% TDS + surcharge + cess ⚠️</td></tr>
+        <tr><td><strong>Repatriation</strong></td><td class="g">Unlimited — 100% free, any time</td><td class="r">Max USD 1M per financial year (April–March)</td></tr>
+        <tr><td><strong>DTAA benefit</strong></td><td>N/A (already tax-free)</td><td>Applicable — India-UK rate 15% (vs 30% default)</td></tr>
+        <tr><td><strong>Form needed for transfer</strong></td><td>N/A</td><td>Form 15CA + 15CB (if transfers &gt;₹5L in FY)</td></tr>
+        <tr><td><strong>Aspora offers?</strong></td><td class="g">✅ Yes</td><td class="g">✅ Yes</td></tr>
       </table>
-      <div class="callout blue" style="margin-top:12px"><strong>📢 30-second explanation for customers</strong><em>"NRE is for the money you earn abroad — it stays in Indian rupees, earns up to 7% tax-free, and you can send it back whenever you want with no restrictions. NRO is for Indian income like rent or pension. Most NRIs working abroad need NRE. That's what Aspora offers."</em></div>
+      <div class="co co-blue" style="margin-top:10px"><strong>📢 30-second explanation for customers</strong><em>"NRE is for money you earn abroad — tax-free in India, fully repatriable, earns 7%. NRO is for income from India like rent or pension — taxable at 30% TDS, capped repatriation. Most NRIs working abroad primarily need NRE."</em></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">💰</span><div><div class="card-title">NRE Account — Deep Dive</div><div class="card-sub">This is what Aspora offers</div></div></div>
-    <div class="card-body">
-      <ul class="learn-list">
-        <li><span class="bullet">🌍</span> Holds money earned abroad — <strong>converted to INR</strong> when deposited</li>
-        <li><span class="bullet">💚</span> Interest is <strong>100% tax-free in India</strong> — zero TDS deducted at source</li>
-        <li><span class="bullet">✅</span> <strong>Fully repatriable</strong> — send money back abroad anytime, any amount, no RBI approval</li>
-        <li><span class="bullet">📈</span> Earns up to <strong>7% savings rate</strong> with Aspora (vs 3% at HDFC/ICICI)</li>
-        <li><span class="bullet">🎁</span> Year 1: <strong>free international transfers</strong></li>
-        <li><span class="bullet">💳</span> Virtual debit card + UPI access via international number</li>
+    <div class="ch"><span class="ci">💸</span><div><div class="ct">NRO Repatriation — The Process</div><div class="cs">Customers often ask — know the steps</div></div></div>
+    <div class="cb">
+      <div class="co co-orange"><strong>⚠️ Annual limit: USD 1 million per financial year (April–March)</strong>Tax clearance is mandatory before transfer.</div>
+      <ul class="ll">
+        <li><span class="ic">1️⃣</span>Check remaining FY limit</li>
+        <li><span class="ic">2️⃣</span>Gather: Passport, Visa, PAN, NRO statement, source-of-funds proof</li>
+        <li><span class="ic">3️⃣</span>If total FY transfers exceed ₹5 Lakh: obtain <strong>Form 15CB</strong> from a Chartered Accountant</li>
+        <li><span class="ic">4️⃣</span>File <strong>Form 15CA</strong> on incometax.gov.in</li>
+        <li><span class="ic">5️⃣</span>Submit 15CA acknowledgment + 15CB + proofs to bank</li>
+        <li><span class="ic">6️⃣</span>Bank debits NRO (principal + TDS + ₹250–1,000 charges + GST)</li>
+        <li><span class="ic">7️⃣</span>NRE credited within <strong>1–3 working days</strong> (same day if intra-bank)</li>
       </ul>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">🏠</span><div><div class="card-title">NRO Account — When a Customer Asks</div></div></div>
-    <div class="card-body">
-      <div class="callout orange"><strong>⚠️ Aspora does not offer NRO accounts</strong> — if a customer specifically needs NRO, acknowledge it and focus on who Aspora is best for.</div>
-      <ul class="learn-list">
-        <li><span class="bullet">🏠</span> Used for <strong>India-based income</strong> — rental income, pension, dividends, interest</li>
-        <li><span class="bullet">⚠️</span> Interest is <strong>taxable in India</strong> — TDS deducted</li>
-        <li><span class="bullet">🔒</span> Repatriation <strong>capped at USD 1 million/yr</strong> and requires documentation</li>
-        <li><span class="bullet">💬</span> Many NRIs have both NRE + NRO at different banks — that's fine</li>
+    <div class="ch"><span class="ci">📋</span><div><div class="ct">FATCA / CRS — What Agents Must Know</div><div class="cs">Customers panic here — your job is to reassure</div></div></div>
+    <div class="cb">
+      <div class="co co-red"><strong>🚨 Most common customer fear</strong>"FATCA means I'll be taxed more or reported to the government."</div>
+      <ul class="ll">
+        <li><span class="ic">📋</span>FATCA (US law) + CRS (global standard) = identifying customer tax jurisdictions. <strong>Reporting only — no new tax</strong></li>
+        <li><span class="ic">✅</span>NRE interest stays <strong>100% tax-free in India</strong> regardless of FATCA</li>
+        <li><span class="ic">🇬🇧</span>UK TIN = <strong>National Insurance Number</strong></li>
+        <li><span class="ic">🇺🇸</span>US TIN = <strong>Social Security Number (SSN) or ITIN</strong></li>
+        <li><span class="ic">🇦🇪</span>UAE = <strong>No TIN required</strong> (UAE has no income tax)</li>
+        <li><span class="ic">⚠️</span>Customers must update FATCA declaration <strong>within 30 days</strong> of any status change</li>
+        <li><span class="ic">🚫</span>Agents must <strong>NOT</strong> determine whether someone is a "US person" or suggest how to answer</li>
       </ul>
+      <div class="script" style="margin-top:10px">📢 "This is a global compliance requirement — every bank in India, the UK, and the US does this. It just means we report to regulators that the account exists. It creates no new tax. Your NRE interest stays completely tax-free."</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">🌐</span><div><div class="card-title">FATCA / CRS — Tax Residency Declaration</div><div class="card-sub">Customers panic at this step — you need to calm them</div></div></div>
-    <div class="card-body">
-      <div class="callout red"><strong>🚨 Common fear:</strong> "FATCA means I'll be taxed more or reported to the government."</div>
-      <ul class="learn-list">
-        <li><span class="bullet">📋</span> FATCA/CRS is a <strong>global reporting standard</strong> — all Indian banks do this, it's not specific to Aspora</li>
-        <li><span class="bullet">✅</span> Does <strong>NOT</strong> create any new tax liability — purely a reporting requirement</li>
-        <li><span class="bullet">💚</span> NRE interest stays <strong>completely tax-free in India</strong> regardless of FATCA</li>
-        <li><span class="bullet">🇬🇧</span> UK customers: TIN = National Insurance Number</li>
-        <li><span class="bullet">🇺🇸</span> US customers: TIN = Social Security Number</li>
-        <li><span class="bullet">🇦🇪</span> UAE customers: <strong>no TIN required</strong> — UAE has no income tax</li>
-      </ul>
-      <div class="script-box" style="margin-top:12px">📢 "This is a global compliance requirement — every bank in India, the UK, the US does this. It just means we report to regulators that the account exists. It doesn't change your tax status or create any new tax. Your NRE interest stays tax-free."</div>
+    <div class="ch"><span class="ci">📊</span><div><div class="ct">Tax Rules — Factual Only, No Tax Advice</div></div></div>
+    <div class="cb">
+      <div class="co co-red"><strong>🚫 Critical rule</strong>Agents must NOT provide tax advice, DTAA guidance, or ITR recommendations. Direct customers to a qualified tax advisor.</div>
+      <table class="tbl">
+        <tr><th>Topic</th><th>Fact You Can Share</th></tr>
+        <tr><td>NRE interest</td><td class="g">Tax-free in India — savings and FD both</td></tr>
+        <tr><td>NRO interest</td><td class="r">30% TDS + surcharge + cess (auto-deducted)</td></tr>
+        <tr><td>DTAA (India–UK)</td><td>Reduces TDS from 30% → 15% on NRO interest</td></tr>
+        <tr><td>How to claim DTAA</td><td>Tax Residency Certificate (TRC) + Form 10F required</td></tr>
+        <tr><td>Lower TDS upfront</td><td>Form 13 application — takes 15–30 days</td></tr>
+        <tr><td>TDS refund</td><td>Claimable when filing Indian ITR</td></tr>
+      </table>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">💸</span><div><div class="card-title">How Remittance Works</div></div></div>
-    <div class="card-body">
-      <ul class="learn-list">
-        <li><span class="bullet">1️⃣</span> Customer sends SWIFT/wire from foreign bank → Aspora NRE account</li>
-        <li><span class="bullet">2️⃣</span> Money converts to INR at mid-market rate</li>
-        <li><span class="bullet">3️⃣</span> Credited to NRE account — starts earning interest immediately</li>
-        <li><span class="bullet">🎁</span> Year 1: <strong>international transfers are free</strong> on Aspora</li>
-        <li><span class="bullet">✅</span> Repatriation: send back from NRE account — <strong>100% free, unlimited</strong></li>
-      </ul>
-    </div>
-  </div>
-
-  <div style="margin-top:8px;display:flex;gap:12px">
-    <button class="mark-done-btn" onclick="markDone('nri')" id="done-nri">✓ Mark Complete</button>
-    <button class="btn btn-primary" onclick="goSection('quiz-nri')">Take Quiz →</button>
+  <div class="done-bar">
+    <button class="btn-done" onclick="markDone('m2')" id="done-m2">✓ Mark Complete</button>
+    <button class="btn btn-p" onclick="go('q2')">Take Quiz 2 →</button>
   </div>
 </div>
 
 <!-- MODULE 3: ONBOARDING PROCESS -->
-<div class="section" id="section-process">
-  <div class="section-hero">
+<div class="section" id="section-m3">
+  <div class="hero hero-purple">
     <h1>Module 3 — Onboarding Process</h1>
-    <p>All 31 stages of the customer journey. Know where they are, why they dropped off, and exactly what to say.</p>
-    <div class="hero-meta">
-      <div class="hero-pill">⏱ ~15 minutes</div>
-      <div class="hero-pill">🗺 31 stages to know</div>
-    </div>
+    <p>All 30 drop-off stages, what documents are needed, how KYC works, and how to handle every blocker.</p>
+    <div class="hero-pills"><div class="hp">⏱ ~15 min</div><div class="hp">30 stages to know</div></div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">🗺</span><div><div class="card-title">The 7 Journey Phases</div></div></div>
-    <div class="card-body">
-      <div class="stage-flow">
-        <div class="sf-item"><div class="sf-num" style="background:#6b7280">0</div><div><div>Not Started</div><div class="sf-cat">1 stage</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#3b82f6">1-11</div><div><div>Basic Details</div><div class="sf-cat">11 stages</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#8b5cf6">12-16</div><div><div>Persona / KYC</div><div class="sf-cat">5 stages</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#f59e0b">17-19</div><div><div>SIM Binding</div><div class="sf-cat">3 stages</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#14b8a6">20-23</div><div><div>Digital Notary</div><div class="sf-cat">4 stages</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#ec4899">24-29</div><div><div>E-Signing</div><div class="sf-cat">6 stages</div></div></div>
-        <div class="sf-item"><div class="sf-num" style="background:#16a34a">30</div><div><div>Account Opened</div><div class="sf-cat">1 stage</div></div></div>
+    <div class="ch"><span class="ci">🗺</span><div><div class="ct">The 7 Journey Phases</div></div></div>
+    <div class="cb">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div style="background:#f1f5f9;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #e2e8f0"><strong style="color:#6b7280">0</strong> · Not Started</div>
+        <div style="background:#dbeafe;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #bfdbfe"><strong style="color:#1e40af">1–11</strong> · Basic Details</div>
+        <div style="background:#f3e8ff;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #ddd6fe"><strong style="color:#7c3aed">12–16</strong> · Persona / KYC</div>
+        <div style="background:#fef3c7;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #fde68a"><strong style="color:#d97706">17–19</strong> · SIM Binding</div>
+        <div style="background:#ccfbf1;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #99f6e4"><strong style="color:#0d9488">20–23</strong> · Digital Notary</div>
+        <div style="background:#fce7f3;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #fbcfe8"><strong style="color:#be185d">24–29</strong> · E-Signing</div>
+        <div style="background:#dcfce7;border-radius:8px;padding:8px 12px;font-size:12px;border:1px solid #86efac"><strong style="color:#16a34a">30</strong> · Account Opened</div>
       </div>
+      <div class="co co-blue">Total time when done in one session: <strong>approximately 15–20 minutes</strong>. Progress is always saved — no restart needed if interrupted.</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">📋</span><div><div class="card-title">Documents Required — Know This Cold</div></div></div>
-    <div class="card-body">
-      <div class="key-facts" style="grid-template-columns:repeat(3,1fr)">
-        <div class="kf"><div class="kf-val">3</div><div class="kf-label">Documents total needed</div></div>
-        <div class="kf green"><div class="kf-val">0</div><div class="kf-label">Physical copies required</div></div>
-        <div class="kf"><div class="kf-val">3mo</div><div class="kf-label">Max age of address proof</div></div>
+    <div class="ch"><span class="ci">📄</span><div><div class="ct">Documents Required</div><div class="cs">Customers ask this on every call</div></div></div>
+    <div class="cb">
+      <div class="kfg" style="grid-template-columns:repeat(3,1fr)">
+        <div class="kf g"><div class="kfv">3</div><div class="kfl">Total documents</div></div>
+        <div class="kf g"><div class="kfv">0</div><div class="kfl">Physical copies needed</div></div>
+        <div class="kf"><div class="kfv">3 months</div><div class="kfl">Max age of address proof</div></div>
       </div>
-      <ul class="learn-list">
-        <li><span class="bullet">📄</span> <strong>Passport</strong> — ALL pages including blank ones (RBI rule)</li>
-        <li><span class="bullet">🪪</span> <strong>PAN Card</strong> — name must match passport exactly. No PAN → apply at incometaxindia.gov.in (takes 2–5 days)</li>
-        <li><span class="bullet">🏠</span> <strong>Overseas Address Proof</strong> — utility bill or bank statement, within last 3 months, must match address entered in app</li>
-        <li><span class="bullet">📸</span> Clear phone photos accepted — no scanning needed, no physical copies, no courier</li>
-        <li><span class="bullet">🌍</span> Foreign language documents accepted — no translation required</li>
+      <ul class="ll">
+        <li><span class="ic">📄</span><strong>Passport</strong> — valid, ALL pages including blank ones (RBI rule). Minimum 3 months remaining validity</li>
+        <li><span class="ic">🪪</span><strong>PAN Card</strong> — active Indian PAN. Name must match passport exactly</li>
+        <li><span class="ic">🏠</span><strong>Non-residency proof + overseas address proof:</strong> UK = Visa/BRP/Share Code + driving licence/utility bill/bank statement (≤3 months). UAE = Emirates ID + utility bill or bank statement</li>
       </ul>
+      <div class="co co-orange" style="margin-top:10px"><strong>No PAN card?</strong>Apply at incometaxindia.gov.in — takes 2–5 days. Do NOT proceed without PAN.</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">📹</span><div><div class="card-title">Digital Notary — The Most Friction Stage</div><div class="card-sub">Stages 20–22 — highest drop-off risk</div></div></div>
-    <div class="card-body">
-      <div class="callout orange"><strong>⚠️ Most customers don't understand what a notary is</strong> — frame it as a short video call, not a legal process</div>
-      <ul class="learn-list">
-        <li><span class="bullet">🏛</span> <strong>RBI-mandated</strong> — not Aspora's choice. Use this to remove friction: "Every Indian bank requires this for NRIs"</li>
-        <li><span class="bullet">📹</span> 5–10 minute video call from home — licensed notary verifies passport</li>
-        <li><span class="bullet">✅</span> No courier, no consulate, no physical appointment</li>
-        <li><span class="bullet">💬</span> <strong>Aspora team books it and guides throughout</strong></li>
-        <li><span class="bullet">📶</span> Requirements: stable WiFi, good lighting, quiet room, original passport ready</li>
-        <li><span class="bullet">📅</span> Book the slot immediately on the call — don't let them "think about it"</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">📱</span><div><div class="card-title">SIM Binding — Common Blocker for NRIs Abroad</div><div class="card-sub">Stages 17–19</div></div></div>
-    <div class="card-body">
-      <ul class="learn-list">
-        <li><span class="bullet">🔒</span> Security feature — links account to Indian number for 2FA (OTPs)</li>
-        <li><span class="bullet">👨‍👩‍👧</span> <strong>Family member's SIM is fine</strong> — spouse, parent, sibling</li>
-        <li><span class="bullet">📵</span> DND must be OFF on that number</li>
-        <li><span class="bullet">✅</span> Application stays active — customer can complete when SIM is available</li>
-        <li><span class="bullet">💡</span> Virtual number option available if no Indian SIM</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🚨</span><div><div class="card-title">Common Drop-off Points & Fixes</div></div></div>
-    <div class="card-body">
+    <div class="ch"><span class="ci">🔍</span><div><div class="ct">KYC Issues — Most Common Problems</div><div class="cs">30-day correction window, max 3 attempts</div></div></div>
+    <div class="cb">
       <table class="tbl">
-        <tr><th>Stage</th><th>Why They Drop Off</th><th>What You Say</th></tr>
-        <tr><td><span class="badge badge-blue">1</span> Account Type</td><td>NRE vs NRO confusion</td><td>"Most NRIs working abroad → NRE. That's what Aspora offers."</td></tr>
-        <tr><td><span class="badge badge-blue">2</span> Documents</td><td>Don't have docs ready</td><td>"Only 3 things. Phone photos work. Do you have your passport near you now?"</td></tr>
-        <tr><td><span class="badge badge-purple">12</span> Video KYC</td><td>Wrong environment / camera issue</td><td>"Face a window, VPN off, WiFi. 3 minutes. Can you do that now?"</td></tr>
-        <tr><td><span class="badge badge-orange">20</span> Notary intro</td><td>"What is a notary?"</td><td>"Short video call, 10 min, from home. RBI requires it. We book it for you."</td></tr>
-        <tr><td><span class="badge badge-orange">17</span> SIM Binding</td><td>No Indian SIM abroad</td><td>"Family member's number works fine. Or virtual number option."</td></tr>
+        <tr><th>Issue</th><th>Resolution</th></tr>
+        <tr><td>Blurry document upload</td><td>Retake in good lighting, resubmit</td></tr>
+        <tr><td>Name mismatch (Passport vs PAN)</td><td>Minor diff: resolvable with note. Legal change: gazette/marriage cert needed</td></tr>
+        <tr><td>Address mismatch</td><td>Verify correct document, resubmit matching proof</td></tr>
+        <tr><td>Expired address proof</td><td>Upload document dated within last 3 months</td></tr>
+        <tr><td>Expired passport</td><td>Must renew — no exceptions. New biometric passport required</td></tr>
+        <tr><td>Passport — blurry photo page</td><td>Lay FLAT on white surface, all pages, no flash, MRZ zone visible</td></tr>
+        <tr><td>Video KYC failure</td><td>VPN OFF · face window light · 4Mbps+ upload · quiet room · 2 fails = escalate</td></tr>
+        <tr><td>Invalid TIN (FATCA)</td><td>Verify correct format for country, re-enter</td></tr>
+        <tr><td>Selfie issues</td><td>Appropriate attire, clear face visibility, good light</td></tr>
       </table>
     </div>
   </div>
 
-  <div style="margin-top:8px;display:flex;gap:12px">
-    <button class="mark-done-btn" onclick="markDone('process')" id="done-process">✓ Mark Complete</button>
-    <button class="btn btn-primary" onclick="goSection('quiz-process')">Take Quiz →</button>
-  </div>
-</div>
-
-<!-- MODULE 4: CALL HANDLING -->
-<div class="section" id="section-calls">
-  <div class="section-hero">
-    <h1>Module 4 — Call Handling</h1>
-    <p>How to handle objections, empathise with frustrated customers, and close every call with CSAT.</p>
-    <div class="hero-meta">
-      <div class="hero-pill">⏱ ~15 minutes</div>
-      <div class="hero-pill">🎯 Objection scripts ready</div>
-    </div>
-  </div>
-
   <div class="card">
-    <div class="card-header"><span class="card-icon">🧠</span><div><div class="card-title">The Golden Rule — Acknowledge Before Solving</div></div></div>
-    <div class="card-body">
-      <div class="callout red"><strong>🚨 Biggest PBM mistake:</strong> jumping to the solution before the customer feels heard. If they feel unheard, CSAT suffers even if you solved the problem.</div>
-      <ul class="learn-list">
-        <li><span class="bullet">🛑</span> When customer is upset: <strong>STOP — acknowledge first, always</strong></li>
-        <li><span class="bullet">💬</span> Say: <strong>"You're completely right to feel this way. I'm sorry."</strong></li>
-        <li><span class="bullet">👂</span> Let them finish — never interrupt to give a solution</li>
-        <li><span class="bullet">🪞</span> Mirror their frustration: <em>"I understand — 3 weeks is a long time, that's not okay"</em></li>
-        <li><span class="bullet">✅</span> Only THEN: "Here's what I'm doing right now to fix this..."</li>
+    <div class="ch"><span class="ci">📹</span><div><div class="ct">Digital Notary — Highest Drop-off Risk</div><div class="cs">Stages 20–22</div></div></div>
+    <div class="cb">
+      <div class="co co-orange"><strong>⚠️ Customers don't understand what a "notary" is</strong>Frame it as a short video call, not a legal process. And use this key phrase to remove friction.</div>
+      <div class="script">📢 "This is an RBI requirement — all Indian banks require this for NRI accounts. It's a 10-minute video call from your home. Our team books it for you and guides you through every step."</div>
+      <ul class="ll">
+        <li><span class="ic">📶</span>Requirements: stable WiFi, good lighting, quiet room, original passport ready</li>
+        <li><span class="ic">📅</span><strong>Book the notary slot immediately on the call</strong> — don't let them "think about it"</li>
+        <li><span class="ic">🚫</span>No courier, no consulate, no physical appointment needed</li>
+        <li><span class="ic">🔄</span>If interrupted: reschedule immediately, confirm new slot before hanging up</li>
       </ul>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">⚡</span><div><div class="card-title">Objection Handling Scripts</div></div></div>
-    <div class="card-body">
-      <div class="obj-grid">
-        <div class="obj-card">
-          <div class="obj-title">⏰ "Too Busy / No Time"</div>
-          <ul>
-            <li>🎯 Ask first: "What rate is your bank giving you on NRE savings?"</li>
-            <li>✅ Aspora 7% vs HDFC 3% → ₹40,000 extra/yr on ₹10L</li>
-            <li>⏱ Ask for <strong>90 seconds</strong> — not "2 minutes"</li>
-            <li>📅 If still busy → lock exact day + time before hanging up</li>
+    <div class="ch"><span class="ci">📱</span><div><div class="ct">SIM Binding — Common Blocker for NRIs Abroad</div><div class="cs">Stages 17–19</div></div></div>
+    <div class="cb">
+      <ul class="ll">
+        <li><span class="ic">🔒</span>Links account to Indian mobile number for 2FA (OTPs)</li>
+        <li><span class="ic">👨‍👩‍👧</span><strong>Family member's Indian SIM is fine</strong> — spouse, parent, sibling</li>
+        <li><span class="ic">📵</span>DND must be OFF on the number — OTPs won't arrive if DND is on</li>
+        <li><span class="ic">💡</span>Virtual number option available if no Indian SIM accessible</li>
+        <li><span class="ic">✅</span>Application stays active — customer can come back when SIM is available</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">🔐</span><div><div class="ct">MPIN &amp; Login Issues</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>Situation</th><th>Resolution</th></tr>
+        <tr><td>Forgot MPIN</td><td>"Forgot MPIN?" feature → verify via PAN + DOB → set new 6-digit MPIN</td></tr>
+        <tr><td>3 wrong attempts</td><td>15-minute cooldown — advise customer to wait</td></tr>
+        <tr><td>5 wrong attempts</td><td>24-hour lockout OR immediate reset via identity verification</td></tr>
+        <tr><td>New device login</td><td>System detects new phone → verify identity → set new MPIN</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">🚨</span><div><div class="ct">Top Drop-off Stages &amp; What to Say</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>Stage</th><th>Why They Drop Off</th><th>What You Say</th></tr>
+        <tr><td><span class="badge bd-b">1</span> Account Type</td><td>NRE vs NRO confusion</td><td>"Most NRIs working abroad → NRE. Tax-free, fully repatriable, 7%."</td></tr>
+        <tr><td><span class="badge bd-b">2</span> Documents</td><td>Don't have docs ready</td><td>"Only 3: Passport + PAN + address proof. Phone photos work. Do you have them now?"</td></tr>
+        <tr><td><span class="badge bd-p">12</span> Video KYC</td><td>Wrong environment/camera</td><td>"VPN off, face a window, WiFi. 3 minutes. Can you do that right now?"</td></tr>
+        <tr><td><span class="badge bd-o">20</span> Notary</td><td>"What is a notary?"</td><td>"10-min video call, from home, RBI requires it, we book it for you."</td></tr>
+        <tr><td><span class="badge bd-o">17</span> SIM</td><td>No Indian SIM abroad</td><td>"Family member's number works fine. Or we can use a virtual number."</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="done-bar">
+    <button class="btn-done" onclick="markDone('m3')" id="done-m3">✓ Mark Complete</button>
+    <button class="btn btn-p" onclick="go('q3')">Take Quiz 3 →</button>
+  </div>
+</div>
+
+<!-- MODULE 4: CALL HANDLING -->
+<div class="section" id="section-m4">
+  <div class="hero hero-teal">
+    <h1>Module 4 — Call Handling</h1>
+    <p>How to open a call, handle every objection, manage difficult customers, and close with CSAT every time.</p>
+    <div class="hero-pills"><div class="hp">⏱ ~15 min</div><div class="hp">Scripts to memorise</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">📞</span><div><div class="ct">Call Opening Scripts</div></div></div>
+    <div class="cb">
+      <div style="margin-bottom:10px"><span class="badge bd-g">Warm lead</span></div>
+      <div class="script">"Hi, this is [PBM Name] from Aspora NRI Banking. I'll be assisting with your NRI account opening process. I need just 2 minutes to update your status and help move your application forward."</div>
+      <div style="margin-bottom:10px"><span class="badge bd-b">Follow-up call</span></div>
+      <div class="script">"Hi, this is [PBM Name] from Aspora NRI Banking. We connected earlier regarding your account opening, and I'm following up to help coordinate the remaining steps."</div>
+      <div style="margin-bottom:10px"><span class="badge bd-o">Stalled application</span></div>
+      <div class="script">"Hi, this is [PBM Name] from Aspora NRI Banking. I'm checking if you're facing any issues with your account opening — I can help simplify things from my side."</div>
+      <div style="margin-bottom:10px"><span class="badge bd-p">Initial funding call</span></div>
+      <div class="script">"Thank you for completing your onboarding. To enable transactions, you'll need to make a first deposit — any amount you're comfortable with. I can assist you with the transfer right now if you'd like."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">🧠</span><div><div class="ct">The Golden Rule — Acknowledge Before Solving</div></div></div>
+    <div class="cb">
+      <div class="co co-red"><strong>🚨 Biggest PBM mistake</strong>Jumping to the solution before the customer feels heard. If they feel unheard, CSAT suffers even if you solved the problem.</div>
+      <ul class="ll">
+        <li><span class="ic">🛑</span>When customer is upset: <strong>STOP — acknowledge first, always</strong></li>
+        <li><span class="ic">💬</span>Say: <strong>"You're completely right to feel this way. I'm sorry."</strong></li>
+        <li><span class="ic">👂</span>Let them finish — never interrupt to give a solution</li>
+        <li><span class="ic">🪞</span>Mirror: <em>"I understand — 3 weeks is a long time, that's not okay"</em></li>
+        <li><span class="ic">✅</span>Only THEN: "Here's what I'm doing right now to fix this..."</li>
+      </ul>
+      <div class="co co-blue" style="margin-top:10px"><strong>Your tone goal</strong>"Your dedicated banking contact helping complete an important process" — NOT a sales agent. Sound: calm, confident, consultative, ownership-oriented.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">⚡</span><div><div class="ct">Objection Handling Scripts</div></div></div>
+    <div class="cb">
+      <div class="g2">
+        <div class="box-b">
+          <div class="box-title">⏰ "Too Busy / No Time"</div>
+          <ul class="box-list">
+            <li>Ask first: "What rate is your bank giving on NRE savings?"</li>
+            <li>Aspora 7% vs HDFC 3% → ₹70,000 MORE per year on ₹20L</li>
+            <li>Ask for <strong>90 seconds</strong> — not "2 minutes" (sounds smaller)</li>
+            <li>If still busy → lock exact day + time before hanging up</li>
           </ul>
         </div>
-        <div class="obj-card">
-          <div class="obj-title">🏦 "Already Have Another Bank"</div>
-          <ul>
-            <li>✅ Never say "close it" — say "add Aspora alongside"</li>
-            <li>💰 ₹20L: Aspora = ₹70,000 MORE per year than HDFC</li>
-            <li>👥 "Most NRIs keep HDFC for bills, Aspora for savings"</li>
-            <li>🤝 Complement, don't compete</li>
+        <div class="box-b">
+          <div class="box-title">🏦 "Already Have Another Bank"</div>
+          <ul class="box-list">
+            <li>Never say "close it" — say "add Aspora alongside"</li>
+            <li>HDFC 3% vs Aspora 7% → ₹70,000 more/yr on ₹20L</li>
+            <li>"Most NRIs keep HDFC for bills, Aspora for savings"</li>
+            <li>Complement, don't compete</li>
           </ul>
         </div>
-        <div class="obj-card">
-          <div class="obj-title">🔒 "Is It Safe?"</div>
-          <ul>
-            <li>🏛 RBI regulated — same as HDFC & ICICI</li>
-            <li>🛡 DICGC insured up to ₹5 lakh — govt-backed</li>
-            <li>💡 Why 7%: no branches + no ATMs = savings passed to you</li>
-            <li>🏦 "IDFC First Bank also gives 7% — same model"</li>
+        <div class="box-b">
+          <div class="box-title">🔒 "Is It Safe?"</div>
+          <ul class="box-list">
+            <li>RBI regulated (via SSFB) — same as HDFC &amp; ICICI</li>
+            <li>DICGC insured up to ₹5 lakh — government-backed</li>
+            <li>Why 7%: no branches + no ATMs = savings passed to you</li>
+            <li>"IDFC First Bank also offers 7% on the same model"</li>
           </ul>
         </div>
-        <div class="obj-card">
-          <div class="obj-title">👨‍👩‍👧 "Need to Discuss with Family"</div>
-          <ul>
-            <li>📲 Send WhatsApp summary immediately — don't wait</li>
-            <li>❓ "What specific concern will your family have?"</li>
-            <li>📞 Offer a 3-way call with family on the line</li>
-            <li>📅 Lock a specific time before hanging up</li>
+        <div class="box-b">
+          <div class="box-title">👨‍👩‍👧 "Need Family Discussion"</div>
+          <ul class="box-list">
+            <li>Send WhatsApp summary immediately — don't wait</li>
+            <li>Ask: "What specific concern will your family have?"</li>
+            <li>Offer a 3-way call with family on the line</li>
+            <li>Lock a specific callback time before hanging up</li>
           </ul>
         </div>
-        <div class="obj-card">
-          <div class="obj-title">💳 "What Are the Fees?"</div>
-          <ul>
-            <li>✅ Zero fees · Zero minimum balance · Zero annual charges</li>
-            <li>🎁 Free international transfers in Year 1</li>
-            <li>⚠️ HDFC needs ₹10K min → ₹5,000/yr penalty if below</li>
-            <li>💚 100% free to maintain — no hidden costs</li>
+        <div class="box-b">
+          <div class="box-title">💳 "What Are the Fees?"</div>
+          <ul class="box-list">
+            <li>Zero fees · Zero minimum balance · Zero annual charges</li>
+            <li>Free international transfers — Year 1</li>
+            <li>HDFC needs ₹10K min → ₹5,000/yr penalty if below</li>
+            <li>100% free to maintain — no hidden costs</li>
           </ul>
         </div>
-        <div class="obj-card">
-          <div class="obj-title">😓 "Process Seems Complicated"</div>
-          <ul>
-            <li>📋 Form → 3 docs → Video KYC → Notary → SIM → Active!</li>
-            <li>⏱ 15–20 minutes total — fully digital</li>
-            <li>💬 You guide on WhatsApp through every step</li>
-            <li>🚀 Start Step 1 NOW on the call — biggest drop-off reducer</li>
+        <div class="box-b">
+          <div class="box-title">😓 "Process Too Complicated"</div>
+          <ul class="box-list">
+            <li>"You're at step X of 30. I'll guide each remaining step personally."</li>
+            <li>15–20 minutes total — fully digital, no branch</li>
+            <li>Progress saved automatically — no restart if interrupted</li>
+            <li>Start Step 1 NOW on the call — biggest drop-off reducer</li>
           </ul>
         </div>
       </div>
@@ -591,264 +652,280 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">📞</span><div><div class="card-title">When to Call After a Notification (RFI Strategy)</div></div></div>
-    <div class="card-body">
-      <div class="callout orange"><strong>⚠️ Don't call immediately after a notification</strong> — the customer hasn't read it yet. You'll sound like spam.</div>
-      <ul class="learn-list">
-        <li><span class="bullet">⏱</span> Wait <strong>1–2 hours</strong> after notification before calling</li>
-        <li><span class="bullet">💼</span> Banking is a long-term relationship — not transactional</li>
-        <li><span class="bullet">📢</span> Script: <em>"Hi, I saw you received our update — calling to personally help with the next step"</em></li>
-      </ul>
+    <div class="ch"><span class="ci">📅</span><div><div class="ct">CRM Disposition Codes &amp; SLAs</div><div class="cs">Log every call — these are mandatory</div></div></div>
+    <div class="cb">
+      <div class="dc-grid">
+        <div class="dc-card"><div class="dc-code" style="color:#16a34a">C1</div><div class="dc-label">Completed onboarding on call</div><div class="dc-sla">Mark converted in CRM immediately</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#3b82f6">C2</div><div class="dc-label">Customer committed within 24 hours</div><div class="dc-sla">Follow up within 24 hours</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#7c3aed">C3</div><div class="dc-label">Callback scheduled</div><div class="dc-sla">Call precisely on the scheduled time — no delays</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#f59e0b">C4</div><div class="dc-label">Tech ticket created</div><div class="dc-sla">Follow up within 2 hours</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#dc2626">C5</div><div class="dc-label">Customer declined</div><div class="dc-sla">Re-attempt after 7 days</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#64748b">C6</div><div class="dc-label">No answer</div><div class="dc-sla">Retry within 4 hours + send WhatsApp</div></div>
+        <div class="dc-card"><div class="dc-code" style="color:#64748b">C7</div><div class="dc-label">Wrong / unreachable number</div><div class="dc-sla">Escalate to data team</div></div>
+      </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-icon">⭐</span><div><div class="card-title">Closing Every Call — CSAT Script</div></div></div>
-    <div class="card-body">
-      <div class="script-box">"Before we close today, I'd like to ask you to complete a quick 1-question satisfaction survey that takes just 10 seconds. It helps us improve the support we give to NRIs like yourself. I'll send it via WhatsApp right now." [Send survey link immediately] "Thank you so much for your time today. Is there anything else I can help you with before we go?"</div>
-      <ul class="learn-list">
-        <li><span class="bullet">⭐</span> Send CSAT on <strong>every call</strong> — even if the issue wasn't fully resolved</li>
-        <li><span class="bullet">📊</span> CSAT measures empathy and clarity — not just whether the problem was solved</li>
-        <li><span class="bullet">💚</span> Your CSAT score = your performance score</li>
-        <li><span class="bullet">⚠️</span> If customer declines survey: note as declined — it still counts in your pipeline</li>
-      </ul>
+    <div class="ch"><span class="ci">📲</span><div><div class="ct">WhatsApp Templates</div></div></div>
+    <div class="cb">
+      <div style="margin-bottom:8px"><span class="badge bd-o">Drop-off reminder</span></div>
+      <div class="script">"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I tried reaching you regarding your NRI account opening. You're very close to completing — I'm here to assist personally with the remaining steps. Resume: [link]. Call me at [number] if needed."</div>
+      <div style="margin-bottom:8px"><span class="badge bd-g">Post-KYC encouragement (Stage 16+)</span></div>
+      <div class="script">"Your KYC has been verified successfully — well done! Just 3 steps remain: SIM binding, e-signing, and MPIN setup. Less than 10 minutes, and I'll personally assist you. Resume: [link]"</div>
     </div>
   </div>
 
-  <div style="margin-top:8px;display:flex;gap:12px">
-    <button class="mark-done-btn" onclick="markDone('calls')" id="done-calls">✓ Mark Complete</button>
-    <button class="btn btn-primary" onclick="goSection('quiz-calls')">Take Quiz →</button>
+  <div class="card">
+    <div class="ch"><span class="ci">⭐</span><div><div class="ct">Closing Every Call — CSAT</div></div></div>
+    <div class="cb">
+      <div class="script">"Before we close today, I'd like to ask you to complete a quick 1-question satisfaction survey — just 10 seconds. It helps us improve the support we give to NRIs like yourself. I'll send it on WhatsApp right now." [Send immediately] "Thank you for your time today. Is there anything else I can help you with?"</div>
+      <div class="co co-red" style="margin-top:8px"><strong>🚨 When to call after a notification</strong>Wait 1–2 hours — calling immediately means the customer hasn't read it yet. You'll sound like spam.</div>
+    </div>
+  </div>
+
+  <div class="done-bar">
+    <button class="btn-done" onclick="markDone('m4')" id="done-m4">✓ Mark Complete</button>
+    <button class="btn btn-p" onclick="go('q4')">Take Quiz 4 →</button>
   </div>
 </div>
 
-<!-- QUIZ: ASPORA BASICS -->
-<div class="section" id="section-quiz-aspora">
-  <div class="section-hero">
-    <h1>Quiz 1 — Aspora Basics</h1>
-    <p>10 questions. 80% to pass. All answers are in Module 1.</p>
-    <div class="hero-meta"><div class="hero-pill">10 Questions</div><div class="hero-pill">Pass: 80%</div></div>
+<!-- MODULE 5: COMPLIANCE & OPS -->
+<div class="section" id="section-m5">
+  <div class="hero hero-rose">
+    <h1>Module 5 — Compliance &amp; Operations</h1>
+    <p>DICGC, beneficiary rules, card management, KYC ops, and the key numbers that come up on calls.</p>
+    <div class="hero-pills"><div class="hp">⏱ ~15 min</div><div class="hp">Know the numbers</div></div>
   </div>
-  <div id="quiz-aspora-container"></div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">🛡</span><div><div class="ct">DICGC — Deposit Insurance</div><div class="cs">Use this to answer "is my money safe?"</div></div></div>
+    <div class="cb">
+      <ul class="ll">
+        <li><span class="ic">🏛</span>DICGC = Deposit Insurance and Credit Guarantee Corporation — statutory body under RBI</li>
+        <li><span class="ic">🏦</span>All scheduled banks are members — including SSFB (Aspora's banking partner)</li>
+        <li><span class="ic">💰</span>Covers <strong>up to ₹5 lakh per depositor per bank</strong></li>
+        <li><span class="ic">📊</span>97%+ of individual Indian depositors are fully covered within this limit</li>
+        <li><span class="ic">💳</span>Banks pay 0.12% of deposits annually as insurance premium</li>
+      </ul>
+      <div class="script" style="margin-top:10px">📢 "Same as HDFC or SBI — Government of India backed. DICGC covers your deposits up to ₹5 lakh. It's a statutory requirement for all scheduled banks."</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">👥</span><div><div class="ct">Beneficiary Management Rules</div></div></div>
+    <div class="cb">
+      <div class="co co-orange"><strong>⚠️ New beneficiary cooling period</strong>First 24 hours: max ₹50,000/day, maximum 2 transactions only. After 24 hours: full limits apply.</div>
+      <ul class="ll">
+        <li><span class="ic">✅</span>New domestic beneficiary: verified via penny drop (5–10 seconds)</li>
+        <li><span class="ic">🌍</span>International beneficiaries: screened against OFAC/UN sanctions lists</li>
+        <li><span class="ic">📊</span>Maximum 30 transactions per day across all modes</li>
+        <li><span class="ic">💸</span>Daily third-party transfer cap: ₹30 lakh</li>
+      </ul>
+      <table class="tbl" style="margin-top:10px">
+        <tr><th>Country</th><th>International Beneficiary Fields Required</th></tr>
+        <tr><td>🇬🇧 UK</td><td>Name, Address, Sort Code/IBAN, Account number, BIC/SWIFT</td></tr>
+        <tr><td>🇦🇪 UAE</td><td>Name, Address, IBAN (23 chars, starts with AE), BIC/SWIFT</td></tr>
+        <tr><td>🇺🇸 USA</td><td>Name, Address, ABA routing, Account number, BIC/SWIFT</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">💳</span><div><div class="ct">Debit Card Management</div></div></div>
+    <div class="cb">
+      <ul class="ll">
+        <li><span class="ic">📱</span>Virtual card: issued instantly, one per account, RuPay (India domestic only)</li>
+        <li><span class="ic">📮</span>Physical card: optional, fee + delivery charge. UK: 1–2 business days. UAE: 2–3 business days</li>
+        <li><span class="ic">⚠️</span>Physical card must be activated within <strong>30 days of receipt</strong></li>
+        <li><span class="ic">🌐</span>International card support: planned Q3 2026 — do not promise to customers</li>
+      </ul>
+      <div class="co co-red" style="margin-top:8px"><strong>Lost card process</strong>1. Block immediately (permanent) → 2. Review recent transactions for fraud → 3. Order replacement (₹200 card fee + ₹100 delivery) → 4. Escalate if unauthorized activity found</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span class="ci">📊</span><div><div class="ct">Key Metrics &amp; Numbers Reference</div></div></div>
+    <div class="cb">
+      <table class="tbl">
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>NRO repatriation limit</td><td>USD 1 million per financial year (Apr–Mar)</td></tr>
+        <tr><td>NRE repatriation limit</td><td class="g">Unlimited</td></tr>
+        <tr><td>NRO TDS rate</td><td class="r">30% + surcharge + cess</td></tr>
+        <tr><td>KYC correction window</td><td>30 days, max 3 attempts</td></tr>
+        <tr><td>FATCA update obligation</td><td>Within 30 days of status change</td></tr>
+        <tr><td>MPIN lockout (3 wrong)</td><td>15-minute cooldown</td></tr>
+        <tr><td>MPIN lockout (5 wrong)</td><td>24-hour lockout or immediate reset via ID verification</td></tr>
+        <tr><td>New beneficiary cooling period</td><td>24 hours, ₹50,000/day, 2 transactions max</td></tr>
+        <tr><td>Form 15CB threshold</td><td>Total FY transfers above ₹5 lakh (NRO repatriation)</td></tr>
+        <tr><td>Lower TDS processing time</td><td>15–30 days (Form 13)</td></tr>
+        <tr><td>DICGC cover</td><td>Up to ₹5 lakh per depositor per bank</td></tr>
+        <tr><td>AML review threshold</td><td>₹25,00,000</td></tr>
+        <tr><td>Minimum remittance</td><td>₹1,000</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="done-bar">
+    <button class="btn-done" onclick="markDone('m5')" id="done-m5">✓ Mark Complete</button>
+    <button class="btn btn-p" onclick="go('q5')">Take Quiz 5 →</button>
+  </div>
 </div>
 
-<!-- QUIZ: NRI PRODUCTS -->
-<div class="section" id="section-quiz-nri">
-  <div class="section-hero">
-    <h1>Quiz 2 — NRI Products</h1>
-    <p>10 questions. 80% to pass. All answers are in Module 2.</p>
-    <div class="hero-meta"><div class="hero-pill">10 Questions</div><div class="hero-pill">Pass: 80%</div></div>
-  </div>
-  <div id="quiz-nri-container"></div>
-</div>
-
-<!-- QUIZ: PROCESS & KYC -->
-<div class="section" id="section-quiz-process">
-  <div class="section-hero">
-    <h1>Quiz 3 — Process & KYC</h1>
-    <p>10 questions. 80% to pass. All answers are in Module 3.</p>
-    <div class="hero-meta"><div class="hero-pill">10 Questions</div><div class="hero-pill">Pass: 80%</div></div>
-  </div>
-  <div id="quiz-process-container"></div>
-</div>
-
-<!-- QUIZ: CALL HANDLING -->
-<div class="section" id="section-quiz-calls">
-  <div class="section-hero">
-    <h1>Quiz 4 — Call Handling</h1>
-    <p>10 questions. 80% to pass. All answers are in Module 4.</p>
-    <div class="hero-meta"><div class="hero-pill">10 Questions</div><div class="hero-pill">Pass: 80%</div></div>
-  </div>
-  <div id="quiz-calls-container"></div>
-</div>
+<!-- QUIZZES -->
+<div class="section" id="section-q1"><div class="hero hero-blue"><h1>Quiz 1 — Aspora &amp; the Platform</h1><p>10 questions · 80% to pass · All answers in Module 1</p><div class="hero-pills"><div class="hp">10 Questions</div><div class="hp">Pass: 80%</div></div></div><div id="qc-q1"></div></div>
+<div class="section" id="section-q2"><div class="hero hero-green"><h1>Quiz 2 — NRI Products</h1><p>10 questions · 80% to pass · All answers in Module 2</p><div class="hero-pills"><div class="hp">10 Questions</div><div class="hp">Pass: 80%</div></div></div><div id="qc-q2"></div></div>
+<div class="section" id="section-q3"><div class="hero hero-purple"><h1>Quiz 3 — Process &amp; KYC</h1><p>10 questions · 80% to pass · All answers in Module 3</p><div class="hero-pills"><div class="hp">10 Questions</div><div class="hp">Pass: 80%</div></div></div><div id="qc-q3"></div></div>
+<div class="section" id="section-q4"><div class="hero hero-teal"><h1>Quiz 4 — Call Handling</h1><p>10 questions · 80% to pass · All answers in Module 4</p><div class="hero-pills"><div class="hp">10 Questions</div><div class="hp">Pass: 80%</div></div></div><div id="qc-q4"></div></div>
+<div class="section" id="section-q5"><div class="hero hero-rose"><h1>Quiz 5 — Compliance &amp; Ops</h1><p>10 questions · 80% to pass · All answers in Module 5</p><div class="hero-pills"><div class="hp">10 Questions</div><div class="hp">Pass: 80%</div></div></div><div id="qc-q5"></div></div>
 
 </div><!-- /main -->
 </div><!-- /layout -->
 
 <script>
-// ─── NAVIGATION ───────────────────────────────────────────────
-var sections=['intro','aspora','nri','process','calls','quiz-aspora','quiz-nri','quiz-process','quiz-calls'];
-function goSection(id){
-  sections.forEach(function(s){
+// NAV
+var ALL=['intro','m1','m2','m3','m4','m5','q1','q2','q3','q4','q5'];
+function go(id){
+  ALL.forEach(function(s){
     document.getElementById('section-'+s).classList.remove('active');
-    var nav=document.getElementById('nav-'+s);
-    if(nav)nav.classList.remove('active');
+    var n=document.getElementById('nav-'+s);if(n)n.classList.remove('active');
   });
   document.getElementById('section-'+id).classList.add('active');
-  var nav=document.getElementById('nav-'+id);
-  if(nav)nav.classList.add('active');
+  var n=document.getElementById('nav-'+id);if(n)n.classList.add('active');
   window.scrollTo(0,0);
 }
-function markDone(mod){
-  var btn=document.getElementById('done-'+mod);
-  if(btn){btn.disabled=true;btn.textContent='✓ Completed';}
-  var chk=document.getElementById('chk-'+mod);
-  if(chk){chk.textContent='✓';}
-  var nav=document.getElementById('nav-'+mod);
-  if(nav)nav.classList.add('done');
+function markDone(id){
+  var b=document.getElementById('done-'+id);if(b){b.disabled=true;b.textContent='✓ Completed';}
+  var d=document.getElementById('dot-'+id);if(d){d.textContent='✓';}
+  var n=document.getElementById('nav-'+id);if(n)n.classList.add('done');
 }
-
-// ─── QUIZ ENGINE ──────────────────────────────────────────────
-var quizScores={};
-function buildQuiz(containerId,quizId,questions){
-  var state={cur:0,score:0,answered:false};
+// QUIZ ENGINE
+var scores={};
+function initQuiz(cid,qid,qs){
+  var st={i:0,score:0,done:false};
   function render(){
-    var el=document.getElementById(containerId);
-    if(state.cur>=questions.length){
-      var pct=Math.round(state.score/questions.length*100);
-      var pass=pct>=80;
-      el.innerHTML='<div class="results-card show">'
-        +'<div class="results-score '+(pass?'pass':'fail')+'">'+pct+'%</div>'
-        +'<div class="results-msg">'+(pass?'🎉 Passed! Well done.':'❌ Not quite. Review the module and try again.')+'</div>'
-        +'<div class="results-breakdown">'
-        +'<div class="rb-box"><div class="rb-val" style="color:#16a34a">'+state.score+'</div><div class="rb-label">Correct</div></div>'
-        +'<div class="rb-box"><div class="rb-val" style="color:#dc2626">'+(questions.length-state.score)+'</div><div class="rb-label">Incorrect</div></div>'
-        +'<div class="rb-box"><div class="rb-val">'+questions.length+'</div><div class="rb-label">Total</div></div>'
+    var el=document.getElementById(cid);
+    if(st.i>=qs.length){
+      var pct=Math.round(st.score/qs.length*100),pass=pct>=80;
+      el.innerHTML='<div class="rcard show">'
+        +'<div class="rscore '+(pass?'pass':'fail')+'">'+pct+'%</div>'
+        +'<div class="rmsg">'+(pass?'🎉 Passed! Great work.':'❌ Not quite — review the module and retry.')+'</div>'
+        +'<div class="rbg">'
+        +'<div class="rbb"><div class="rbbv" style="color:#16a34a">'+st.score+'</div><div class="rbbl">Correct</div></div>'
+        +'<div class="rbb"><div class="rbbv" style="color:#dc2626">'+(qs.length-st.score)+'</div><div class="rbbl">Incorrect</div></div>'
+        +'<div class="rbb"><div class="rbbv">'+qs.length+'</div><div class="rbbl">Total</div></div>'
         +'</div>'
         +'<div style="display:flex;gap:10px;justify-content:center">'
-        +(pass?'':'<button class="btn btn-outline" onclick="resetQuiz(\''+containerId+'\',\''+quizId+'\')">Retry Quiz</button>')
-        +'<button class="btn btn-primary" onclick="goSection(\''+(pass?getNextSection(quizId):quizId.replace('quiz-',''))+'\')">'+(pass?'Next →':'Review Module')+'</button>'
+        +(pass?'':'<button class="btn btn-o" onclick="resetQ(\''+cid+'\',\''+qid+'\')">Retry</button>')
+        +'<button class="btn btn-p" onclick="go(\''+(pass?nextMod(qid):qid.replace('q','m'))+'\')">'+(pass?'Next →':'Review Module')+'</button>'
         +'</div></div>';
       if(pass){
-        markDone(quizId);
-        var chk=document.getElementById('chk-'+quizId);
-        if(chk)chk.textContent='✓';
-        var nav=document.getElementById('nav-'+quizId);
-        if(nav)nav.classList.add('done');
-        quizScores[quizId]=pct;
-        updateScoreBadge();
+        scores[qid]=pct;
+        markDone(qid);
+        updatePill();
       }
       return;
     }
-    var q=questions[state.cur];
-    var pct=Math.round(state.cur/questions.length*100);
-    var html='<div class="quiz-progress"><div class="quiz-progress-bar" style="width:'+pct+'%"></div></div>'
-      +'<div class="quiz-card">'
-      +'<div class="quiz-qnum">Question '+(state.cur+1)+' of '+questions.length+'</div>'
-      +'<div class="quiz-q">'+q.q+'</div>'
-      +'<div class="quiz-options">';
-    q.opts.forEach(function(opt,i){
-      html+='<button class="quiz-opt" id="opt-'+i+'" onclick="answerQ(\''+containerId+'\',\''+quizId+'\','+i+','+q.a+')">'+opt+'</button>';
-    });
-    html+='</div>'
-      +'<div class="quiz-feedback" id="qfeedback"></div>'
-      +'<div class="quiz-nav">'
-      +'<span style="font-size:12px;color:#94a3b8">Score: '+state.score+'/'+state.cur+'</span>'
-      +'<button class="btn btn-primary" id="qnext" onclick="nextQ(\''+containerId+'\',\''+quizId+'\')" disabled>Next →</button>'
-      +'</div></div>';
+    var q=qs[st.i],pct=Math.round(st.i/qs.length*100);
+    var html='<div class="qprog"><div class="qprog-bar" style="width:'+pct+'%"></div></div>'
+      +'<div class="qcard"><div class="qnum">Question '+(st.i+1)+' of '+qs.length+'</div>'
+      +'<div class="qq">'+q.q+'</div><div class="qopts">';
+    q.o.forEach(function(o,i){html+='<button class="qopt" id="o'+i+'" onclick="ans(\''+cid+'\',\''+qid+'\','+i+','+q.a+')">'+o+'</button>';});
+    html+='</div><div class="qfb" id="qfb"></div>'
+      +'<div class="qnav"><span style="font-size:12px;color:#94a3b8">'+st.score+'/'+st.i+' correct</span>'
+      +'<button class="btn btn-p" id="qnxt" onclick="nxt(\''+cid+'\',\''+qid+'\')" disabled>Next →</button></div></div>';
     el.innerHTML=html;
-    el._state=state;
-    el._questions=questions;
   }
-  window['quiz_state_'+containerId]=state;
-  window['quiz_questions_'+containerId]=questions;
+  window['st_'+cid]=st;window['qs_'+cid]=qs;window['render_'+cid]=render;
   render();
-  window['quiz_render_'+containerId]=render;
 }
-function answerQ(containerId,quizId,chosen,correct){
-  var el=document.getElementById(containerId);
-  var state=window['quiz_state_'+containerId];
-  var questions=window['quiz_questions_'+containerId];
-  if(state.answered)return;
-  state.answered=true;
-  var q=questions[state.cur];
-  var allOpts=el.querySelectorAll('.quiz-opt');
-  allOpts.forEach(function(b){b.disabled=true;});
-  allOpts[correct].classList.add('correct');
-  if(chosen===correct){
-    state.score++;
-    var fb=document.getElementById('qfeedback');
-    fb.className='quiz-feedback pass show';
-    fb.innerHTML='✅ <strong>Correct!</strong> '+q.explain;
-  } else {
-    allOpts[chosen].classList.add('wrong');
-    allOpts[correct].classList.add('reveal');
-    var fb=document.getElementById('qfeedback');
-    fb.className='quiz-feedback fail show';
-    fb.innerHTML='❌ <strong>Incorrect.</strong> '+q.explain;
-  }
-  document.getElementById('qnext').disabled=false;
+function ans(cid,qid,chosen,correct){
+  var st=window['st_'+cid],qs=window['qs_'+cid];
+  if(st.done)return;st.done=true;
+  var q=qs[st.i];
+  document.querySelectorAll('#section-'+qid+' .qopt').forEach(function(b){b.disabled=true;});
+  document.getElementById('o'+correct).classList.add('correct');
+  var fb=document.getElementById('qfb');
+  if(chosen===correct){st.score++;fb.className='qfb pass show';fb.innerHTML='✅ <strong>Correct!</strong> '+q.e;}
+  else{document.getElementById('o'+chosen).classList.add('wrong');document.getElementById('o'+correct).classList.add('reveal');fb.className='qfb fail show';fb.innerHTML='❌ <strong>Incorrect.</strong> '+q.e;}
+  document.getElementById('qnxt').disabled=false;
 }
-function nextQ(containerId,quizId){
-  var state=window['quiz_state_'+containerId];
-  state.cur++;
-  state.answered=false;
-  window['quiz_render_'+containerId]();
-}
-function resetQuiz(containerId,quizId){
-  window['quiz_state_'+containerId]={cur:0,score:0,answered:false};
-  window['quiz_render_'+containerId]();
-}
-function getNextSection(quizId){
-  var map={'quiz-aspora':'nri','quiz-nri':'process','quiz-process':'calls','quiz-calls':'quiz-aspora'};
-  return map[quizId]||'intro';
-}
-function updateScoreBadge(){
-  var badge=document.getElementById('score-badge');
-  var keys=Object.keys(quizScores);
-  if(!keys.length)return;
-  badge.style.display='inline-block';
-  var avg=Math.round(keys.reduce(function(s,k){return s+quizScores[k];},0)/keys.length);
-  badge.textContent='Quiz Avg: '+avg+'%';
+function nxt(cid,qid){var st=window['st_'+cid];st.i++;st.done=false;window['render_'+cid]();}
+function resetQ(cid,qid){window['st_'+cid]={i:0,score:0,done:false};window['render_'+cid]();}
+function nextMod(qid){return{q1:'m2',q2:'m3',q3:'m4',q4:'m5',q5:'q1'}[qid]||'intro';}
+function updatePill(){
+  var ks=Object.keys(scores);if(!ks.length)return;
+  var avg=Math.round(ks.reduce(function(s,k){return s+scores[k];},0)/ks.length);
+  var p=document.getElementById('score-pill');p.style.display='inline-block';p.textContent='Avg: '+avg+'%';
 }
 
-// ─── QUIZ DATA ────────────────────────────────────────────────
-var Q_ASPORA=[
-  {q:'What is the maximum savings interest rate Aspora offers?',opts:['3.00%','5.50%','7.00%','9.00%'],a:2,explain:'Aspora offers up to 7% on balances of ₹25 Lakh and above.'},
-  {q:'How much more does a customer with ₹20 Lakh earn per year at Aspora vs HDFC?',opts:['₹20,000','₹40,000','₹70,000','₹1,00,000'],a:2,explain:'₹20L at Aspora ~6.5% = ₹1,30,000/yr. ₹20L at HDFC 3% = ₹60,000/yr. Difference = ₹70,000.'},
-  {q:'Which countries does Aspora currently serve?',opts:['UK, US, Canada','UK, US, UAE','UK, Australia, UAE','US, UAE, Singapore'],a:1,explain:'Aspora currently serves UK, US, UAE, and EU.'},
-  {q:'How is Aspora able to offer higher interest rates than traditional banks?',opts:['Government subsidy','Foreign investment','No branches and no ATMs — cost savings passed to customers','Lower KYC requirements'],a:2,explain:'No physical infrastructure (branches/ATMs) means lower operating costs, which Aspora passes to customers as higher interest.'},
-  {q:'What government insurance scheme covers Aspora deposits?',opts:['RBI Insurance','DICGC up to ₹5 Lakh','SEBI protection up to ₹10 Lakh','None — non-bank platforms are uninsured'],a:1,explain:'DICGC (Deposit Insurance and Credit Guarantee Corporation) is a government body under RBI that covers deposits up to ₹5 lakh per bank per depositor.'},
-  {q:'Which of the following does Aspora NOT charge?',opts:['Interest on loans','Annual fee','Minimum balance fee','Both B and C'],a:3,explain:'Aspora has zero annual fees and zero minimum balance requirement. 100% free to maintain.'},
-  {q:'At what balance tier does Aspora\'s rate jump significantly (from ~3.5% to 6.5%)?',opts:['₹1 Lakh','₹5 Lakh','₹10 Lakh','₹25 Lakh'],a:2,explain:'At ₹10 Lakh the rate jumps from 3.5% to 6.5% — this is the key tier to mention when customers hesitate about amount.'},
-  {q:'What is Aspora\'s Fixed Deposit rate?',opts:['6.00%','6.80%','7.25%','7.50%'],a:2,explain:'Aspora FD 1yr rate is 7.25%, compared to HDFC 6.5% and SBI 6.8%.'},
-  {q:'A customer asks: "7% seems too good to be true — is it a scam?" What is the best response?',opts:['Tell them to check our website','Ignore the concern and move on','Explain no branches/ATMs = cost savings + RBI regulated + IDFC First also offers 7%','Promise to call them back'],a:2,explain:'Always validate the concern, explain the business model (no branches/ATMs), cite a well-known peer (IDFC First), and confirm RBI + DICGC protection.'},
-  {q:'What is the primary performance metric for PBMs?',opts:['Number of accounts opened','Call duration','CSAT score','Revenue generated'],a:2,explain:'CSAT (Customer Satisfaction) is the #1 metric. It measures empathy and clarity — not just outcomes.'}
+// QUIZ DATA
+var Q1=[
+  {q:'What is Aspora?',o:['A fully licensed Indian bank','A Series B fintech platform for NRIs — NOT a bank itself','An RBI-regulated small finance bank','A government-backed remittance service'],a:1,e:'Aspora is a fintech platform (Series B startup). The actual banking is done by Shivalik Small Finance Bank (SSFB), the licensed banking partner.'},
+  {q:'Who is Aspora\'s regulated banking partner that holds the RBI licence?',o:['HDFC Bank','IDFC First Bank','Shivalik Small Finance Bank (SSFB)','Yes Bank'],a:2,e:'SSFB (Shivalik Small Finance Bank) is Aspora\'s regulated banking partner. They manage actual accounts, deposits, compliance, cards, and regulatory reporting.'},
+  {q:'Which countries does Aspora currently serve?',o:['UK, US, Canada','UK, US, UAE, EU','UK, Australia, UAE','US, UAE, Singapore'],a:1,e:'Aspora currently serves UK, US, UAE, and EU.'},
+  {q:'What is the maximum NRE savings rate Aspora offers?',o:['3.50%','5.50%','6.50%','7.00%'],a:3,e:'7% on balances of ₹25L–₹50L. This is the headline USP.'},
+  {q:'At what balance tier does the rate jump significantly to 6.5%?',o:['₹1 Lakh','₹5 Lakh','₹10 Lakh','₹25 Lakh'],a:2,e:'At ₹10 Lakh the rate jumps from 3.5% to 6.5%. Key tier to mention when customers hesitate about deposit amount.'},
+  {q:'How much more does a customer with ₹20 Lakh earn per year at Aspora vs HDFC?',o:['₹20,000','₹40,000','₹70,000','₹1,00,000'],a:2,e:'₹20L at Aspora ~6.5% ≈ ₹1,30,000/yr. ₹20L at HDFC 3% = ₹60,000/yr. Difference = ₹70,000.'},
+  {q:'What is Aspora\'s 1-year Fixed Deposit rate?',o:['6.50%','6.80%','7.00%','7.25%'],a:3,e:'Aspora FD 1yr = 7.25%, vs HDFC 6.5% and SBI 6.8%.'},
+  {q:'What is the daily ATM withdrawal limit?',o:['₹10,000','₹20,000','₹50,000','₹1,00,000'],a:1,e:'₹20,000 per transaction, ₹50,000 per day is the ATM withdrawal limit.'},
+  {q:'Aspora\'s current debit card supports international transactions.',o:['True — works globally','True — works in UK and UAE only','False — RuPay card is India domestic only; international support is planned Q3 2026','False — no card is available'],a:2,e:'The current RuPay virtual/physical card is India domestic only. International support is planned for Q3 2026 — do not promise this to customers.'},
+  {q:'A customer asks why Aspora offers 7% when HDFC only offers 3%. What is the correct explanation?',o:['Government subsidy','Foreign investment backing','No branches + no ATMs = cost savings passed to customers as higher interest','Aspora takes higher risk with deposits'],a:2,e:'No physical infrastructure (no branches, no ATMs) = much lower operating costs. Those savings are passed to customers as higher interest rates.'}
+];
+var Q2=[
+  {q:'What does NRE stand for?',o:['Non-Resident Earnings','Non-Resident External','National Remittance Entity','New Resident Exchange'],a:1,e:'NRE = Non-Resident External. It holds foreign earnings converted to INR.'},
+  {q:'Is interest on an NRE account taxable in India?',o:['Yes — 30% TDS deducted','Yes — but only above ₹2.5L','No — completely tax-free in India','Depends on the customer\'s home country'],a:2,e:'NRE interest is 100% tax-free in India. Zero TDS. This is one of the biggest selling points.'},
+  {q:'What is the repatriation limit on an NRE account?',o:['USD 500,000 per year','USD 1 million per year with RBI approval','Unlimited — 100% free, no cap, no approval needed','₹50 Lakh per year'],a:2,e:'NRE accounts allow unlimited, 100% free repatriation — no caps, no RBI approval, no paperwork.'},
+  {q:'A UK customer earns rent from a property in Mumbai. Which account type should hold this rent income?',o:['NRE — tax-free earnings','NRO — for India-based income like rent','FCNR — foreign currency','Either — both are the same'],a:1,e:'NRO is for India-sourced income: rent, pension, dividends. NRE is for foreign earnings.'},
+  {q:'What TDS rate applies to NRO interest?',o:['10%','15%','20%','30% + surcharge + cess'],a:3,e:'NRO interest is taxed at 30% TDS plus surcharge and cess — automatically deducted. DTAA can reduce this (e.g. India-UK rate is 15%).'},
+  {q:'A US customer needs to provide a TIN for their FATCA declaration. What number do they use?',o:['US Passport number','PAN card number','Social Security Number (SSN) or ITIN','US Green Card number'],a:2,e:'US TIN = SSN or ITIN. UK TIN = National Insurance Number. UAE = no TIN required.'},
+  {q:'What does FATCA compliance actually mean for a customer\'s tax position?',o:['They will pay extra tax','It creates no new tax — purely a reporting requirement','Their NRE interest becomes taxable','They must file US taxes'],a:1,e:'FATCA/CRS is a global reporting standard. It does NOT create new taxes. NRE interest stays 100% tax-free in India regardless.'},
+  {q:'UAE customers need to provide a TIN for FATCA declaration.',o:['True — UAE Tax ID required','True — Emirates ID number used as TIN','False — UAE has no income tax, no TIN required','Only if they have more than ₹10L in the account'],a:2,e:'UAE has no income tax, so there is no TIN requirement for UAE customers completing FATCA declaration.'},
+  {q:'What is the annual NRO-to-NRE repatriation limit?',o:['₹50 Lakh per year','USD 500,000 per year','USD 1 million per financial year','Unlimited with CA certificate'],a:2,e:'NRO repatriation is capped at USD 1 million per financial year (April–March). Tax clearance is mandatory.'},
+  {q:'Form 15CB is required for NRO repatriation when...',o:['Any amount is transferred','Transfers exceed USD 1 million in a year','Total FY transfers exceed ₹5 Lakh — must be obtained from a Chartered Accountant','The customer is a US citizen'],a:2,e:'Form 15CB from a CA is required when total NRO repatriation in a financial year exceeds ₹5 Lakh. Below this amount, Form 15CA alone suffices.'}
+];
+var Q3=[
+  {q:'How many documents does a customer need to open an NRI account?',o:['2','3','4','5'],a:1,e:'Only 3: Passport (all pages), PAN card, and Overseas non-residency + address proof.'},
+  {q:'A customer uploads only the photo page of their passport. What should you tell them?',o:['That\'s fine — only the photo page is needed','Upload ALL pages including blank ones — RBI requirement','Just the photo page and the last page is enough','Send the physical passport by post'],a:1,e:'RBI requires ALL passport pages, including blank ones. This is non-negotiable.'},
+  {q:'What is the maximum age of an acceptable address proof document?',o:['6 months','1 year','3 months','There is no limit'],a:2,e:'Address proof must be dated within the last 3 months — utility bill or bank statement.'},
+  {q:'A customer\'s Video KYC keeps failing. What is the first thing you check?',o:['Tell them to buy a new phone','Check if VPN is ON — most common hidden cause','Advise them to visit a branch','Escalate to tech team immediately'],a:1,e:'VPN being on is the most common hidden cause of KYC failures. Check this first before anything else.'},
+  {q:'A customer abroad has no active Indian SIM. What solution do you offer?',o:['They must return to India first','Application will be automatically cancelled','Family member\'s Indian SIM works, or use a virtual number option','They need to buy a new Indian SIM before proceeding'],a:2,e:"A family member's SIM (spouse/parent/sibling) is acceptable. There's also a virtual number option. Application stays active."},
+  {q:'Why is DND (Do Not Disturb) relevant to SIM binding?',o:['It blocks incoming calls from Aspora','It prevents OTPs from being received on that number','It causes the app to crash','It is not relevant to SIM binding'],a:1,e:'If DND is active on the Indian SIM, OTPs for SIM binding will not be received. Customer must turn DND off.'},
+  {q:'How many KYC correction attempts is a customer allowed, and within what time window?',o:['Unlimited attempts, 30 days','3 attempts, 30 days','5 attempts, 14 days','2 attempts, 60 days'],a:1,e:'Maximum 3 KYC correction attempts are allowed, within a 30-day correction window.'},
+  {q:'A customer is at Stage 20 (Digital Notary Intro) and asks what a notary is. What is the best response?',o:['Tell them it\'s an Aspora security feature they can skip','Explain it\'s a 10-minute video call from home — RBI mandates it for all NRI accounts, Aspora books it for them','Say it\'s optional and recommend skipping it','Tell them to Google "digital notary"'],a:1,e:'Frame it as RBI-mandated (removes perception that Aspora is adding complexity), emphasise it\'s from home and short, and confirm Aspora books the slot.'},
+  {q:'A customer\'s name on PAN is "Raj Kumar" but passport says "Rajkumar" (one word). What do you do?',o:['Reject — they need a new PAN card','This is a resolvable minor spelling difference — note it and proceed','Cancel the application','Ask them to change their passport name'],a:1,e:'Small spelling/spacing differences are resolvable with a note. Major name differences (different names entirely) require legal documentation.'},
+  {q:'After how many wrong MPIN attempts is a customer locked out for 24 hours?',o:['3 attempts','5 attempts','7 attempts','10 attempts'],a:1,e:'After 5 wrong MPIN attempts, the account is locked for 24 hours. After 3 wrong attempts, there is only a 15-minute cooldown.'}
+];
+var Q4=[
+  {q:'A customer says "I\'m very frustrated — I\'ve been trying for 3 weeks." What do you say FIRST?',o:['Explain how to fix the issue immediately','Ask for their account number','Acknowledge and apologise: "You\'re completely right to feel this way. I\'m sorry."','Transfer the call to a manager'],a:2,e:'Acknowledge before solving — always. The customer must feel heard before you give any solution. Empathy first, solution second.'},
+  {q:'Which CRM disposition code do you use when a customer completes onboarding on the call?',o:['C2','C3','C1','C4'],a:2,e:'C1 = Completed onboarding on call. Mark converted in CRM immediately.'},
+  {q:'A customer says "I\'ll call you back when I have time." What is the correct response?',o:['Say "okay" and end the call','Send an email and wait','Lock a specific day and time: "Is Tuesday at 4pm good for you?" and send a WhatsApp summary','Remove from pipeline — they declined'],a:2,e:'Never hang up without locking a specific callback time. "Call me when ready" almost always means a lost lead. Lock a day and time, then send a WhatsApp summary immediately.'},
+  {q:'How long after receiving a notification should you wait before calling the customer?',o:['Call immediately — maximum urgency','30 minutes','1–2 hours','Next business day'],a:2,e:'Wait 1–2 hours. Calling immediately means the customer hasn\'t read the notification yet and the call sounds like unsolicited contact.'},
+  {q:'A customer says "Is it safe? I don\'t trust digital banking." What is the best response?',o:['Tell them to trust you','Show them your website','Explain: RBI regulated via SSFB, DICGC insured to ₹5L, 256-bit encryption, KYC by licensed notary — same protection as HDFC','Offer to call back later'],a:2,e:'Give concrete credibility markers: RBI regulation, DICGC insurance, bank-grade encryption, licensed notary. Cite IDFC First as a known peer with the same model.'},
+  {q:'What is the SLA for following up after a "No Answer" (C6)?',o:['Within 24 hours','Next business day','Within 4 hours + WhatsApp message','Within 1 hour'],a:2,e:'C6 (No Answer): retry within 4 hours and send a WhatsApp message.'},
+  {q:'On which calls should you send the CSAT survey?',o:['Only resolved calls','Only when the customer seemed satisfied','Every single call — even if the issue was not resolved','Only when the customer requests it'],a:2,e:'CSAT is sent after every call without exception. Even a frustrated customer who got bad news but felt heard will give a good CSAT score.'},
+  {q:'A customer says "Already have HDFC NRE, why do I need Aspora?" What is the best response?',o:['Tell them to close HDFC','Say they can\'t have two NRE accounts','Add Aspora alongside — HDFC 3% for bills, Aspora 7% for savings = ₹70,000 more per year on ₹20L','Offer a discount'],a:2,e:'Never suggest closing another bank. Frame Aspora as complementary: HDFC for day-to-day, Aspora for maximising savings interest. NRIs can hold NRE accounts at multiple banks.'},
+  {q:'What tone should a PBM aim for on calls?',o:['Energetic and sales-focused','Calm, confident, consultative — "your dedicated banking contact", not a sales agent','Urgent and transactional','Scripted and formal'],a:1,e:'Goal: sound like a dedicated banking contact who owns the process. Never sound rushed, transactional, or scripted.'},
+  {q:'What is the correct WhatsApp drop-off message template?',o:['"Hi, please complete your application."','"Hi [Name], this is [PBM Name] from Aspora. You\'re close to completing — I\'m here to assist personally. Resume: [link]."','Send them the Aspora website link','Send them a rate comparison PDF'],a:1,e:'The template acknowledges they are close, offers personal assistance, and includes the resume link. Always personalise with name and PBM name.'}
+];
+var Q5=[
+  {q:'What does DICGC stand for and what does it do?',o:['Digital Insurance Corp — covers online fraud','Deposit Insurance and Credit Guarantee Corporation — insures bank deposits up to ₹5 lakh','RBI\'s internal audit body','A private deposit insurance company'],a:1,e:'DICGC is a statutory body under RBI. All scheduled banks are members. It covers deposits up to ₹5 lakh per depositor per bank.'},
+  {q:'What is the cooling period for a new beneficiary and what limits apply during this time?',o:['No cooling period — full limits apply immediately','48 hours, ₹25,000 max','24 hours, max ₹50,000/day and 2 transactions maximum','7 days, ₹10,000/day'],a:2,e:'24-hour cooling period. During this time: max ₹50,000/day and only 2 transactions. After 24 hours, full limits apply.'},
+  {q:'A UAE customer provides their IBAN for international transfer. What format should it be?',o:['16 digits starting with UAE','21 characters starting with AE','23 characters starting with AE','Any format — the bank will validate'],a:2,e:'UAE IBAN is 23 characters and starts with AE. Always verify this format when helping customers set up international beneficiaries.'},
+  {q:'What is the AML (Anti-Money Laundering) review threshold for transactions?',o:['₹5,00,000','₹10,00,000','₹25,00,000','₹50,00,000'],a:2,e:'Transactions at or above ₹25,00,000 (₹25 lakh) are subject to AML review.'},
+  {q:'A customer receives a physical card but doesn\'t activate it for 35 days. What happens?',o:['Nothing — no activation deadline','Card is automatically blocked — missed 30-day activation deadline','They need to pay a reactivation fee','Card works — 30 days is just a recommendation'],a:1,e:'Physical cards must be activated within 30 days of receipt. After 35 days, the activation deadline has passed and the card would need to be replaced.'},
+  {q:'After how many wrong MPIN entries is the account locked with only a 15-minute cooldown?',o:['1 attempt','3 attempts','5 attempts','10 attempts'],a:1,e:'3 wrong MPIN attempts = 15-minute cooldown. 5 wrong attempts = 24-hour lockout or immediate reset via identity verification.'},
+  {q:'A customer asks: "Who does Aspora\'s KYC verification?" What do you say?',o:['Tell them it\'s Persona SDK','Tell them it\'s NotaryLive','Say "our licensed verification partner" — never name the vendor','Tell them it\'s the RBI directly'],a:2,e:'Partner names (Persona, NotaryLive, Zoho Sign etc.) are internal information. Never share with customers. Use "our licensed verification partner."'},
+  {q:'What is the minimum remittance amount on the Aspora platform?',o:['₹100','₹500','₹1,000','₹5,000'],a:2,e:'Minimum remittance is ₹1,000.'},
+  {q:'A customer wants to claim the India-UK DTAA benefit to reduce TDS on NRO interest from 30% to 15%. What documents do they need?',o:['Only their passport','Only Form 15CA','Tax Residency Certificate (TRC) + Form 10F','Just a letter from their UK employer'],a:2,e:'To claim DTAA benefit (India-UK rate: 15% vs standard 30%), customers need a Tax Residency Certificate (TRC) from HMRC and Form 10F. Direct them to a tax advisor.'},
+  {q:'What should you say if a customer asks whether they were rejected due to sanctions screening?',o:['Confirm they were flagged for sanctions','Tell them "could not be approved after compliance review" — never mention sanctions','Explain the AML/OFAC screening process in detail','Offer to override the compliance decision'],a:1,e:'Never tell a customer they were flagged for sanctions. The correct phrase is "could not be approved after compliance review." This is a strict compliance rule.'}
 ];
 
-var Q_NRI=[
-  {q:'What does NRE stand for?',opts:['Non-Resident Earnings','Non-Resident External','National Resident Exchange','New Remittance Entity'],a:1,explain:'NRE = Non-Resident External account. It holds foreign earnings converted to INR.'},
-  {q:'Is interest on an NRE account taxable in India?',opts:['Yes, fully taxable','Yes, but at reduced rate','No, completely tax-free','Only amounts above ₹2.5L are taxed'],a:2,explain:'NRE interest is 100% tax-free in India. No TDS is deducted. This is a major selling point.'},
-  {q:'A UK customer has ₹15 Lakh in rent from Indian property. Which account type is appropriate?',opts:['NRE — tax-free earnings','NRO — for India-based income','FCNR — foreign currency','Any of the above'],a:1,explain:'NRO is for India-sourced income like rent, pension, dividends. NRE is for foreign earnings.'},
-  {q:'What is the repatriation limit on an NRE account?',opts:['USD 1 million per year','₹50 Lakh per year','Unlimited — 100% free','Requires RBI approval for amounts over ₹10 Lakh'],a:2,explain:'NRE accounts allow 100% free, unlimited repatriation — no caps, no RBI approval needed.'},
-  {q:'Does Aspora offer NRO accounts?',opts:['Yes, both NRE and NRO','Yes, NRO only','No — Aspora offers NRE accounts only','Only for UAE customers'],a:2,explain:'Aspora currently offers NRE accounts only. NRO is not available on the platform.'},
-  {q:'What does FATCA stand for and what does it actually mean for the customer?',opts:['A new Indian tax that NRIs must pay','A reporting requirement — no new tax liability','A fee charged for international accounts','Foreign Account Tax Collection Act — you pay 30% tax'],a:1,explain:'FATCA/CRS is a global reporting standard. It does NOT create new taxes. NRE interest stays tax-free regardless.'},
-  {q:'A US customer asks for their TIN for the FATCA declaration. What do they use?',opts:['Passport number','PAN card number','Social Security Number','US Green Card number'],a:2,explain:'US TIN = Social Security Number. UK TIN = National Insurance Number. UAE = no TIN required.'},
-  {q:'What happens to NRE interest during FATCA reporting?',opts:['It becomes taxable','It is reduced by 10%','It remains completely tax-free','It depends on the country'],a:2,explain:'FATCA is reporting only. NRE interest stays 100% tax-free in India regardless of FATCA declaration.'},
-  {q:'FCNR accounts hold money in:',opts:['Indian Rupees only','Only USD','Foreign currency (GBP/USD/EUR)','Gold-backed units'],a:2,explain:'FCNR (Foreign Currency Non-Resident) accounts hold money in the original foreign currency — GBP, USD, EUR etc. — protecting against forex risk.'},
-  {q:'A customer says "I have HDFC NRE, why do I need Aspora?" What is the best response?',opts:['Tell them to close HDFC','Explain they don\'t need it','Say add Aspora alongside — HDFC 3% vs Aspora 7%, most NRIs keep HDFC for bills, Aspora for savings','Offer a discount'],a:2,explain:'Never say "close it." Frame Aspora as complementary — HDFC for day-to-day, Aspora for maximising savings interest.'}
-];
-
-var Q_PROCESS=[
-  {q:'How many documents does a customer need to open an NRI account?',opts:['5 documents','4 documents','3 documents','2 documents'],a:2,explain:'Only 3: Passport (all pages), PAN card, and Overseas address proof.'},
-  {q:'What is the maximum age of an address proof document?',opts:['6 months','1 year','3 months','There is no limit'],a:2,explain:'Address proof must be within the last 3 months — utility bill or bank statement.'},
-  {q:'A customer uploads their passport but only the photo page. What should you tell them?',opts:['That\'s fine — only the photo page is needed','Upload ALL pages including blank ones — RBI requirement','Re-upload with better lighting','Send it by post instead'],a:1,explain:'RBI requires ALL passport pages to be submitted, including blank ones. This is non-negotiable.'},
-  {q:'A customer stuck at Stage 12 (Video KYC) says their camera isn\'t working. What do you check first?',opts:['Ask them to buy a new phone','Check VPN is OFF — it\'s the most common hidden cause','Tell them to come to a branch','Escalate immediately to tech team'],a:1,explain:'VPN being on is the most common hidden cause of KYC failures. Check this first before anything else.'},
-  {q:'What is digital notarization and why is it required?',opts:['Optional document certification','RBI-mandated video call with licensed notary to verify passport — all Indian banks require it for NRIs','A physical stamp from a government office','A fee paid to Aspora'],a:1,explain:'Digital notarization is RBI-mandated — not Aspora\'s choice. Every Indian bank requires it for NRI accounts. It\'s a 5-10 min video call from home.'},
-  {q:'A customer abroad doesn\'t have their Indian SIM active. What is the best solution?',opts:['Tell them to come back to India first','They cannot proceed until they return to India','Family member\'s Indian SIM works fine (spouse/parent/sibling). Or virtual number option.','Cancel the application'],a:2,explain:'A family member\'s Indian SIM is acceptable. There\'s also a virtual number option. The application stays active.'},
-  {q:'What does "DND" mean in the context of SIM binding, and why does it matter?',opts:['Do Not Disturb — OTPs cannot be received on a DND number','Data Not Downloaded — slow connection issue','Direct Number Dialing — a different feature','Dual Number Device — using two SIMs'],a:0,explain:'DND (Do Not Disturb) blocks promotional and transactional messages. If DND is ON, the OTP for SIM binding won\'t arrive.'},
-  {q:'At what stage does the customer\'s account actually get opened?',opts:['After e-signing (Stage 24)','After SIM binding (Stage 18)','After completing Stage 30 (Account summary - initial funding)','After digital notarization'],a:2,explain:'Stage 30 is the account opened stage. The PBM calls to assist with initial funding.'},
-  {q:'A customer\'s name on PAN is "Raj Kumar" but passport says "Rajkumar". What do you do?',opts:['Tell them it will be rejected — get a new PAN','This is a resolvable small spelling difference — note it and proceed','Cancel the application','Ask them to change their passport name'],a:1,explain:'Small spelling differences are resolvable with a note. Major differences (different names) need legal documents. Catch this early at Stage 3.'},
-  {q:'How long does the full digital onboarding take approximately?',opts:['2-3 hours','45-60 minutes','15-20 minutes','3-5 business days'],a:2,explain:'The full process takes approximately 15-20 minutes when done in one session. Progress is always saved if interrupted.'}
-];
-
-var Q_CALLS=[
-  {q:'A customer says "I\'m very frustrated, I\'ve been trying for 3 weeks." What do you say FIRST?',opts:['Tell them how to fix the issue immediately','Acknowledge and apologise: "You\'re completely right to feel this way. I\'m sorry."','Ask for their account number','Explain it\'s not your fault'],a:1,explain:'Always acknowledge before solving. "Stop — acknowledge first, always." The customer must feel heard before you give any solution.'},
-  {q:'A customer says "I\'m too busy, call me later." What is the best next step?',opts:['Say "okay" and end the call','Ask "What rate is your bank giving on NRE savings?" — use a rate comparison to create urgency','Send an email','Remove from pipeline'],a:1,explain:'Create urgency with the rate question first. If still busy, lock an exact day and time before hanging up.'},
-  {q:'How long after a customer notification should you wait before calling?',opts:['Call immediately — maximum urgency','30 minutes','1-2 hours','Next business day'],a:2,explain:'Wait 1-2 hours — calling immediately means the customer hasn\'t read the notification yet and you\'ll sound like spam.'},
-  {q:'A customer says they want to discuss with their family first. What do you NOT do?',opts:['Send a WhatsApp summary immediately','Ask what specific concern the family will have','Say "okay, call me when you\'re ready" and end the call without booking a follow-up','Offer a 3-way call'],a:2,explain:'Never hang up without locking a specific follow-up time. "Okay call me when ready" almost always means lost lead.'},
-  {q:'On which calls should you send the CSAT survey?',opts:['Only calls where the issue was resolved','Only calls where the customer seemed happy','Every single call — even if the issue wasn\'t resolved','Only when the customer asks for it'],a:2,explain:'CSAT is sent on every call without exception. Even a customer who got bad news but felt heard will give a good CSAT.'},
-  {q:'What does CSAT measure?',opts:['Whether you solved the problem','Empathy and clarity of the interaction — not just outcomes','The number of accounts you opened','How long the call lasted'],a:1,explain:'CSAT measures whether the customer felt heard and helped — empathy and clarity. Not purely problem resolution.'},
-  {q:'A customer asks "Do I have to close my HDFC NRE account to open with Aspora?" What do you say?',opts:['Yes — they can\'t have two NRE accounts at the same bank','No — add Aspora alongside. Most NRIs keep HDFC for bills, Aspora for savings.','Yes — HDFC and Aspora are incompatible','Only if the balance is over ₹10 Lakh'],a:1,explain:'Never suggest closing another bank. NRIs can have NRE accounts at multiple banks. Frame Aspora as complementary, not competitive.'},
-  {q:'A customer says "The 7% rate sounds too good to be true." What is the core explanation?',opts:['Tell them not to worry and trust us','Explain: no branches + no ATMs = cost savings passed to you as interest. Same model as IDFC First. RBI + DICGC protected.','Say "others also offer 7%" without more detail','Ignore the concern and continue'],a:1,explain:'Validate the concern, explain the business model (no physical infrastructure = cost savings), cite IDFC First as peer, confirm RBI + DICGC.'},
-  {q:'What is the CSAT closing script?',opts:['"Thanks for calling, goodbye."','"I\'ll send you a feedback form sometime."','"Quick 1-question survey, 10 seconds — sending on WhatsApp now." [Send immediately]','Ask if they\'d like to leave a Google review'],a:2,explain:'Send the survey link IMMEDIATELY on WhatsApp while on the call. Don\'t wait — the moment you hang up, response rates drop dramatically.'},
-  {q:'A customer is at Stage 20 (Digital Notary) and says "I don\'t understand why I need a notary." What do you say?',opts:['Explain it\'s an Aspora security requirement','Say it\'s optional and they can skip it','"This is an RBI requirement — all Indian banks require it for NRI accounts. It\'s a 10-minute video call from home. We book it for you."','Tell them to look it up online'],a:2,explain:'Frame it as RBI-mandated (true) — removes perception it\'s Aspora making things difficult. Emphasise it\'s from home, short, and fully guided.'}
-];
-
-// ─── INIT QUIZZES ─────────────────────────────────────────────
-buildQuiz('quiz-aspora-container','quiz-aspora',Q_ASPORA);
-buildQuiz('quiz-nri-container','quiz-nri',Q_NRI);
-buildQuiz('quiz-process-container','quiz-process',Q_PROCESS);
-buildQuiz('quiz-calls-container','quiz-calls',Q_CALLS);
+initQuiz('qc-q1','q1',Q1);
+initQuiz('qc-q2','q2',Q2);
+initQuiz('qc-q3','q3',Q3);
+initQuiz('qc-q4','q4',Q4);
+initQuiz('qc-q5','q5',Q5);
 </script>
 </body>
 </html>
