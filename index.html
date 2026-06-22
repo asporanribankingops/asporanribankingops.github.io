@@ -63,6 +63,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .tab[data-tab="kycflow"].active     {background:#e0f2fe;color:#0369a1;border-color:#0ea5e9}
 .tab[data-tab="obflow"]     ::before{background:#f97316}
 .tab[data-tab="obflow"].active     {background:#fff7ed;color:#c2410c;border-color:#f97316}
+.tab[data-tab="quiz"]::before{background:#f43f5e}
+.tab[data-tab="quiz"].active{background:#fff1f2;color:#be123c;border-color:#f43f5e}
 
 /* ── Panel colour headers ── */
 .panel-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:16px;border-left:4px solid}
@@ -750,6 +752,7 @@ function handleGoogleSignIn(response) {
     <button class="tab" data-tab="kycflow" onclick="switchTab('kycflow')"><i class="ti ti-git-branch" style="font-size:14px"></i> KYC Case Mgmt</button>
     <button class="tab" data-tab="obflow" onclick="switchTab('obflow')"><i class="ti ti-device-mobile" style="font-size:14px"></i> Onboarding Flow</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
+    <button class="tab" data-tab="quiz" onclick="switchTab('quiz')"><i class="ti ti-brain" style="font-size:14px"></i> Knowledge Quiz</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
     <button class="tab" id="add-page-btn" onclick="cpAddPage()" style="border-style:dashed;opacity:.7"><i class="ti ti-plus" style="font-size:13px"></i> New page</button>
@@ -5563,6 +5566,43 @@ switchTab = function(id) {
 
   </div><!-- /panel-obflow -->
 
+
+  <!-- ═══════════ KNOWLEDGE QUIZ PANEL ═══════════ -->
+  <div id="panel-quiz" class="panel" style="border-top:3px solid #f43f5e">
+    <div class="panel-banner" style="background:linear-gradient(135deg,#fff1f2,#fce7f3);border-color:#f43f5e;color:#be123c">
+      <div class="panel-banner-icon" style="background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff">🧠</div>
+      <div>
+        <div class="panel-banner-title">Knowledge Check Quiz</div>
+        <div class="panel-banner-sub">Test what you've learned · Match terms · Answer MCQs · See your gaps</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div id="quiz-score-badge" style="display:none;background:#fff;border:2px solid #f43f5e;border-radius:100px;padding:6px 18px;font-size:15px;font-weight:800;color:#be123c"></div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="background:#f3f4f6;border-radius:100px;height:8px;margin-bottom:20px;overflow:hidden">
+      <div id="quiz-progress-fill" style="height:100%;width:0;background:linear-gradient(90deg,#f43f5e,#fb7185);border-radius:100px;transition:width .4s ease"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#9ca3af;margin-top:-14px;margin-bottom:18px">
+      <span id="quiz-progress-label">0 of 0 answered</span>
+      <span id="quiz-timer-label">⏱ 0:00</span>
+    </div>
+
+    <div id="quiz-body"></div>
+
+    <!-- Results panel -->
+    <div id="quiz-results" style="display:none;animation:fadeSlideIn .3s ease">
+      <div id="quiz-results-inner"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap" id="quiz-action-bar">
+      <button id="quiz-start-btn" onclick="quizStart()" style="padding:11px 28px;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(244,63,94,.3);transition:all .18s">🚀 Start Quiz</button>
+      <button id="quiz-submit-btn" onclick="quizSubmit()" style="display:none;padding:11px 28px;background:linear-gradient(135deg,#2ea55e,#16a34a);color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(46,165,94,.3)">✓ Submit & See Results</button>
+      <button id="quiz-retry-btn" onclick="quizStart()" style="display:none;padding:11px 28px;background:#f3f4f6;color:#374151;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer">↺ Try Again</button>
+    </div>
+  </div>
+
   <div id="panel-auditlog" class="panel panel-auditlog">
     <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
@@ -6573,6 +6613,522 @@ function showToast(msg){
   setTimeout(function(){t.classList.add('show');},10);
   setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},2800);
 }
+
+})();
+</script>
+
+<!-- ═══════════════════════ QUIZ ENGINE ═══════════════════════ -->
+<style>
+/* ── Quiz layout ── */
+.quiz-section{margin-bottom:32px}
+.quiz-section-title{font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#be123c;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.quiz-section-title span{background:#fff1f2;border:1.5px solid #fecdd3;border-radius:100px;padding:3px 12px;font-size:11px}
+
+/* MCQ */
+.mcq-card{background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:border-color .2s}
+.mcq-q{font-size:14px;font-weight:600;color:#1e293b;margin-bottom:14px;line-height:1.5}
+.mcq-q .q-num{display:inline-block;width:24px;height:24px;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;border-radius:50%;font-size:11px;font-weight:700;text-align:center;line-height:24px;margin-right:8px;flex-shrink:0}
+.mcq-opts{display:flex;flex-direction:column;gap:8px}
+.mcq-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid rgba(0,0,0,.08);border-radius:10px;cursor:pointer;transition:all .15s;font-size:13.5px;color:#374151;background:#fafafa;user-select:none}
+.mcq-opt:hover{border-color:#f43f5e;background:#fff1f2;color:#be123c}
+.mcq-opt.selected{border-color:#4f6af5;background:#eef2ff;color:#3730a3;font-weight:600}
+.mcq-opt.correct{border-color:#16a34a;background:#f0fdf4;color:#15803d;font-weight:600}
+.mcq-opt.wrong{border-color:#dc2626;background:#fef2f2;color:#dc2626}
+.mcq-opt.reveal-correct{border-color:#16a34a;background:#f0fdf4;color:#15803d;font-weight:600}
+.mcq-opt-key{width:22px;height:22px;border-radius:6px;border:1.5px solid rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#6b7280;flex-shrink:0;background:#fff;transition:all .15s}
+.mcq-opt.selected .mcq-opt-key{background:#4f6af5;border-color:#4f6af5;color:#fff}
+.mcq-opt.correct .mcq-opt-key{background:#16a34a;border-color:#16a34a;color:#fff}
+.mcq-opt.wrong .mcq-opt-key{background:#dc2626;border-color:#dc2626;color:#fff}
+.mcq-feedback{font-size:12px;margin-top:10px;padding:8px 12px;border-radius:8px;display:none;line-height:1.5}
+.mcq-feedback.show{display:block}
+.mcq-feedback.ok{background:#f0fdf4;color:#15803d;border-left:3px solid #16a34a}
+.mcq-feedback.bad{background:#fef2f2;color:#dc2626;border-left:3px solid #dc2626}
+
+/* Mix & Match */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.match-grid{grid-template-columns:1fr}}
+.match-col-label{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px}
+.match-item{padding:10px 14px;border:1.5px solid rgba(0,0,0,.1);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;background:#fff;transition:all .18s;position:relative;line-height:1.4}
+.match-item:hover{border-color:#f43f5e;background:#fff8f8}
+.match-item.selected{border-color:#f43f5e;background:#fff1f2;font-weight:700;box-shadow:0 0 0 3px rgba(244,63,94,.15)}
+.match-item.matched-ok{border-color:#16a34a;background:#f0fdf4;color:#15803d;cursor:default;font-weight:600}
+.match-item.matched-ok::after{content:'✓';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#16a34a;font-weight:800}
+.match-item.matched-wrong{border-color:#dc2626;background:#fef2f2;color:#dc2626;cursor:default}
+.match-item.matched-wrong::after{content:'✗';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#dc2626;font-weight:800}
+.match-item.disabled{opacity:.5;cursor:default;pointer-events:none}
+.match-connector{display:flex;align-items:center;justify-content:center;font-size:18px;color:#d1d5db;padding:4px 0}
+
+/* True/False */
+.tf-card{background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;padding:18px 20px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.tf-q{font-size:13.5px;font-weight:600;color:#1e293b;margin-bottom:12px;line-height:1.5}
+.tf-opts{display:flex;gap:8px}
+.tf-btn{flex:1;padding:9px;border:1.5px solid rgba(0,0,0,.1);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;background:#fafafa}
+.tf-btn.t:hover{border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.tf-btn.f:hover{border-color:#dc2626;background:#fef2f2;color:#dc2626}
+.tf-btn.selected-t{border-color:#4f6af5;background:#eef2ff;color:#4f6af5}
+.tf-btn.correct-ans{border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.tf-btn.wrong-ans{border-color:#dc2626;background:#fef2f2;color:#dc2626}
+
+/* Results */
+.result-card{background:#fff;border-radius:16px;padding:28px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1.5px solid rgba(0,0,0,.07);margin-bottom:20px}
+.result-score{font-size:56px;font-weight:800;line-height:1;margin-bottom:4px}
+.result-grade{font-size:18px;font-weight:700;margin-bottom:16px}
+.gap-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#fff7f7;border:1.5px solid #fecdd3;border-radius:10px;margin-bottom:8px;font-size:13px;color:#9f1239;line-height:1.5}
+.gap-item .gap-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.strength-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;margin-bottom:8px;font-size:13px;color:#15803d}
+.result-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7280;margin:16px 0 8px}
+</style>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══════════ QUIZ DATA ═══════════ */
+var QUIZ = {
+
+  /* ── Section 1: Mix & Match ── */
+  matchSets: [
+    {
+      title: 'Aspora — Entities & Regulators',
+      topic: 'product',
+      pairs: [
+        {left:'RTL (Real Transfer Limited)', right:'Aspora\'s legal entity — operates the platform'},
+        {left:'FCA', right:'UK regulator — authorises Aspora as a payment institution'},
+        {left:'SSFB (Shivalik Small Finance Bank)', right:'Partner bank — holds RBI licence, takes deposits'},
+        {left:'DICGC', right:'Deposit insurer — covers up to ₹5 lakh per depositor'},
+        {left:'PRA', right:'UK prudential regulator — does NOT regulate Aspora'},
+      ]
+    },
+    {
+      title: 'Account Types',
+      topic: 'accounts',
+      pairs: [
+        {left:'NRE Account', right:'Tax-free in India · Fully repatriable · For foreign earnings'},
+        {left:'NRO Account', right:'Taxable in India · For Indian income (rent, pension, dividends)'},
+        {left:'FCNR Account', right:'Foreign currency deposits · No INR conversion risk'},
+        {left:'Demat Account', right:'Holds shares & mutual funds — not a savings account'},
+      ]
+    },
+    {
+      title: 'KYC Queue Names',
+      topic: 'kyc',
+      pairs: [
+        {left:'KYC Open Queue', right:'Fresh & re-submitted KYC cases waiting for agent review'},
+        {left:'Debit Freeze Queue', right:'Approved cases awaiting initial funding + address verification'},
+        {left:'AVPQ', right:'Address Verification Pending — funded but address not yet confirmed'},
+        {left:'Lapsed Queue', right:'Discrepant cases where customer didn\'t resubmit in time'},
+        {left:'Rejected Queue', right:'Permanently rejected cases — cannot be reopened'},
+      ]
+    },
+    {
+      title: 'Onboarding Stages',
+      topic: 'stages',
+      pairs: [
+        {left:'Stage 0', right:'Not started — lead created but app not opened'},
+        {left:'Stage 12', right:'Video KYC — Verification SDK / Persona'},
+        {left:'Stage 17', right:'SIM Binding — Indian mobile number verification'},
+        {left:'Stage 20', right:'Digital Notary — video notarisation begins'},
+        {left:'Stage 24', right:'E-Signing — documents signed digitally'},
+        {left:'Stage 30', right:'Account Active — onboarding complete 🎉'},
+      ]
+    }
+  ],
+
+  /* ── Section 2: MCQ ── */
+  mcqs: [
+    {
+      q:'What type of regulated entity is Aspora (RTL)?',
+      opts:['A deposit-taking bank regulated by PRA','An FCA-authorised payment institution for money remittance','An NBFC registered with RBI','A credit union regulated by FCA'],
+      ans:1, topic:'product',
+      explain:'Aspora (RTL) is an FCA-authorised payment institution — it facilitates money transfers but does NOT take deposits. Deposits are held by partner bank SSFB.'
+    },
+    {
+      q:'Which bank actually holds the customer\'s NRE/NRO deposits?',
+      opts:['Aspora (RTL)','HDFC Bank','Shivalik Small Finance Bank (SSFB)','Reserve Bank of India'],
+      ans:2, topic:'product',
+      explain:'SSFB holds the deposits and has the RBI banking licence. Aspora acts as an introducer — it onboards customers and channels them to SSFB.'
+    },
+    {
+      q:'DICGC deposit insurance covers up to how much per depositor?',
+      opts:['₹1 lakh','₹2 lakh','₹5 lakh','₹10 lakh'],
+      ans:2, topic:'product',
+      explain:'DICGC (Deposit Insurance and Credit Guarantee Corporation) covers up to ₹5 lakh per depositor per bank — applicable to SSFB deposits.'
+    },
+    {
+      q:'A customer says "I earn rent from my Mumbai flat — which account should I use for that income?"',
+      opts:['NRE Account — it\'s tax-free','NRO Account — for income sourced in India','FCNR Account — best for Indian income','Either NRE or NRO, they\'re the same'],
+      ans:1, topic:'accounts',
+      explain:'NRO accounts are for income earned in India (rent, dividends, pension). NRE is for foreign earnings remitted to India. This is a critical distinction customers often confuse.'
+    },
+    {
+      q:'Which exchange rate does Aspora use for remittances?',
+      opts:['RBI reference rate + 2% margin','Google exchange rate with zero hidden fees','SWIFT mid-market rate','Custom Aspora rate determined daily'],
+      ans:1, topic:'product',
+      explain:'Aspora matches Google exchange rates and charges zero hidden FX fees — a key differentiator to highlight when customers compare with banks or exchange houses.'
+    },
+    {
+      q:'A customer\'s KYC is marked discrepant. What happens next?',
+      opts:['The case moves to Rejected Queue immediately','Customer gets a notification to resubmit; case re-enters KYC Open Queue with a Re-submission tag','Case is auto-approved after 48 hours','Agent approves it manually without customer action'],
+      ans:1, topic:'kyc',
+      explain:'Discrepant cases wait for the customer to resubmit corrected info. Once resubmitted, the case re-enters the KYC Open Queue with a "Re-submission" tag so agents know it\'s a retry.'
+    },
+    {
+      q:'What does the Debit Freeze Queue mean for the customer?',
+      opts:['Their account is blocked due to fraud suspicion','KYC was approved — waiting for initial funding and address verification before full activation','They have an outstanding balance to pay','Their KYC was rejected and they must restart'],
+      ans:1, topic:'kyc',
+      explain:'Debit Freeze is a normal post-approval holding state. The account exists but transfers out are restricted until the first deposit lands AND address is verified.'
+    },
+    {
+      q:'FATCA is a tax compliance requirement from which country?',
+      opts:['India','UK','USA','UAE'],
+      ans:2, topic:'compliance',
+      explain:'FATCA (Foreign Account Tax Compliance Act) is a US law requiring financial institutions globally to report US persons\' foreign accounts to the IRS. It applies even to non-US customers who have US tax residency.'
+    },
+    {
+      q:'A customer asks "Will the UK Financial Ombudsman handle my complaint?" — what\'s the correct answer?',
+      opts:['Yes, Aspora is UK-based so UK Ombudsman applies','No — Aspora acts as introducer to SSFB; disputes are governed by Indian law and RBI framework','Yes, but only for remittance-related complaints','Partially — remittance under UK Ombudsman, savings under Indian law'],
+      ans:1, topic:'compliance',
+      explain:'Since the account is held by SSFB (an Indian bank), disputes fall under Indian banking law and RBI\'s grievance framework. The UK Ombudsman has no jurisdiction over SSFB deposits.'
+    },
+    {
+      q:'Aspora was formerly known as which brand?',
+      opts:['TransferWise','Vance','Remitly','Wise NRI'],
+      ans:1, topic:'product',
+      explain:'Aspora rebranded from Vance. It\'s backed by Sequoia Capital and supports transfers to 3,000+ Indian banks.'
+    },
+    {
+      q:'At which stage does SIM binding typically happen?',
+      opts:['Stage 3','Stage 12','Stage 17','Stage 24'],
+      ans:2, topic:'stages',
+      explain:'SIM binding (Indian mobile number verification) happens at Stage 17. Tip: confirm the customer\'s Indian SIM is active early in the call to prevent silent failures at this stage.'
+    },
+    {
+      q:'A customer\'s case shows "Re-submission" tag in the KYC Open Queue. What does this mean?',
+      opts:['First-time submission from this customer','Customer was asked to fix a discrepancy and has resubmitted','System auto-re-submitted due to a technical error','Agent manually escalated the case'],
+      ans:1, topic:'kyc',
+      explain:'The Re-submission tag means the customer was previously told their KYC was discrepant, made the corrections, and resubmitted. Agents should review this with awareness of the previous discrepancy.'
+    },
+  ],
+
+  /* ── Section 3: True / False ── */
+  trueFalse: [
+    {q:'Aspora (RTL) is regulated by both FCA and PRA in the UK.',ans:false,topic:'product',explain:'False — Aspora is FCA-regulated as a payment institution only. PRA regulates deposit-taking banks, which Aspora is not.'},
+    {q:'An NRE account\'s interest and principal are fully repatriable to the country of residence.',ans:true,topic:'accounts',explain:'True — NRE accounts are fully repatriable. Both principal and interest can be transferred abroad freely, and the interest is tax-free in India.'},
+    {q:'UK FSCS (Financial Services Compensation Scheme) protects Aspora customers\' deposits.',ans:false,topic:'product',explain:'False — FSCS applies to UK deposit-takers. Aspora doesn\'t hold deposits; SSFB does. DICGC (up to ₹5L) applies to SSFB deposits.'},
+    {q:'A customer in the Lapsed Queue can still be re-activated by resubmitting their KYC.',ans:true,topic:'kyc',explain:'True — lapsed cases occur when the customer didn\'t resubmit in time, but they can still resubmit to re-enter the KYC Open Queue.'},
+    {q:'Aspora supports money transfers to over 3,000 Indian banks.',ans:true,topic:'product',explain:'True — Aspora\'s transfer network covers 3,000+ Indian banks, which is a strong selling point versus competitors with limited bank support.'},
+    {q:'Video KYC happens at Stage 24 of the onboarding flow.',ans:false,topic:'stages',explain:'False — Video KYC (Persona/Verification SDK) happens at Stage 12. Stage 24 is E-Signing.'},
+    {q:'CRS (Common Reporting Standard) and FATCA serve different purposes — CRS is for multi-country reporting, FATCA is US-specific.',ans:true,topic:'compliance',explain:'True — FATCA applies to US persons globally. CRS is an OECD standard adopted by 100+ countries for multilateral tax information sharing.'},
+    {q:'Once a customer\'s KYC is Rejected, the case can be reopened with additional documents.',ans:false,topic:'kyc',explain:'False — Rejected cases are permanent. The customer must start the onboarding process fresh if they wish to proceed.'},
+  ]
+};
+
+/* ═══════════ QUIZ STATE ═══════════ */
+var qState = {
+  started: false,
+  mcqAnswers: {},   // idx → chosen option
+  tfAnswers: {},    // idx → true/false
+  matchAnswers: [], // per set: {leftIdx → rightIdx}
+  matchSelected: {left:null, right:null}, // per set
+  submitted: false,
+  timerSecs: 0,
+  timerInterval: null,
+  currentMatchSet: 0,
+};
+
+/* ═══════════ RENDER QUIZ ═══════════ */
+window.quizStart = function(){
+  qState = {started:true,mcqAnswers:{},tfAnswers:{},matchAnswers:QUIZ.matchSets.map(function(){return {};}),
+    matchSelected:{left:null,right:null},submitted:false,timerSecs:0,timerInterval:null};
+  clearInterval(qState.timerInterval);
+  qState.timerInterval = setInterval(function(){
+    qState.timerSecs++;
+    var m=Math.floor(qState.timerSecs/60),s=qState.timerSecs%60;
+    var el=document.getElementById('quiz-timer-label');
+    if(el) el.textContent='⏱ '+m+':'+(s<10?'0':'')+s;
+  },1000);
+  document.getElementById('quiz-results').style.display='none';
+  document.getElementById('quiz-start-btn').style.display='none';
+  document.getElementById('quiz-retry-btn').style.display='none';
+  document.getElementById('quiz-submit-btn').style.display='inline-block';
+  document.getElementById('quiz-score-badge').style.display='none';
+  renderQuiz();
+};
+
+function renderQuiz(){
+  var html='';
+
+  /* ── Mix & Match sets ── */
+  html+='<div class="quiz-section">';
+  html+='<div class="quiz-section-title">🔗 Mix & Match <span>Drag to match or click term → click definition</span></div>';
+  QUIZ.matchSets.forEach(function(set,si){
+    html+='<div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)">';
+    html+='<div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:14px">'+set.title+'</div>';
+    // Shuffle rights
+    var rightOrder = set.pairs.map(function(_,i){return i;});
+    rightOrder = rightOrder.sort(function(){return Math.random()-.5;});
+    html+='<div class="match-grid"><div>';
+    html+='<div class="match-col-label">Terms</div>';
+    set.pairs.forEach(function(p,pi){
+      html+='<div class="match-item" id="ml-'+si+'-'+pi+'" onclick="matchClick(\'left\','+si+','+pi+')" data-si="'+si+'" data-idx="'+pi+'">'+p.left+'</div>';
+    });
+    html+='</div><div>';
+    html+='<div class="match-col-label">Definitions</div>';
+    rightOrder.forEach(function(ri){
+      html+='<div class="match-item" id="mr-'+si+'-'+ri+'" onclick="matchClick(\'right\','+si+','+ri+')" data-si="'+si+'" data-idx="'+ri+'">'+QUIZ.matchSets[si].pairs[ri].right+'</div>';
+    });
+    html+='</div></div>';
+    html+='<div id="match-feedback-'+si+'" style="font-size:12px;color:#9ca3af;margin-top:8px">Click a term then click its matching definition.</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* ── MCQ ── */
+  html+='<div class="quiz-section">';
+  html+='<div class="quiz-section-title">💡 Multiple Choice <span>'+QUIZ.mcqs.length+' questions</span></div>';
+  QUIZ.mcqs.forEach(function(q,qi){
+    html+='<div class="mcq-card" id="mcq-'+qi+'">';
+    html+='<div class="mcq-q"><span class="q-num">'+(qi+1)+'</span>'+q.q+'</div>';
+    html+='<div class="mcq-opts">';
+    var keys=['A','B','C','D'];
+    q.opts.forEach(function(opt,oi){
+      html+='<div class="mcq-opt" id="mcqo-'+qi+'-'+oi+'" onclick="mcqPick('+qi+','+oi+')">'
+        +'<span class="mcq-opt-key">'+keys[oi]+'</span>'+opt+'</div>';
+    });
+    html+='</div>';
+    html+='<div class="mcq-feedback" id="mcqf-'+qi+'"></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* ── True / False ── */
+  html+='<div class="quiz-section">';
+  html+='<div class="quiz-section-title">✅ True or False <span>'+QUIZ.trueFalse.length+' statements</span></div>';
+  QUIZ.trueFalse.forEach(function(q,qi){
+    html+='<div class="tf-card" id="tf-'+qi+'">';
+    html+='<div class="tf-q"><span class="q-num" style="background:linear-gradient(135deg,#7b95f6,#4f6af5)">'+(qi+1)+'</span>'+q.q+'</div>';
+    html+='<div class="tf-opts">'
+      +'<button class="tf-btn t" id="tft-'+qi+'" onclick="tfPick('+qi+',true)">✓ True</button>'
+      +'<button class="tf-btn f" id="tff-'+qi+'" onclick="tfPick('+qi+',false)">✗ False</button>'
+      +'</div>';
+    html+='<div class="mcq-feedback" id="tff-fb-'+qi+'"></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  document.getElementById('quiz-body').innerHTML=html;
+  updateQuizProgress();
+}
+
+/* ─── Match click handler ─── */
+var _matchPending = {}; // si → {side, idx}
+window.matchClick = function(side, si, idx){
+  if(qState.submitted) return;
+  var answered = qState.matchAnswers[si];
+  // If already matched, ignore
+  if(side==='left' && answered[idx]!==undefined) return;
+  // Find if this right slot is taken
+  if(side==='right'){
+    var taken = Object.values(answered).indexOf(idx) !== -1;
+    if(taken) return;
+  }
+
+  if(!_matchPending[si]){ _matchPending[si]={}; }
+  var pending = _matchPending[si];
+
+  if(side==='left'){
+    // Deselect previous left
+    if(pending.left!==undefined){
+      var prev=document.getElementById('ml-'+si+'-'+pending.left);
+      if(prev) prev.classList.remove('selected');
+    }
+    pending.left=idx;
+    var el=document.getElementById('ml-'+si+'-'+idx);
+    if(el) el.classList.toggle('selected');
+    document.getElementById('match-feedback-'+si).textContent='✓ Term selected — now click its definition.';
+  } else {
+    if(pending.left===undefined){
+      // Select right first
+      if(pending.right!==undefined){
+        var pr=document.getElementById('mr-'+si+'-'+pending.right);
+        if(pr) pr.classList.remove('selected');
+      }
+      pending.right=idx;
+      var elr=document.getElementById('mr-'+si+'-'+idx);
+      if(elr) elr.classList.toggle('selected');
+      document.getElementById('match-feedback-'+si).textContent='Definition selected — now click its term.';
+      return;
+    }
+    // Make the match
+    var li=pending.left;
+    answered[li]=idx;
+    // Visual
+    var lEl=document.getElementById('ml-'+si+'-'+li);
+    var rEl=document.getElementById('mr-'+si+'-'+idx);
+    if(lEl){lEl.classList.remove('selected');lEl.classList.add('disabled');}
+    if(rEl){rEl.classList.remove('selected');rEl.classList.add('disabled');}
+    // Show partial feedback
+    document.getElementById('match-feedback-'+si).textContent=
+      Object.keys(answered).length+' / '+QUIZ.matchSets[si].pairs.length+' matched.';
+    pending.left=undefined;
+    pending.right=undefined;
+    updateQuizProgress();
+  }
+};
+
+/* ─── MCQ pick ─── */
+window.mcqPick = function(qi, oi){
+  if(qState.submitted) return;
+  qState.mcqAnswers[qi]=oi;
+  var q=QUIZ.mcqs[qi];
+  document.querySelectorAll('#mcq-'+qi+' .mcq-opt').forEach(function(el,i){
+    el.classList.toggle('selected', i===oi);
+  });
+  updateQuizProgress();
+};
+
+/* ─── TF pick ─── */
+window.tfPick = function(qi, val){
+  if(qState.submitted) return;
+  qState.tfAnswers[qi]=val;
+  document.getElementById('tft-'+qi).classList.toggle('selected-t', val===true);
+  document.getElementById('tff-'+qi).classList.toggle('selected-t', val===false);
+  updateQuizProgress();
+};
+
+/* ─── Progress ─── */
+function updateQuizProgress(){
+  var total = QUIZ.mcqs.length + QUIZ.trueFalse.length +
+    QUIZ.matchSets.reduce(function(s,ms){return s+ms.pairs.length;},0);
+  var done = Object.keys(qState.mcqAnswers).length + Object.keys(qState.tfAnswers).length +
+    qState.matchAnswers.reduce(function(s,a){return s+Object.keys(a).length;},0);
+  var pct = total ? (done/total*100) : 0;
+  document.getElementById('quiz-progress-fill').style.width=pct+'%';
+  document.getElementById('quiz-progress-label').textContent=done+' of '+total+' answered';
+}
+
+/* ═══════════ SUBMIT & SCORE ═══════════ */
+window.quizSubmit = function(){
+  clearInterval(qState.timerInterval);
+  qState.submitted=true;
+  var score=0, total=0, gaps=[], strengths=[];
+  var topicScores={};
+
+  function topicAdd(topic,pts,got){
+    if(!topicScores[topic]) topicScores[topic]={got:0,total:0};
+    topicScores[topic].total+=pts;
+    topicScores[topic].got+=got;
+  }
+
+  /* Score MCQs */
+  QUIZ.mcqs.forEach(function(q,qi){
+    total++;
+    var chosen=qState.mcqAnswers[qi];
+    var correct=chosen===q.ans;
+    if(correct){score++;topicAdd(q.topic,1,1);}
+    else topicAdd(q.topic,1,0);
+    // Reveal
+    document.querySelectorAll('#mcq-'+qi+' .mcq-opt').forEach(function(el,oi){
+      if(oi===q.ans) el.classList.add(correct||chosen!==oi?'reveal-correct':'correct');
+      if(oi===chosen&&!correct) el.classList.add('wrong');
+      el.classList.remove('selected');
+    });
+    var fb=document.getElementById('mcqf-'+qi);
+    fb.textContent=(correct?'✓ Correct! ':'✗ Incorrect. ')+q.explain;
+    fb.className='mcq-feedback show '+(correct?'ok':'bad');
+  });
+
+  /* Score T/F */
+  QUIZ.trueFalse.forEach(function(q,qi){
+    total++;
+    var chosen=qState.tfAnswers[qi];
+    var correct=chosen===q.ans;
+    if(correct){score++;topicAdd(q.topic,1,1);}
+    else topicAdd(q.topic,1,0);
+    var tBtn=document.getElementById('tft-'+qi), fBtn=document.getElementById('tff-'+qi);
+    tBtn.classList.remove('selected-t'); fBtn.classList.remove('selected-t');
+    if(q.ans===true) tBtn.classList.add('correct-ans'); else fBtn.classList.add('correct-ans');
+    if(chosen!==undefined&&chosen!==q.ans){
+      if(chosen===true) tBtn.classList.add('wrong-ans'); else fBtn.classList.add('wrong-ans');
+    }
+    tBtn.disabled=true; fBtn.disabled=true;
+    var fb=document.getElementById('tff-fb-'+qi);
+    fb.textContent=(correct?'✓ Correct! ':'✗ '+(chosen===undefined?'Not answered. ':'Incorrect. '))+q.explain;
+    fb.className='mcq-feedback show '+(correct?'ok':'bad');
+  });
+
+  /* Score Match */
+  QUIZ.matchSets.forEach(function(set,si){
+    set.pairs.forEach(function(p,li){
+      total++;
+      var chosenRi=qState.matchAnswers[si][li];
+      var correct=chosenRi===li;
+      if(correct){score++;topicAdd(set.topic,1,1);}
+      else topicAdd(set.topic,1,0);
+      var lEl=document.getElementById('ml-'+si+'-'+li);
+      var rEl=chosenRi!==undefined?document.getElementById('mr-'+si+'-'+chosenRi):null;
+      if(lEl){lEl.classList.remove('disabled','selected');lEl.classList.add(correct?'matched-ok':'matched-wrong');}
+      if(rEl){rEl.classList.remove('disabled','selected');rEl.classList.add(correct?'matched-ok':'matched-wrong');}
+      if(!correct&&chosenRi===undefined&&lEl) lEl.style.opacity='.5';
+    });
+  });
+
+  /* Topic gap analysis */
+  var topicNames={product:'What is Aspora',accounts:'Account Types (NRE/NRO)',kyc:'KYC & Queue Management',stages:'Onboarding Stages',compliance:'Compliance & Regulations'};
+  Object.keys(topicScores).forEach(function(t){
+    var s=topicScores[t];
+    var pct=s.total?Math.round(s.got/s.total*100):0;
+    if(pct<70) gaps.push({topic:topicNames[t]||t,pct:pct});
+    else strengths.push({topic:topicNames[t]||t,pct:pct});
+  });
+
+  var pct=Math.round(score/total*100);
+  var grade = pct>=90?{g:'A+',msg:'Outstanding! 🎉 You\'ve mastered the NRI SOP.',color:'#16a34a'}
+    : pct>=75?{g:'A',msg:'Great work! 👏 Strong understanding across topics.',color:'#2ea55e'}
+    : pct>=60?{g:'B',msg:'Good effort. 📚 Review the gap areas below.',color:'#f59e0b'}
+    : {g:'C',msg:'Keep studying. 💪 Focus on the highlighted gaps.',color:'#f43f5e'};
+
+  var m=Math.floor(qState.timerSecs/60), s=qState.timerSecs%60;
+  var timeStr=m+'m '+(s<10?'0':'')+s+'s';
+
+  var resultsHtml='<div class="result-card">'
+    +'<div class="result-score" style="color:'+grade.color+'">'+pct+'%</div>'
+    +'<div class="result-grade" style="color:'+grade.color+'">Grade '+grade.g+' — '+grade.msg+'</div>'
+    +'<div style="display:flex;gap:20px;justify-content:center;font-size:13px;color:#6b7280;margin-top:8px">'
+    +'<span>✅ '+score+' / '+total+' correct</span>'
+    +'<span>⏱ Completed in '+timeStr+'</span>'
+    +'</div></div>';
+
+  if(gaps.length){
+    resultsHtml+='<div class="result-section-title">📌 Knowledge Gaps — Review These Topics</div>';
+    gaps.forEach(function(g){
+      resultsHtml+='<div class="gap-item"><span class="gap-icon">⚠️</span>'
+        +'<div><strong>'+g.topic+'</strong><br>Score: '+g.pct+'% — Go back and re-read this section, then retry the quiz.</div></div>';
+    });
+  }
+  if(strengths.length){
+    resultsHtml+='<div class="result-section-title">💪 Strong Areas — Keep It Up</div>';
+    strengths.forEach(function(s){
+      resultsHtml+='<div class="strength-item">✓ <strong>'+s.topic+'</strong> — '+s.pct+'% correct</div>';
+    });
+  }
+
+  document.getElementById('quiz-results-inner').innerHTML=resultsHtml;
+  document.getElementById('quiz-results').style.display='block';
+  document.getElementById('quiz-submit-btn').style.display='none';
+  document.getElementById('quiz-retry-btn').style.display='inline-block';
+  document.getElementById('quiz-score-badge').style.display='block';
+  document.getElementById('quiz-score-badge').textContent=pct+'% — Grade '+grade.g;
+  document.getElementById('quiz-results').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // Award XP
+  if(typeof addXP==='function') addXP(Math.round(score*3));
+  // Confetti if great score
+  if(pct>=80&&typeof confettiBurst==='function'){
+    var btn=document.getElementById('quiz-retry-btn');
+    for(var i=0;i<3;i++) setTimeout(function(){confettiBurst(btn);},i*300);
+  }
+};
 
 })();
 </script>
