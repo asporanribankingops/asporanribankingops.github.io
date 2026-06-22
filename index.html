@@ -61,6 +61,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .tab[data-tab="pbmframework"].active{background:#eef6e6;color:#2a6a10;border-color:#70b840}
 .tab[data-tab="auditlog"].active    {background:#f0f0f8;color:#44447a;border-color:#8888aa}
 .tab[data-tab="kycflow"].active     {background:#e0f2fe;color:#0369a1;border-color:#0ea5e9}
+.tab[data-tab="obflow"]     ::before{background:#f97316}
+.tab[data-tab="obflow"].active     {background:#fff7ed;color:#c2410c;border-color:#f97316}
 
 /* ── Panel colour headers ── */
 .panel-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:16px;border-left:4px solid}
@@ -322,6 +324,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" data-tab="kycsop" onclick="switchTab('kycsop')"><i class="ti ti-file-check" style="font-size:14px"></i> KYC Ops SOP</button>
     <button class="tab" data-tab="pbmframework" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
     <button class="tab" data-tab="kycflow" onclick="switchTab('kycflow')"><i class="ti ti-git-branch" style="font-size:14px"></i> KYC Case Mgmt</button>
+    <button class="tab" data-tab="obflow" onclick="switchTab('obflow')"><i class="ti ti-device-mobile" style="font-size:14px"></i> Onboarding Flow</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
@@ -4820,9 +4823,118 @@ switchTab = function(id) {
       </div>
     </div>
 
-    <!-- §4b App Onboarding Flow Screenshots -->
-    <div class="kf-section" id="kfs-4b">
-      <div class="kf-h2">📱 <span class="kf-editable" contenteditable="false">App Onboarding Flow — Stage Screenshots</span></div>
+    </div>
+
+    <!-- §5 Queue reference -->
+    <div class="kf-section" id="kfs-5">
+      <div class="kf-h2">📋 <span class="kf-editable" contenteditable="false">5. Queue-by-queue reference</span></div>
+      <table class="kf-tbl" id="kf-queue-tbl">
+        <thead><tr><th>Queue</th><th>Purpose</th><th>How a case enters</th><th>How a case exits</th><th>Who acts</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false"><strong>KYC Open Queue</strong></td><td class="kf-editable" contenteditable="false">Fresh and re-submitted KYC cases waiting for agent review</td><td class="kf-editable" contenteditable="false">(a) New onboarding submission (b) Customer resubmits a discrepant case (carries Re-submission tag)</td><td class="kf-editable" contenteditable="false">Agent picks Approve / Discrepant / Reject</td><td class="kf-editable" contenteditable="false">Bank KYC agent</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Debit Freeze Queue</strong></td><td class="kf-editable" contenteditable="false">Approved cases waiting for initial funding and address verification</td><td class="kf-editable" contenteditable="false">Agent approves the KYC</td><td class="kf-editable" contenteditable="false">Initial funding lands → Address Verification Pending Queue. Address verified first → Initial Funding Queue.</td><td class="kf-editable" contenteditable="false">System (auto-routing)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Address Verification Pending Queue</strong></td><td class="kf-editable" contenteditable="false">Funded but address not yet verified</td><td class="kf-editable" contenteditable="false">Initial funding lands while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Letter delivery callback received → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">System (until callback), then agent</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Initial Funding Queue</strong></td><td class="kf-editable" contenteditable="false">Address verified but customer has not funded yet</td><td class="kf-editable" contenteditable="false">Letter delivery callback arrives while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Customer completes initial funding → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">Customer (action) + agent (verification)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Discrepant Queue</strong></td><td class="kf-editable" contenteditable="false">Cases with issues, awaiting customer resubmission or lapse</td><td class="kf-editable" contenteditable="false">Agent marks Discrepant</td><td class="kf-editable" contenteditable="false">Customer resubmits → KYC Open Queue with Re-submission tag. No submission in X days → Lapsed Queue.</td><td class="kf-editable" contenteditable="false">Customer (action), agent (re-review)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Lapsed Queue</strong></td><td class="kf-editable" contenteditable="false">Cases where customer never resubmitted in time</td><td class="kf-editable" contenteditable="false">Auto-routed when X days pass without resubmission</td><td class="kf-editable" contenteditable="false">Final state. Customer must start fresh onboarding.</td><td class="kf-editable" contenteditable="false">System</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Active Users Queue</strong></td><td class="kf-editable" contenteditable="false">Live, fully verified customers</td><td class="kf-editable" contenteditable="false">Agent manually verifies funding + address and removes debit freeze</td><td class="kf-editable" contenteditable="false">Final state</td><td class="kf-editable" contenteditable="false">—</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Rejected Queue</strong></td><td class="kf-editable" contenteditable="false">Cases rejected for AML / serious KYC issues</td><td class="kf-editable" contenteditable="false">Agent rejects</td><td class="kf-editable" contenteditable="false">Final state. Permanent.</td><td class="kf-editable" contenteditable="false">—</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-queue-tbl" data-cols="5" onclick="kfAddTableRow(event)">+ Add queue row</button>
+    </div>
+
+    <!-- §6 Agent actions -->
+    <div class="kf-section" id="kfs-6">
+      <div class="kf-h2">⚡ <span class="kf-editable" contenteditable="false">6. Agent actions</span></div>
+      <p class="kf-p kf-editable" contenteditable="false">Full set of actions a bank KYC agent can take inside the CRM. Anything not on this list is out of scope.</p>
+      <table class="kf-tbl" id="kf-agent-tbl">
+        <thead><tr><th>Action</th><th>Where it lives</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Approve KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Lifts credit freeze, triggers welcome letter, moves case to Debit Freeze Queue.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Mark Discrepant</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Discrepant Queue and notifies customer to resubmit. Agent can attach a reason / note explaining the discrepancy.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Reject KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Rejected Queue. Permanent.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Re-review on resubmission</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue (Re-submission tag)</td><td class="kf-editable" contenteditable="false">Same three options as a fresh case, with full visibility of past discrepancy history.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Verify initial funding</strong></td><td class="kf-editable" contenteditable="false">Address Verification Pending / Initial Funding / Debit Freeze Queues</td><td class="kf-editable" contenteditable="false">Manual confirmation that funding details look correct. One of two checks needed before debit freeze can be lifted.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Verify address</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Manual confirmation of address. CRM shows auto-updated delivery status from the letter callback; agent confirms and ticks off.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Remove debit freeze</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Available only when both verifications are complete. Moves case to Active Users Queue.</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-agent-tbl" data-cols="3" onclick="kfAddTableRow(event)">+ Add action row</button>
+    </div>
+
+    <!-- §7 Edge cases -->
+    <div class="kf-section" id="kfs-7">
+      <div class="kf-h2">⚠️ <span class="kf-editable" contenteditable="false">7. Edge cases &amp; rules to build for</span></div>
+      <ul class="kf-ul" id="kf-edge-ul">
+        <li class="kf-editable" contenteditable="false"><strong>Re-submission tag.</strong> When a discrepant case re-enters KYC Open Queue, it must carry a visible Re-submission tag. The agent UI should make this clearly distinct from brand-new cases.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Configurable lapse window.</strong> The number of days (X) before a discrepant case lapses must be a backend configuration an authorised non-engineer can change. No code release needed to update it.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Either-order completion.</strong> Initial funding and address verification can complete in any order. Routing must handle both paths cleanly without forcing a sequence.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Address verification is callback-driven.</strong> The CRM listens for a delivery callback from the courier and updates address-verification status automatically. The agent only verifies it as part of the final 2-step check.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Two separate manual verification steps.</strong> "Verify funding" and "Verify address" are two distinct actions with two distinct audit trails — not collapsed into a single click.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Debit freeze removal is gated.</strong> The "Remove debit freeze" action must only be enabled once both verifications are marked complete. If only one is done, the action stays disabled.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Final states are sticky.</strong> Active, Rejected, and Lapsed are all final-state queues. No transitions out of them.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Lapsed = full reset.</strong> When a case lapses, the CIF and accounts close and the KYC is marked invalid. The customer is notified. The only path back is fresh digital onboarding — new CIF, new accounts, new KYC.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Welcome letter is fire-and-watch.</strong> Triggered the moment KYC is approved; the system then waits for the delivery callback. See Open Questions for the undeliverable scenario.</li>
+      </ul>
+      <button class="kf-add-row-btn" data-list="kf-edge-ul" data-type="ul" onclick="kfAddListItem(event)">+ Add rule</button>
+    </div>
+
+    <!-- §8 Open questions -->
+    <div class="kf-section" id="kfs-8">
+      <div class="kf-h2">❓ <span class="kf-editable" contenteditable="false">8. Open questions / decisions needed</span></div>
+      <table class="kf-tbl" id="kf-oq-tbl">
+        <thead><tr><th>#</th><th>Question</th><th>Notes / Decision</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="kf-editable" contenteditable="false">1</td>
+            <td class="kf-editable" contenteditable="false"><strong>Welcome letter undelivered</strong> — what happens if the courier reports the letter as undeliverable (returned / address not found)?</td>
+            <td class="kf-editable" contenteditable="false">Retry mechanism agreed: if first delivery fails, re-trigger automatically. After 3 failed attempts, notify the customer on the app and via comms that the letter was returned and could not be delivered.</td>
+            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">2</td>
+            <td class="kf-editable" contenteditable="false"><strong>Customer-facing visibility</strong> — what does the customer see in the app while their case is in each queue?</td>
+            <td class="kf-editable" contenteditable="false">Already handled.</td>
+            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">3</td>
+            <td class="kf-editable" contenteditable="false"><strong>Default value for X (lapse window)</strong> — what should the initial value be (7, 14, 30 days)? Does it differ between UK and UAE customers?</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">4</td>
+            <td class="kf-editable" contenteditable="false"><strong>Re-submission count limit</strong> — is there a maximum number of times a customer can be marked discrepant before soft-rejection? Currently allows infinite back-and-forth.</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">5</td>
+            <td class="kf-editable" contenteditable="false"><strong>Multiple accounts on one CIF</strong> — most customers have both NRE and NRO. Are we treating them as one case or two? Current doc assumes one case per CIF.</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">6</td>
+            <td class="kf-editable" contenteditable="false"><strong>SLAs on each queue</strong> — should an agent be expected to clear KYC Open Queue within N hours? Should there be alerting on aged cases?</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-oq-tbl" data-cols="4" onclick="kfAddTableRow(event)">+ Add question</button>
+    </div>
+
+    </div><!-- /kf-body -->
+  </div><!-- /panel-kycflow -->
+
+
+  <div id="panel-obflow" class="panel" style="border-top:3px solid #f97316">
+    <div class="panel-banner" style="background:#fff7ed;border-color:#f97316;color:#c2410c"><div class="panel-banner-icon" style="background:#f97316;color:#fff">📱</div><div><div class="panel-banner-title">App Onboarding Flow</div><div class="panel-banner-sub">Stage-by-stage screenshots from the Aspora onboarding journey — grouped by phase</div></div></div>
+    <div style="padding:0">
+
       <p class="kf-p kf-editable" contenteditable="false">Screenshots from each onboarding stage, grouped by phase. These correspond directly to the drop-off stages tracked in the CRM — each stage where a customer stopped is a potential queue entry point.</p>
 
       <style>
@@ -4961,112 +5073,8 @@ switchTab = function(id) {
         });
       })();
       </script>
-    </div>
 
-    <!-- §5 Queue reference -->
-    <div class="kf-section" id="kfs-5">
-      <div class="kf-h2">📋 <span class="kf-editable" contenteditable="false">5. Queue-by-queue reference</span></div>
-      <table class="kf-tbl" id="kf-queue-tbl">
-        <thead><tr><th>Queue</th><th>Purpose</th><th>How a case enters</th><th>How a case exits</th><th>Who acts</th></tr></thead>
-        <tbody>
-          <tr><td class="kf-editable" contenteditable="false"><strong>KYC Open Queue</strong></td><td class="kf-editable" contenteditable="false">Fresh and re-submitted KYC cases waiting for agent review</td><td class="kf-editable" contenteditable="false">(a) New onboarding submission (b) Customer resubmits a discrepant case (carries Re-submission tag)</td><td class="kf-editable" contenteditable="false">Agent picks Approve / Discrepant / Reject</td><td class="kf-editable" contenteditable="false">Bank KYC agent</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Debit Freeze Queue</strong></td><td class="kf-editable" contenteditable="false">Approved cases waiting for initial funding and address verification</td><td class="kf-editable" contenteditable="false">Agent approves the KYC</td><td class="kf-editable" contenteditable="false">Initial funding lands → Address Verification Pending Queue. Address verified first → Initial Funding Queue.</td><td class="kf-editable" contenteditable="false">System (auto-routing)</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Address Verification Pending Queue</strong></td><td class="kf-editable" contenteditable="false">Funded but address not yet verified</td><td class="kf-editable" contenteditable="false">Initial funding lands while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Letter delivery callback received → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">System (until callback), then agent</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Initial Funding Queue</strong></td><td class="kf-editable" contenteditable="false">Address verified but customer has not funded yet</td><td class="kf-editable" contenteditable="false">Letter delivery callback arrives while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Customer completes initial funding → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">Customer (action) + agent (verification)</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Discrepant Queue</strong></td><td class="kf-editable" contenteditable="false">Cases with issues, awaiting customer resubmission or lapse</td><td class="kf-editable" contenteditable="false">Agent marks Discrepant</td><td class="kf-editable" contenteditable="false">Customer resubmits → KYC Open Queue with Re-submission tag. No submission in X days → Lapsed Queue.</td><td class="kf-editable" contenteditable="false">Customer (action), agent (re-review)</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Lapsed Queue</strong></td><td class="kf-editable" contenteditable="false">Cases where customer never resubmitted in time</td><td class="kf-editable" contenteditable="false">Auto-routed when X days pass without resubmission</td><td class="kf-editable" contenteditable="false">Final state. Customer must start fresh onboarding.</td><td class="kf-editable" contenteditable="false">System</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Active Users Queue</strong></td><td class="kf-editable" contenteditable="false">Live, fully verified customers</td><td class="kf-editable" contenteditable="false">Agent manually verifies funding + address and removes debit freeze</td><td class="kf-editable" contenteditable="false">Final state</td><td class="kf-editable" contenteditable="false">—</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Rejected Queue</strong></td><td class="kf-editable" contenteditable="false">Cases rejected for AML / serious KYC issues</td><td class="kf-editable" contenteditable="false">Agent rejects</td><td class="kf-editable" contenteditable="false">Final state. Permanent.</td><td class="kf-editable" contenteditable="false">—</td></tr>
-        </tbody>
-      </table>
-      <button class="kf-add-row-btn" data-table="kf-queue-tbl" data-cols="5" onclick="kfAddTableRow(event)">+ Add queue row</button>
-    </div>
-
-    <!-- §6 Agent actions -->
-    <div class="kf-section" id="kfs-6">
-      <div class="kf-h2">⚡ <span class="kf-editable" contenteditable="false">6. Agent actions</span></div>
-      <p class="kf-p kf-editable" contenteditable="false">Full set of actions a bank KYC agent can take inside the CRM. Anything not on this list is out of scope.</p>
-      <table class="kf-tbl" id="kf-agent-tbl">
-        <thead><tr><th>Action</th><th>Where it lives</th><th>What it does</th></tr></thead>
-        <tbody>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Approve KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Lifts credit freeze, triggers welcome letter, moves case to Debit Freeze Queue.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Mark Discrepant</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Discrepant Queue and notifies customer to resubmit. Agent can attach a reason / note explaining the discrepancy.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Reject KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Rejected Queue. Permanent.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Re-review on resubmission</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue (Re-submission tag)</td><td class="kf-editable" contenteditable="false">Same three options as a fresh case, with full visibility of past discrepancy history.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Verify initial funding</strong></td><td class="kf-editable" contenteditable="false">Address Verification Pending / Initial Funding / Debit Freeze Queues</td><td class="kf-editable" contenteditable="false">Manual confirmation that funding details look correct. One of two checks needed before debit freeze can be lifted.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Verify address</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Manual confirmation of address. CRM shows auto-updated delivery status from the letter callback; agent confirms and ticks off.</td></tr>
-          <tr><td class="kf-editable" contenteditable="false"><strong>Remove debit freeze</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Available only when both verifications are complete. Moves case to Active Users Queue.</td></tr>
-        </tbody>
-      </table>
-      <button class="kf-add-row-btn" data-table="kf-agent-tbl" data-cols="3" onclick="kfAddTableRow(event)">+ Add action row</button>
-    </div>
-
-    <!-- §7 Edge cases -->
-    <div class="kf-section" id="kfs-7">
-      <div class="kf-h2">⚠️ <span class="kf-editable" contenteditable="false">7. Edge cases &amp; rules to build for</span></div>
-      <ul class="kf-ul" id="kf-edge-ul">
-        <li class="kf-editable" contenteditable="false"><strong>Re-submission tag.</strong> When a discrepant case re-enters KYC Open Queue, it must carry a visible Re-submission tag. The agent UI should make this clearly distinct from brand-new cases.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Configurable lapse window.</strong> The number of days (X) before a discrepant case lapses must be a backend configuration an authorised non-engineer can change. No code release needed to update it.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Either-order completion.</strong> Initial funding and address verification can complete in any order. Routing must handle both paths cleanly without forcing a sequence.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Address verification is callback-driven.</strong> The CRM listens for a delivery callback from the courier and updates address-verification status automatically. The agent only verifies it as part of the final 2-step check.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Two separate manual verification steps.</strong> "Verify funding" and "Verify address" are two distinct actions with two distinct audit trails — not collapsed into a single click.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Debit freeze removal is gated.</strong> The "Remove debit freeze" action must only be enabled once both verifications are marked complete. If only one is done, the action stays disabled.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Final states are sticky.</strong> Active, Rejected, and Lapsed are all final-state queues. No transitions out of them.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Lapsed = full reset.</strong> When a case lapses, the CIF and accounts close and the KYC is marked invalid. The customer is notified. The only path back is fresh digital onboarding — new CIF, new accounts, new KYC.</li>
-        <li class="kf-editable" contenteditable="false"><strong>Welcome letter is fire-and-watch.</strong> Triggered the moment KYC is approved; the system then waits for the delivery callback. See Open Questions for the undeliverable scenario.</li>
-      </ul>
-      <button class="kf-add-row-btn" data-list="kf-edge-ul" data-type="ul" onclick="kfAddListItem(event)">+ Add rule</button>
-    </div>
-
-    <!-- §8 Open questions -->
-    <div class="kf-section" id="kfs-8">
-      <div class="kf-h2">❓ <span class="kf-editable" contenteditable="false">8. Open questions / decisions needed</span></div>
-      <table class="kf-tbl" id="kf-oq-tbl">
-        <thead><tr><th>#</th><th>Question</th><th>Notes / Decision</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr>
-            <td class="kf-editable" contenteditable="false">1</td>
-            <td class="kf-editable" contenteditable="false"><strong>Welcome letter undelivered</strong> — what happens if the courier reports the letter as undeliverable (returned / address not found)?</td>
-            <td class="kf-editable" contenteditable="false">Retry mechanism agreed: if first delivery fails, re-trigger automatically. After 3 failed attempts, notify the customer on the app and via comms that the letter was returned and could not be delivered.</td>
-            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
-          </tr>
-          <tr>
-            <td class="kf-editable" contenteditable="false">2</td>
-            <td class="kf-editable" contenteditable="false"><strong>Customer-facing visibility</strong> — what does the customer see in the app while their case is in each queue?</td>
-            <td class="kf-editable" contenteditable="false">Already handled.</td>
-            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
-          </tr>
-          <tr>
-            <td class="kf-editable" contenteditable="false">3</td>
-            <td class="kf-editable" contenteditable="false"><strong>Default value for X (lapse window)</strong> — what should the initial value be (7, 14, 30 days)? Does it differ between UK and UAE customers?</td>
-            <td class="kf-editable" contenteditable="false">—</td>
-            <td class="kf-editable" contenteditable="false">🔴 Open</td>
-          </tr>
-          <tr>
-            <td class="kf-editable" contenteditable="false">4</td>
-            <td class="kf-editable" contenteditable="false"><strong>Re-submission count limit</strong> — is there a maximum number of times a customer can be marked discrepant before soft-rejection? Currently allows infinite back-and-forth.</td>
-            <td class="kf-editable" contenteditable="false">—</td>
-            <td class="kf-editable" contenteditable="false">🔴 Open</td>
-          </tr>
-          <tr>
-            <td class="kf-editable" contenteditable="false">5</td>
-            <td class="kf-editable" contenteditable="false"><strong>Multiple accounts on one CIF</strong> — most customers have both NRE and NRO. Are we treating them as one case or two? Current doc assumes one case per CIF.</td>
-            <td class="kf-editable" contenteditable="false">—</td>
-            <td class="kf-editable" contenteditable="false">🔴 Open</td>
-          </tr>
-          <tr>
-            <td class="kf-editable" contenteditable="false">6</td>
-            <td class="kf-editable" contenteditable="false"><strong>SLAs on each queue</strong> — should an agent be expected to clear KYC Open Queue within N hours? Should there be alerting on aged cases?</td>
-            <td class="kf-editable" contenteditable="false">—</td>
-            <td class="kf-editable" contenteditable="false">🔴 Open</td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="kf-add-row-btn" data-table="kf-oq-tbl" data-cols="4" onclick="kfAddTableRow(event)">+ Add question</button>
-    </div>
-
-    </div><!-- /kf-body -->
-  </div><!-- /panel-kycflow -->
+  </div><!-- /panel-obflow -->
 
   <div id="panel-auditlog" class="panel panel-auditlog">
     <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
