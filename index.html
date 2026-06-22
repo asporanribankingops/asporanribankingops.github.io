@@ -6046,5 +6046,535 @@ document.querySelectorAll('.stage-hdr').forEach(function(hdr){
 
 })();
 </script>
+
+<!-- ═══════════════════ ENGAGEMENT LAYER ═══════════════════ -->
+<style>
+/* ── Daily tip banner ── */
+#daily-tip{
+  background:linear-gradient(120deg,#eef2ff,#f0f7ff);
+  border:1.5px solid rgba(79,106,245,.15);
+  border-radius:14px;
+  padding:13px 18px;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:13px;
+  color:#3d4f7c;
+  position:relative;
+  overflow:hidden;
+}
+#daily-tip::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:linear-gradient(180deg,#7b95f6,#9fb4f8);
+  border-radius:4px 0 0 4px;
+}
+#daily-tip-icon{font-size:22px;flex-shrink:0}
+#daily-tip-text{flex:1;line-height:1.5}
+#daily-tip-text strong{color:#2d3a6b;display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;opacity:.6}
+#daily-tip-close{background:none;border:none;font-size:16px;cursor:pointer;color:#9ca3af;padding:0 4px;flex-shrink:0}
+
+/* ── Toolbar pills (font size, focus, dark) ── */
+#engage-toolbar{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 16px;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  flex-wrap:wrap;
+}
+.etool-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;
+  border-radius:100px;
+  border:1.5px solid rgba(0,0,0,.08);
+  background:#fff;
+  font-size:12px;font-weight:600;
+  color:#4b5563;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.etool-btn:hover{background:#eef2ff;border-color:#7b95f6;color:#4f6af5}
+.etool-btn.active{background:#eef2ff;border-color:#7b95f6;color:#4f6af5}
+.etool-sep{width:1px;height:22px;background:rgba(0,0,0,.1);margin:0 4px}
+#font-size-display{font-size:11px;color:#9ca3af;min-width:28px;text-align:center}
+
+/* ── Call timer ── */
+#call-timer-widget{
+  position:fixed;top:80px;right:20px;z-index:800;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  border:1.5px solid rgba(0,0,0,.07);
+  padding:14px 18px;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  min-width:160px;
+}
+#call-timer-widget.open{display:flex}
+#call-timer-display{
+  font-size:32px;font-weight:800;
+  font-variant-numeric:tabular-nums;
+  color:#2d3a6b;
+  letter-spacing:.02em;
+  line-height:1;
+}
+#call-timer-display.running{color:#2ea55e}
+#call-timer-display.warning{color:#d97706;animation:timer-pulse .8s ease-in-out infinite}
+@keyframes timer-pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.timer-btn-row{display:flex;gap:6px}
+.timer-btn{padding:6px 14px;border-radius:100px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.timer-btn.start{background:linear-gradient(135deg,#2ea55e,#4dbb7a);color:#fff;box-shadow:0 2px 8px rgba(46,165,94,.25)}
+.timer-btn.stop{background:#fef2f2;color:#dc2626;border:1.5px solid #fca5a5}
+.timer-btn.reset{background:#f3f4f6;color:#6b7280}
+#call-timer-laps{font-size:10.5px;color:#6b7280;max-height:80px;overflow-y:auto;width:100%;text-align:center}
+
+/* ── Quick notes ── */
+#notes-panel{
+  position:fixed;right:0;top:0;bottom:0;z-index:850;
+  width:300px;
+  background:#fff;
+  box-shadow:-8px 0 32px rgba(0,0,0,.12);
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+#notes-panel.open{transform:translateX(0)}
+#notes-header{
+  background:linear-gradient(120deg,#4f6af5,#7b95f6);
+  padding:16px 18px;
+  color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#notes-header h3{font-size:14px;font-weight:700}
+#notes-close{background:rgba(255,255,255,.2);border:none;border-radius:8px;color:#fff;width:28px;height:28px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+#notes-ta{
+  flex:1;padding:16px;border:none;outline:none;resize:none;
+  font-size:13.5px;line-height:1.7;color:#2d3748;
+  font-family:inherit;background:#fafbff;
+}
+#notes-footer{
+  padding:10px 16px;border-top:1.5px solid rgba(0,0,0,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+#notes-status{font-size:11px;color:#9ca3af}
+
+/* ── Focus mode ── */
+body.focus-mode .stage-card:not(.focused){
+  opacity:.35;
+  filter:grayscale(.4);
+  transform:none!important;
+  pointer-events:none;
+}
+body.focus-mode .stage-card.focused{
+  ring:2px solid #7b95f6;
+  box-shadow:0 0 0 3px rgba(79,106,245,.2),0 8px 32px rgba(0,0,0,.12)!important;
+}
+
+/* ── Streak & XP bar ── */
+#xp-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;
+  height:36px;
+  background:linear-gradient(90deg,#f8f9ff,#f0f4ff);
+  border-bottom:1px solid rgba(79,106,245,.08);
+  font-size:11.5px;
+  color:#4b5563;
+  overflow:hidden;
+}
+#xp-fill-wrap{flex:1;height:6px;background:#e5e7eb;border-radius:100px;overflow:hidden;max-width:160px}
+#xp-fill{height:100%;background:linear-gradient(90deg,#7b95f6,#9fb4f8);border-radius:100px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.xp-badge{display:inline-flex;align-items:center;gap:4px;background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:100px;padding:2px 10px;font-weight:700;color:#4f6af5}
+
+/* ── Back to top ── */
+#back-top{
+  position:fixed;bottom:28px;left:28px;z-index:800;
+  width:40px;height:40px;
+  border-radius:12px;
+  background:#fff;
+  border:1.5px solid rgba(0,0,0,.1);
+  box-shadow:0 4px 14px rgba(0,0,0,.1);
+  cursor:pointer;
+  font-size:18px;
+  display:none;align-items:center;justify-content:center;
+  transition:all .18s;color:#4f6af5;
+}
+#back-top.visible{display:flex}
+#back-top:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.14)}
+
+/* ── Stage card enhancements ── */
+.stage-card{position:relative}
+.stage-progress-bar{height:3px;background:linear-gradient(90deg,#7b95f6,#9fb4f8);width:0;transition:width .4s ease;border-radius:0 0 0 0;position:absolute;bottom:0;left:0}
+.stage-card.done .stage-progress-bar{width:100%;background:linear-gradient(90deg,#2ea55e,#4dbb7a)}
+
+/* ── Highlight text ── */
+body.highlight-mode ::selection{
+  background:rgba(251,191,36,.35);
+  color:inherit;
+}
+.sticky-highlight{
+  background:rgba(251,191,36,.25);
+  border-bottom:2px solid #f59e0b;
+  border-radius:2px;
+  cursor:pointer;
+}
+
+/* ── Reading width control ── */
+.main.narrow{max-width:680px}
+.main.wide{max-width:1100px}
+
+/* ── Smooth font size transition ── */
+.stage-body,.script-view,.kf-p,.obj-a,.wa-body{transition:font-size .15s}
+
+/* ── Dark mode ── */
+body.dark-mode{
+  background:#0f1117;
+  color:#e2e8f0;
+}
+body.dark-mode .topbar{background:linear-gradient(120deg,#1a2050,#263080,#304090)}
+body.dark-mode .tabs{background:rgba(15,17,23,.9);border-bottom-color:rgba(255,255,255,.08)}
+body.dark-mode .tab{color:#94a3b8;background:transparent}
+body.dark-mode .tab:hover{background:rgba(79,106,245,.12);color:#93aaf7}
+body.dark-mode .tab.active{background:#1a1f35;border-color:rgba(255,255,255,.1);border-bottom-color:#1a1f35}
+body.dark-mode .stage-card,body.dark-mode .card-sec,body.dark-mode .wa-block,body.dark-mode .kf-section{background:#1a1f35;border-color:rgba(255,255,255,.07)}
+body.dark-mode .stage-hdr:hover{background:rgba(79,106,245,.08)}
+body.dark-mode .script-view{background:#141929;color:#c8d4f0;border-left-color:#5b78e0}
+body.dark-mode .info-box{background:#1a1f35;border-color:rgba(79,106,245,.2)}
+body.dark-mode .panel-banner{background:#1a1f35!important}
+body.dark-mode .dtable th,body.dark-mode .kf-tbl th{background:#1f2540;color:#93aaf7}
+body.dark-mode .dtable td,body.dark-mode .kf-tbl td{border-color:rgba(255,255,255,.06)}
+body.dark-mode .obj-a{background:rgba(79,106,245,.08)}
+body.dark-mode #daily-tip{background:#1a1f35;border-color:rgba(79,106,245,.2);color:#a0aec0}
+body.dark-mode #engage-toolbar,body.dark-mode #xp-bar{background:#141929;border-bottom-color:rgba(255,255,255,.06)}
+body.dark-mode .etool-btn{background:#1a1f35;border-color:rgba(255,255,255,.1);color:#94a3b8}
+body.dark-mode .etool-btn:hover{background:#232b50;color:#93aaf7;border-color:#5b78e0}
+body.dark-mode #notes-ta{background:#0f1117;color:#c8d4f0}
+body.dark-mode #notes-footer,body.dark-mode #notes-panel{background:#1a1f35}
+body.dark-mode #call-timer-widget{background:#1a1f35;border-color:rgba(255,255,255,.08)}
+body.dark-mode #call-timer-display{color:#93aaf7}
+body.dark-mode .wa-hdr{background:#1f2e1f;color:#86efac}
+body.dark-mode .search-row input{background:#1a1f35;color:#e2e8f0;border-color:rgba(79,106,245,.25)}
+body.dark-mode #spotlight>div{background:#1a1f35}
+body.dark-mode .sl-item:hover,body.dark-mode .sl-item.sl-active{background:rgba(79,106,245,.12)}
+body.dark-mode .sl-item-title{color:#e2e8f0}
+body.dark-mode #sl-input{color:#e2e8f0;background:transparent}
+body.dark-mode #sl-results,body.dark-mode #spotlight>div>div:last-child{background:#1a1f35}
+body.dark-mode #back-top,body.dark-mode .etool-btn{background:#1a1f35}
+</style>
+
+<script>
+(function(){
+'use strict';
+
+/* ─── TIPS DATA ─── */
+var TIPS=[
+  {icon:'💡',text:'<strong>Pro tip</strong> Always mirror the customer\'s language — if they say "shifting abroad", use that phrase back, not "emigrating".'},
+  {icon:'🎯',text:'<strong>Best opener</strong> Mention the 1 million accounts milestone early — social proof builds trust instantly.'},
+  {icon:'⏱️',text:'<strong>Speed tip</strong> The fastest KYC completions happen when the agent sends the app link while still on the call.'},
+  {icon:'🛡️',text:'<strong>Objection ready</strong> "Is it safe?" → Lead with DICGC protection and SSFB\'s RBI licence — these are the strongest trust signals.'},
+  {icon:'📋',text:'<strong>FATCA note</strong> If a customer hesitates at Tax Residency, clarify it\'s a global regulatory requirement, not India-specific.'},
+  {icon:'🌍',text:'<strong>UAE customers</strong> Emphasise zero hidden FX fees and Google exchange rates — they compare against exchange houses.'},
+  {icon:'📱',text:'<strong>Drop-off pattern</strong> Most drops happen at Stage 12 (Video KYC). Pre-brief customers on lighting and document readiness.'},
+  {icon:'🤝',text:'<strong>Closing line</strong> "I\'ll stay on the line while you open the app" dramatically increases completion rates.'},
+  {icon:'🔑',text:'<strong>SIM binding</strong> Ask if their Indian SIM is active before they reach Stage 17 — silent failures here cause most re-calls.'},
+  {icon:'💬',text:'<strong>WhatsApp follow-up</strong> Send the app link within 2 minutes of ending the call — engagement drops sharply after 10 minutes.'},
+];
+
+/* ─── INJECT XP BAR & ENGAGE TOOLBAR below topbar ─── */
+var topbar = document.querySelector('.topbar');
+if(topbar) {
+  // XP Bar
+  var xpBar = document.createElement('div');
+  xpBar.id = 'xp-bar';
+  var xpData = JSON.parse(localStorage.getItem('xp-data')||'{"xp":0,"streak":0,"lastDay":""}');
+  var today = new Date().toDateString();
+  if(xpData.lastDay !== today && xpData.lastDay === new Date(Date.now()-86400000).toDateString()) {
+    xpData.streak = (xpData.streak||0)+1;
+  } else if(xpData.lastDay !== today) {
+    xpData.streak = xpData.streak > 0 ? xpData.streak : 0;
+  }
+  var maxXp = 200, pct = Math.min((xpData.xp % maxXp)/maxXp*100, 100);
+  var level = Math.floor(xpData.xp/maxXp)+1;
+  xpBar.innerHTML =
+    '<span class="xp-badge">⚡ Level '+level+'</span>'+
+    '<div id="xp-fill-wrap"><div id="xp-fill" style="width:'+pct+'%"></div></div>'+
+    '<span style="font-size:11px;color:#6b7280">'+xpData.xp+' XP</span>'+
+    '<span style="margin-left:auto;display:flex;align-items:center;gap:5px">'+
+    (xpData.streak>0?'<span style="font-size:14px">🔥</span><span style="font-weight:700;color:#f59e0b">'+xpData.streak+' day streak</span>':'<span style="color:#9ca3af">Start your streak today</span>')+
+    '</span>';
+  topbar.parentNode.insertBefore(xpBar, topbar.nextSibling);
+
+  // Engage Toolbar
+  var etb = document.createElement('div');
+  etb.id = 'engage-toolbar';
+  var currentFontSize = parseInt(localStorage.getItem('font-size')||'14');
+  etb.innerHTML =
+    '<button class="etool-btn" onclick="adjustFont(-1)" title="Decrease font size">A−</button>'+
+    '<span id="font-size-display">'+currentFontSize+'px</span>'+
+    '<button class="etool-btn" onclick="adjustFont(1)" title="Increase font size">A+</button>'+
+    '<div class="etool-sep"></div>'+
+    '<button class="etool-btn" id="dark-btn" onclick="toggleDark()">🌙 Dark mode</button>'+
+    '<button class="etool-btn" id="focus-btn" onclick="toggleFocus()">🎯 Focus mode</button>'+
+    '<button class="etool-btn" onclick="toggleTimer()">⏱️ Call timer</button>'+
+    '<button class="etool-btn" onclick="toggleNotes()">📝 Notes</button>'+
+    '<div class="etool-sep"></div>'+
+    '<button class="etool-btn" id="width-btn" onclick="cycleWidth()" title="Toggle reading width">↔ Width</button>'+
+    '<span style="margin-left:auto;font-size:11px;color:#9ca3af" id="session-time">Session: 0m</span>';
+  xpBar.parentNode.insertBefore(etb, xpBar.nextSibling);
+}
+
+/* ─── DAILY TIP ─── */
+function injectTip(){
+  var closed = localStorage.getItem('tip-closed-'+new Date().toDateString());
+  if(closed) return;
+  var tip = TIPS[new Date().getDay() % TIPS.length];
+  var panel = document.querySelector('.panel.active .main, .main');
+  if(!panel) return;
+  var el = document.getElementById('daily-tip');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'daily-tip';
+    el.innerHTML = '<span id="daily-tip-icon">'+tip.icon+'</span>'+
+      '<div id="daily-tip-text"><strong>Daily tip</strong>'+tip.text+'</div>'+
+      '<button id="daily-tip-close" onclick="closeTip()" title="Dismiss">×</button>';
+    var main = document.querySelector('.main');
+    if(main) main.insertBefore(el, main.firstChild);
+  }
+}
+window.closeTip = function(){
+  var el = document.getElementById('daily-tip');
+  if(el){ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(function(){el.remove();},300); }
+  localStorage.setItem('tip-closed-'+new Date().toDateString(),'1');
+};
+setTimeout(injectTip, 400);
+
+/* ─── FONT SIZE ─── */
+var fontSize = parseInt(localStorage.getItem('font-size')||'14');
+applyFont(fontSize);
+function applyFont(sz){
+  sz = Math.max(12, Math.min(18, sz));
+  fontSize = sz;
+  var targets = document.querySelectorAll('.script-view,.stage-body p,.kf-p,.obj-a,.wa-body,.info-val,body');
+  targets.forEach(function(el){ el.style.fontSize = sz+'px'; });
+  var disp = document.getElementById('font-size-display');
+  if(disp) disp.textContent = sz+'px';
+  localStorage.setItem('font-size', sz);
+}
+window.adjustFont = function(d){ applyFont(fontSize+d); addXP(2); };
+
+/* ─── DARK MODE ─── */
+var dark = localStorage.getItem('dark-mode')==='1';
+if(dark) document.body.classList.add('dark-mode');
+window.toggleDark = function(){
+  dark = !dark;
+  document.body.classList.toggle('dark-mode', dark);
+  localStorage.setItem('dark-mode', dark?'1':'0');
+  var btn = document.getElementById('dark-btn');
+  if(btn) btn.textContent = dark ? '☀️ Light mode' : '🌙 Dark mode';
+  if(btn) btn.classList.toggle('active', dark);
+};
+var darkBtn = document.getElementById('dark-btn');
+if(darkBtn && dark){ darkBtn.textContent='☀️ Light mode'; darkBtn.classList.add('active'); }
+
+/* ─── FOCUS MODE ─── */
+var focusMode = false;
+window.toggleFocus = function(){
+  focusMode = !focusMode;
+  document.body.classList.toggle('focus-mode', focusMode);
+  var btn = document.getElementById('focus-btn');
+  if(btn) btn.classList.toggle('active', focusMode);
+  if(btn) btn.textContent = focusMode ? '🎯 Exit focus' : '🎯 Focus mode';
+  if(focusMode){
+    // Focus on first open stage or first card
+    var open = document.querySelector('.stage-card.done') || document.querySelector('.stage-card');
+    if(open){ open.classList.add('focused'); open.scrollIntoView({behavior:'smooth',block:'center'}); }
+  } else {
+    document.querySelectorAll('.stage-card').forEach(function(c){ c.classList.remove('focused'); });
+  }
+};
+// Click on stage hdr sets focus
+document.addEventListener('click',function(e){
+  if(!focusMode) return;
+  var hdr = e.target.closest('.stage-hdr');
+  if(!hdr) return;
+  var card = hdr.closest('.stage-card');
+  document.querySelectorAll('.stage-card').forEach(function(c){ c.classList.remove('focused'); });
+  if(card) card.classList.add('focused');
+});
+
+/* ─── READING WIDTH ─── */
+var widths = ['','narrow','wide'], widthIdx = 0;
+window.cycleWidth = function(){
+  var main = document.querySelector('.main');
+  if(!main) return;
+  main.classList.remove(widths[widthIdx]||'x');
+  widthIdx = (widthIdx+1)%3;
+  if(widths[widthIdx]) main.classList.add(widths[widthIdx]);
+  var btn = document.getElementById('width-btn');
+  var labels = ['↔ Width','↔ Narrow','↔ Wide'];
+  if(btn) btn.textContent = labels[widthIdx];
+};
+
+/* ─── CALL TIMER ─── */
+var timerEl = document.createElement('div');
+timerEl.id = 'call-timer-widget';
+timerEl.innerHTML =
+  '<div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:.06em;text-transform:uppercase">Call Timer</div>'+
+  '<div id="call-timer-display">00:00</div>'+
+  '<div class="timer-btn-row">'+
+    '<button class="timer-btn start" id="timer-start" onclick="timerToggle()">▶ Start</button>'+
+    '<button class="timer-btn reset" onclick="timerReset()">↺</button>'+
+  '</div>'+
+  '<div id="call-timer-laps"></div>'+
+  '<button onclick="toggleTimer()" style="position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:#9ca3af;font-size:16px">×</button>';
+timerEl.style.position='fixed';
+document.body.appendChild(timerEl);
+
+var timerSecs = 0, timerRunning = false, timerInterval = null;
+window.toggleTimer = function(){
+  timerEl.classList.toggle('open');
+};
+window.timerToggle = function(){
+  if(timerRunning){
+    clearInterval(timerInterval); timerRunning=false;
+    document.getElementById('timer-start').textContent='▶ Start';
+    document.getElementById('call-timer-display').classList.remove('running');
+    // Log lap
+    var laps = document.getElementById('call-timer-laps');
+    var m=Math.floor(timerSecs/60), s=timerSecs%60;
+    var lap=document.createElement('div');
+    lap.style.cssText='padding:2px 0;border-top:1px solid rgba(0,0,0,.05)';
+    lap.textContent='📞 Call: '+pad(m)+':'+pad(s);
+    laps.insertBefore(lap, laps.firstChild);
+    addXP(5);
+  } else {
+    timerRunning=true;
+    document.getElementById('timer-start').textContent='⏸ Pause';
+    document.getElementById('call-timer-display').classList.add('running');
+    timerInterval = setInterval(function(){
+      timerSecs++;
+      var m=Math.floor(timerSecs/60), s=timerSecs%60;
+      var disp=document.getElementById('call-timer-display');
+      disp.textContent=pad(m)+':'+pad(s);
+      if(timerSecs>=300) disp.classList.add('warning'); else disp.classList.remove('warning');
+    },1000);
+  }
+};
+window.timerReset = function(){
+  clearInterval(timerInterval); timerRunning=false; timerSecs=0;
+  document.getElementById('call-timer-display').textContent='00:00';
+  document.getElementById('call-timer-display').classList.remove('running','warning');
+  document.getElementById('timer-start').textContent='▶ Start';
+};
+function pad(n){ return n<10?'0'+n:n; }
+
+/* ─── QUICK NOTES ─── */
+var notesPanel = document.createElement('div');
+notesPanel.id = 'notes-panel';
+notesPanel.innerHTML =
+  '<div id="notes-header"><h3>📝 Call Notes</h3><button id="notes-close" onclick="toggleNotes()">×</button></div>'+
+  '<textarea id="notes-ta" placeholder="Jot notes here during the call…\n\nCustomer name:\nKey concern:\nNext action:\n">'+
+    (localStorage.getItem('call-notes')||'')+
+  '</textarea>'+
+  '<div id="notes-footer">'+
+    '<span id="notes-status">Auto-saved</span>'+
+    '<button onclick="clearNotes()" style="font-size:11px;background:none;border:none;cursor:pointer;color:#9ca3af">Clear</button>'+
+  '</div>';
+document.body.appendChild(notesPanel);
+var notesTa = document.getElementById('notes-ta');
+notesTa.addEventListener('input', function(){
+  localStorage.setItem('call-notes', notesTa.value);
+  document.getElementById('notes-status').textContent = 'Saved ✓';
+  setTimeout(function(){ document.getElementById('notes-status').textContent='Auto-saved'; }, 1200);
+});
+window.toggleNotes = function(){ notesPanel.classList.toggle('open'); };
+window.clearNotes = function(){
+  if(confirm('Clear all notes?')){ notesTa.value=''; localStorage.removeItem('call-notes'); }
+};
+
+/* ─── BACK TO TOP ─── */
+var btt = document.createElement('button');
+btt.id = 'back-top'; btt.title='Back to top'; btt.textContent='↑';
+btt.onclick = function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+document.body.appendChild(btt);
+window.addEventListener('scroll', function(){
+  btt.classList.toggle('visible', window.scrollY > 400);
+});
+
+/* ─── XP SYSTEM ─── */
+function addXP(pts){
+  var d = JSON.parse(localStorage.getItem('xp-data')||'{"xp":0,"streak":0,"lastDay":""}');
+  var today = new Date().toDateString();
+  if(d.lastDay !== today){ d.streak = d.lastDay===new Date(Date.now()-86400000).toDateString()?(d.streak+1):1; d.lastDay=today; }
+  d.xp += pts;
+  localStorage.setItem('xp-data', JSON.stringify(d));
+  var maxXp=200, pct=Math.min((d.xp%maxXp)/maxXp*100,100);
+  var fill=document.getElementById('xp-fill');
+  if(fill) fill.style.width=pct+'%';
+  var xpDisp=document.querySelector('#xp-bar span:nth-child(3)');
+  if(xpDisp) xpDisp.textContent=d.xp+' XP';
+  // Level up toast
+  if(d.xp % maxXp < pts){ showToast('🎉 Level up! You\'re now Level '+(Math.floor(d.xp/maxXp)+1)); }
+}
+window.addXP = addXP;
+
+// Award XP for opening stage cards
+document.querySelectorAll('.stage-hdr').forEach(function(hdr){
+  hdr.addEventListener('click', function(){
+    var body=hdr.nextElementSibling;
+    if(body&&!body.classList.contains('open')) addXP(3);
+  });
+});
+
+/* ─── SESSION TIMER ─── */
+var sessionStart = Date.now();
+setInterval(function(){
+  var el=document.getElementById('session-time');
+  if(!el) return;
+  var mins=Math.floor((Date.now()-sessionStart)/60000);
+  el.textContent='Session: '+(mins>0?mins+'m':'<1m');
+  if(mins>0&&mins%5===0) addXP(1);
+},30000);
+
+/* ─── STAGE PROGRESS BARS ─── */
+document.querySelectorAll('.stage-card').forEach(function(card){
+  var bar=document.createElement('div');
+  bar.className='stage-progress-bar';
+  card.appendChild(bar);
+  if(card.classList.contains('done')) bar.style.width='100%';
+});
+
+// Update progress bars when done status changes
+var _origMutObs = new MutationObserver(function(muts){
+  muts.forEach(function(m){
+    if(m.target.classList&&m.target.classList.contains('stage-card')){
+      var bar=m.target.querySelector('.stage-progress-bar');
+      if(bar) bar.style.width = m.target.classList.contains('done')?'100%':'0';
+    }
+  });
+});
+document.querySelectorAll('.stage-card').forEach(function(c){
+  _origMutObs.observe(c,{attributes:true,attributeFilter:['class']});
+});
+
+function showToast(msg){
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.classList.add('show');},10);
+  setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},300);},2800);
+}
+
+})();
+</script>
 </body>
 </html>
