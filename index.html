@@ -4955,7 +4955,7 @@ switchTab = function(id) {
             img.src=BASE+fn;
             img.alt='Stage '+n;
             img.loading='lazy';
-            img.onclick=function(){openLB(BASE+fn,IMGS[n].map(function(f){return BASE+f;}),IMGS[n].indexOf(fn));};
+            img.onclick=(function(src,stg){return function(){openLb(src,'Stage '+stg);};})(BASE+fn,n);
             el.appendChild(img);
           });
         });
