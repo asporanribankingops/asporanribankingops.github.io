@@ -4935,11 +4935,11 @@ switchTab = function(id) {
     <div class="panel-banner" style="background:#fff7ed;border-color:#f97316;color:#c2410c"><div class="panel-banner-icon" style="background:#f97316;color:#fff">📱</div><div><div class="panel-banner-title">App Onboarding Flow</div><div class="panel-banner-sub">Stage-by-stage screenshots from the Aspora onboarding journey — grouped by phase</div></div></div>
 
     <!-- Edit toolbar -->
-    <div id="ob-edit-bar" style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <button id="ob-edit-btn" onclick="obToggleEdit()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:#f97316;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">✏️ Edit Labels</button>
-      <button id="ob-save-btn" onclick="obSave()" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">💾 Save</button>
-      <button id="ob-cancel-btn" onclick="obCancelEdit()" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:#6b7280;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">✕ Cancel</button>
-      <span id="ob-edit-hint" style="font-size:11.5px;color:#9a3412;display:none">Click any label or description to edit it</span>
+    <div id="ob-edit-bar" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;background:var(--bg);padding:10px 0 10px 0;border-bottom:1px solid var(--border)">
+      <button id="ob-edit-btn" onclick="obToggleEdit()" style="display:flex;align-items:center;gap:6px;padding:8px 18px;background:#f97316;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(249,115,22,.3)">✏️ Edit Labels</button>
+      <button id="ob-save-btn" onclick="obSave()" style="display:none;align-items:center;gap:6px;padding:8px 18px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer">💾 Save Changes</button>
+      <button id="ob-cancel-btn" onclick="obCancelEdit()" style="display:none;align-items:center;gap:6px;padding:8px 18px;background:#6b7280;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer">✕ Cancel</button>
+      <span id="ob-edit-hint" style="font-size:11.5px;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;padding:4px 10px;display:none">✎ Click any phase title or stage label to edit it</span>
     </div>
 
     <div style="padding:0">
@@ -5071,14 +5071,26 @@ switchTab = function(id) {
         Object.keys(IMGS).forEach(function(n){
           var el=document.getElementById('ob-s'+n);
           if(!el)return;
-          IMGS[n].forEach(function(fn){
+          var allSrcs=IMGS[n].map(function(f){return BASE+f;});
+          IMGS[n].forEach(function(fn,i){
             var img=document.createElement('img');
             img.src=BASE+fn;
-            img.alt='Stage '+n;
+            img.alt='Stage '+n+' ('+(i+1)+'/'+IMGS[n].length+')';
             img.loading='lazy';
-            img.onclick=(function(src,stg){return function(){openLb(src,'Stage '+stg);};})(BASE+fn,n);
+            img.title='Click to expand · '+IMGS[n].length+' image'+(IMGS[n].length>1?'s':'');
+            img.onclick=(function(srcs,idx,stageN){return function(){
+              _lbImgs=srcs.map(function(s){return {src:s,cap:'Stage '+stageN};});
+              _lbIdx=idx;_lbShow();
+            };})(allSrcs,i,n);
             el.appendChild(img);
           });
+          // Show image count badge on the container
+          if(IMGS[n].length>1){
+            var badge=document.createElement('span');
+            badge.textContent=IMGS[n].length+' images';
+            badge.style.cssText='font-size:10px;color:#0369a1;background:#e0f2fe;border-radius:20px;padding:2px 8px;margin-left:4px;font-weight:600';
+            el.parentElement.querySelector('.ob-stage-label').appendChild(badge);
+          }
         });
       })();
 
