@@ -245,6 +245,369 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 @keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .gh-sync-status:hover{opacity:.8}
 </style>
+
+<!-- ═══════════════════════════════════════════════
+     VISUAL UPGRADE — overrides above for richer UI
+     ═══════════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Foundation ── */
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:linear-gradient(135deg,#f0f4ff 0%,#faf5ff 50%,#fff0fb 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+
+/* ── Topbar ── */
+.topbar{
+  background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4c1d95 100%);
+  border-bottom:none;
+  box-shadow:0 4px 24px rgba(49,46,129,.35);
+  padding:16px 24px;
+}
+.topbar h1{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.topbar p{font-size:11.5px;color:rgba(255,255,255,.65)}
+.topbar-icon{background:rgba(255,255,255,.15);color:#e0e7ff;border-radius:10px}
+.gh-sync-status{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.2)}
+.gh-sync-status.connected{background:rgba(74,222,128,.2);color:#86efac;border-color:rgba(74,222,128,.3)}
+
+/* ── Tab bar ── */
+.tabs{
+  padding:14px 24px 0;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(8px);
+  border-bottom:1.5px solid rgba(0,0,0,.07);
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  gap:4px;
+}
+.tab{
+  padding:8px 16px;
+  border-radius:10px 10px 0 0;
+  border:1.5px solid transparent;
+  border-bottom:none;
+  font-size:12.5px;
+  font-weight:500;
+  background:transparent;
+  color:#6b7280;
+  gap:7px;
+  transition:all .18s;
+  position:relative;
+  bottom:-1.5px;
+}
+.tab::before{width:7px;height:7px}
+.tab:hover{background:rgba(99,102,241,.07);color:#4338ca;transform:translateY(-2px)}
+.tab.active{
+  background:#fff;
+  border-color:rgba(0,0,0,.08);
+  border-bottom-color:#fff;
+  font-weight:700;
+  box-shadow:0 -3px 12px rgba(0,0,0,.06);
+}
+
+/* ── Main content area ── */
+.main{max-width:920px;padding:28px 20px 80px}
+
+/* ── Panel base ── */
+.panel.active{
+  animation:fadeSlideIn .22s ease;
+}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Panel banner ── */
+.panel-banner{
+  border-radius:14px;
+  padding:18px 22px;
+  margin-bottom:22px;
+  border-left:none;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.panel-banner-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  font-size:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.panel-banner-title{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.panel-banner-sub{font-size:12px;opacity:.75;margin-top:2px}
+
+/* ── Stage cards ── */
+.stage-card{
+  border:1.5px solid rgba(0,0,0,.07);
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  transition:box-shadow .18s,transform .18s;
+  overflow:hidden;
+}
+.stage-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-1px)}
+.stage-hdr{padding:14px 18px;gap:12px}
+.stage-hdr:hover{background:rgba(99,102,241,.04)}
+.s-num{width:34px;height:34px;font-size:13px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.s-title{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.s-sub{font-size:11.5px}
+.stage-body{padding:0 18px 18px;border-top:1.5px solid rgba(0,0,0,.06)}
+
+/* ── Info boxes ── */
+.info-box{
+  background:linear-gradient(135deg,rgba(99,102,241,.04),rgba(168,85,247,.04));
+  border-radius:12px;
+  border:1.5px solid rgba(99,102,241,.1);
+  padding:12px 14px;
+}
+.info-lbl{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:#7c3aed}
+
+/* ── Script view ── */
+.script-view{
+  background:linear-gradient(135deg,#f0f4ff,#faf5ff);
+  border-left:4px solid #6366f1;
+  border-radius:0 12px 12px 0;
+  padding:14px 18px;
+  font-size:13.5px;
+  line-height:1.8;
+  color:#1e1b4b;
+  box-shadow:0 2px 8px rgba(99,102,241,.08);
+}
+
+/* ── Tables ── */
+.dtable th{
+  background:linear-gradient(135deg,#f0f4ff,#ede9fe);
+  color:#4338ca;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:10px 14px;
+  border-bottom:2px solid rgba(99,102,241,.15);
+}
+.dtable td{padding:11px 14px;font-size:13.5px}
+.dtable tr:hover td{background:rgba(99,102,241,.03)}
+
+.kf-tbl th{
+  background:linear-gradient(135deg,#e0f2fe,#e8edfd);
+  font-size:12px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:9px 12px;
+}
+.kf-tbl tr:hover td{background:rgba(14,165,233,.04)}
+
+/* ── Objection rows ── */
+.obj-row{
+  border-bottom:1.5px solid rgba(0,0,0,.06);
+  padding:14px 0;
+  transition:background .15s;
+  border-radius:8px;
+}
+.obj-q{
+  font-size:13.5px;
+  color:#374151;
+  font-style:normal;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.obj-q::before{content:'❓ ';font-style:normal}
+.obj-a{
+  font-size:13.5px;
+  padding-left:18px;
+  color:#1f2937;
+  line-height:1.7;
+  border-left:3px solid #a78bfa;
+  padding-left:14px;
+  border-radius:0 8px 8px 0;
+  background:rgba(167,139,250,.05);
+  padding:10px 14px;
+  margin-top:2px;
+}
+
+/* ── WhatsApp blocks ── */
+.wa-block{
+  border-radius:14px;
+  border:1.5px solid rgba(64,184,105,.2);
+  box-shadow:0 2px 10px rgba(64,184,105,.08);
+}
+.wa-hdr{
+  background:linear-gradient(135deg,#e6f9ee,#f0fdf4);
+  color:#166534;
+  border-radius:12px 12px 0 0;
+  padding:12px 16px;
+  font-weight:700;
+}
+
+/* ── Checklist items ── */
+.cl-item{padding:12px 4px;border-bottom:1.5px solid rgba(0,0,0,.06)}
+.cl-circle{
+  border:2px solid rgba(0,0,0,.15);
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.cl-item.done .cl-circle{background:linear-gradient(135deg,#16a34a,#22c55e);border-color:#16a34a}
+
+/* ── Badges & tips ── */
+.s-badge{
+  font-size:11px;font-weight:600;
+  padding:4px 12px;
+  border-radius:100px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+.tip{padding:4px 12px;border-radius:100px;font-weight:500}
+
+/* ── Buttons ── */
+.btn{
+  border-radius:8px;
+  font-weight:500;
+  font-size:12.5px;
+  transition:all .15s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.btn-blue{
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 2px 8px rgba(99,102,241,.3);
+}
+.btn-blue:hover{opacity:.9;box-shadow:0 4px 16px rgba(99,102,241,.35)}
+.btn-green{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#fff;border-color:transparent;
+}
+.btn-red{
+  background:linear-gradient(135deg,#ef4444,#dc2626);
+  color:#fff;border-color:transparent;
+}
+
+/* ── KYC flow sections ── */
+.kf-section{
+  background:#fff;
+  border-radius:14px;
+  border:1.5px solid rgba(0,0,0,.07);
+  padding:18px 20px;
+  margin-bottom:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.kf-h2{
+  font-size:15.5px;
+  font-weight:800;
+  letter-spacing:-.02em;
+  padding-bottom:10px;
+  margin-bottom:14px;
+  border-bottom:2px solid rgba(14,165,233,.25);
+  background:linear-gradient(90deg,#0369a1,#0ea5e9);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.kf-h3{
+  font-size:13.5px;font-weight:700;
+  color:#0369a1;
+  background:rgba(14,165,233,.06);
+  border-radius:7px;
+  padding:6px 12px;
+  margin:14px 0 8px;
+}
+.kf-note{
+  border-radius:10px;
+  padding:12px 16px;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+
+/* ── Search input ── */
+.search-row input{
+  border-radius:10px;
+  border:1.5px solid rgba(99,102,241,.2);
+  font-size:13.5px;
+  padding:10px 14px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+  transition:all .18s;
+}
+.search-row input:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 0 4px rgba(99,102,241,.12);
+}
+
+/* ── Card sections ── */
+.card-sec{
+  border-radius:14px;
+  border:1.5px solid rgba(0,0,0,.07);
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  margin-bottom:16px;
+}
+
+/* ── Onboarding flow phase headers ── */
+.ob-phase-title{
+  border-radius:10px 10px 0 0;
+  font-size:12.5px;
+  padding:9px 16px;
+  letter-spacing:.04em;
+}
+.ob-phase-body{
+  border-radius:0 0 12px 12px;
+  padding:16px;
+}
+.ob-imgs img{
+  border-radius:10px;
+  border:2px solid rgba(0,0,0,.07);
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+  transition:transform .2s,box-shadow .2s;
+}
+.ob-imgs img:hover{
+  transform:scale(1.06) translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+}
+
+/* ── Panel top border replacement with gradient ── */
+.panel-stages{border-top:4px solid transparent;border-image:linear-gradient(90deg,#378add,#60a5fa) 1}
+.panel-objections{border-top:4px solid transparent;border-image:linear-gradient(90deg,#f0a050,#fb923c) 1}
+.panel-crm{border-top:4px solid transparent;border-image:linear-gradient(90deg,#9b6de0,#a78bfa) 1}
+.panel-whatsapp{border-top:4px solid transparent;border-image:linear-gradient(90deg,#40b869,#4ade80) 1}
+.panel-checklist{border-top:4px solid transparent;border-image:linear-gradient(90deg,#3aadad,#2dd4bf) 1}
+.panel-playbook{border-top:4px solid transparent;border-image:linear-gradient(90deg,#e0b040,#fbbf24) 1}
+.panel-kycsop{border-top:4px solid transparent;border-image:linear-gradient(90deg,#e06060,#f87171) 1}
+.panel-pbmframework{border-top:4px solid transparent;border-image:linear-gradient(90deg,#70b840,#86efac) 1}
+.panel-auditlog{border-top:4px solid transparent;border-image:linear-gradient(90deg,#8888aa,#a5b4fc) 1}
+.panel-kycflow{border-top:4px solid transparent;border-image:linear-gradient(90deg,#0ea5e9,#38bdf8) 1}
+
+/* ── Toast ── */
+.toast{
+  background:linear-gradient(135deg,#1e1b4b,#312e81);
+  color:#fff;
+  border-radius:100px;
+  font-weight:600;
+  box-shadow:0 4px 24px rgba(49,46,129,.4);
+}
+
+/* ── Audit avatars ── */
+.audit-avatar{
+  background:linear-gradient(135deg,#6366f1,#a78bfa);
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 2px 8px rgba(99,102,241,.3);
+}
+
+/* ── Progress bars ── */
+.prog-fill{
+  background:linear-gradient(90deg,#6366f1,#a78bfa);
+  border-radius:2px;
+}
+
+/* ── Lightbox counter ── */
+.lb-counter{
+  background:rgba(99,102,241,.7);
+  backdrop-filter:blur(8px);
+  font-weight:600;
+  border-radius:100px;
+}
+
+/* ── Scrollbar (WebKit) ── */
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(99,102,241,.25);border-radius:100px}
+::-webkit-scrollbar-thumb:hover{background:rgba(99,102,241,.45)}
+</style>
 <script src="https://accounts.google.com/gsi/client" async></script>
 <style>
 #auth-gate{position:fixed;inset:0;z-index:99999;background:#f8fafc;display:flex;align-items:center;justify-content:center}
