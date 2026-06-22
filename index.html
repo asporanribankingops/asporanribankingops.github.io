@@ -5581,5 +5581,471 @@ switchTab = function(id) {
   <!-- Custom pages injected here by cpRender() -->
   <div id="custom-pages-panels"></div>
 
+<!-- ═══════════════════════════ INTERACTIVITY LAYER ═══════════════════════════ -->
+
+<!-- Spotlight Search -->
+<div id="spotlight" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(15,10,40,.6);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding-top:12vh">
+  <div style="width:min(680px,94vw);background:#fff;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1.5px solid rgba(0,0,0,.07)">
+      <span style="font-size:20px;opacity:.5">🔍</span>
+      <input id="sl-input" placeholder="Search stages, scripts, objections, KYC…" autocomplete="off"
+        style="flex:1;border:none;outline:none;font-size:16px;font-family:inherit;background:transparent;color:#111">
+      <kbd style="font-size:11px;background:#f3f4f6;border:1.5px solid #e5e7eb;border-radius:5px;padding:2px 7px;color:#6b7280;flex-shrink:0">Esc</kbd>
+    </div>
+    <div id="sl-results" style="max-height:420px;overflow-y:auto;padding:8px"></div>
+    <div style="padding:10px 20px;border-top:1.5px solid rgba(0,0,0,.06);display:flex;gap:16px;font-size:11.5px;color:#9ca3af">
+      <span>↑↓ navigate</span><span>↵ open</span><span>Esc close</span>
+    </div>
+  </div>
+</div>
+
+<!-- Floating toolbar -->
+<div id="floating-bar" style="position:fixed;bottom:28px;right:28px;z-index:900;display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+  <div id="fb-shortcuts" style="display:none;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.15);padding:16px 20px;font-size:12.5px;width:230px;border:1.5px solid rgba(0,0,0,.07)">
+    <div style="font-weight:700;margin-bottom:10px;color:#1e1b4b">⌨️ Keyboard shortcuts</div>
+    <div style="display:flex;flex-direction:column;gap:7px;color:#374151">
+      <div style="display:flex;justify-content:space-between"><span>Spotlight search</span><kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px">⌘K</kbd></div>
+      <div style="display:flex;justify-content:space-between"><span>Next tab</span><kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px">⌘→</kbd></div>
+      <div style="display:flex;justify-content:space-between"><span>Prev tab</span><kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px">⌘←</kbd></div>
+      <div style="display:flex;justify-content:space-between"><span>Close lightbox</span><kbd style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px;font-size:11px">Esc</kbd></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button onclick="document.getElementById('fb-shortcuts').style.display=document.getElementById('fb-shortcuts').style.display==='none'?'block':'none'" title="Keyboard shortcuts"
+      style="width:42px;height:42px;border-radius:12px;background:#fff;border:1.5px solid rgba(0,0,0,.1);box-shadow:0 4px 16px rgba(0,0,0,.12);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .18s">⌨️</button>
+    <button onclick="openSpotlight()" title="Search (⌘K)"
+      style="display:flex;align-items:center;gap:8px;padding:0 18px;height:42px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;box-shadow:0 4px 16px rgba(99,102,241,.4);cursor:pointer;font-size:13.5px;font-weight:600;transition:all .18s">
+      🔍 Search <kbd style="background:rgba(255,255,255,.2);border-radius:5px;padding:1px 7px;font-size:11px">⌘K</kbd>
+    </button>
+  </div>
+</div>
+
+<!-- Progress widget (injected into topbar by JS) -->
+<div id="progress-widget" style="display:none;align-items:center;gap:8px">
+  <div style="position:relative;width:32px;height:32px">
+    <svg viewBox="0 0 32 32" style="width:32px;height:32px;transform:rotate(-90deg)">
+      <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="3"/>
+      <circle id="progress-ring" cx="16" cy="16" r="13" fill="none" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round"
+        stroke-dasharray="81.7" stroke-dashoffset="81.7" style="transition:stroke-dashoffset .5s ease"/>
+    </svg>
+    <span id="progress-pct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#e0e7ff">0%</span>
+  </div>
+  <span style="font-size:11px;color:rgba(255,255,255,.65)"><span id="progress-done">0</span> / <span id="progress-total">0</span> stages</span>
+</div>
+
+<style>
+/* Spotlight result item */
+.sl-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:10px;cursor:pointer;transition:background .12s}
+.sl-item:hover,.sl-item.sl-active{background:rgba(99,102,241,.08)}
+.sl-item-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sl-item-title{font-size:13.5px;font-weight:600;color:#111}
+.sl-item-sub{font-size:11.5px;color:#6b7280;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:480px}
+.sl-section{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;padding:12px 16px 4px}
+mark{background:linear-gradient(120deg,rgba(99,102,241,.25),rgba(139,92,246,.2));border-radius:3px;padding:0 2px;color:inherit}
+
+/* Copy button on scripts */
+.copy-btn{position:absolute;top:8px;right:8px;padding:4px 10px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:7px;font-size:11px;font-weight:600;color:#4338ca;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;gap:4px}
+.copy-btn.copied{background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.3);color:#15803d}
+.script-view:hover .copy-btn,.script-view:focus-within .copy-btn{opacity:1}
+
+/* Stage done overlay */
+.stage-done-badge{display:none;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;border:1.5px solid #86efac;border-radius:100px;padding:3px 10px}
+.stage-card.done .stage-done-badge{display:flex}
+.stage-card.done .stage-hdr{background:linear-gradient(135deg,rgba(22,163,74,.04),rgba(34,197,94,.04))}
+.stage-card.done .s-num{background:linear-gradient(135deg,#16a34a,#22c55e)!important;box-shadow:0 2px 8px rgba(22,163,74,.3)!important}
+
+/* Ripple */
+.ripple-host{position:relative;overflow:hidden}
+@keyframes ripple-anim{to{transform:scale(4);opacity:0}}
+.ripple-el{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);pointer-events:none;animation:ripple-anim .5s ease-out forwards}
+
+/* Smooth stage body */
+.stage-body{transition:none}
+
+/* Tab pulse dot for new content */
+.tab-new::after{content:'';position:absolute;top:6px;right:6px;width:6px;height:6px;background:#f87171;border-radius:50%;animation:pulse-dot 1.5s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+
+/* Confetti particle */
+@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(80px) rotate(720deg);opacity:0}}
+</style>
+
+<script>
+(function(){
+'use strict';
+
+/* ─── 1. SPOTLIGHT SEARCH ─── */
+var slOpen=false, slActive=-1, slItems=[];
+
+function openSpotlight(){
+  document.getElementById('spotlight').style.display='flex';
+  document.getElementById('sl-input').value='';
+  document.getElementById('sl-results').innerHTML='<div class="sl-section">All sections</div>';
+  buildSlIndex();
+  slOpen=true;
+  setTimeout(function(){document.getElementById('sl-input').focus();},50);
+  slRender('');
+}
+function closeSpotlight(){
+  document.getElementById('spotlight').style.display='none';
+  slOpen=false;
+}
+window.openSpotlight=openSpotlight;
+
+// Build search index from DOM
+var slIndex=[];
+function buildSlIndex(){
+  if(slIndex.length) return;
+  // Stage cards
+  document.querySelectorAll('.stage-card').forEach(function(card){
+    var title=card.querySelector('.s-title');
+    var sub=card.querySelector('.s-sub');
+    var script=card.querySelector('.script-view');
+    if(title) slIndex.push({type:'stage',icon:'🎯',color:'#e0f2fe',tab:'stages',label:'Stage Script',
+      title:title.textContent.trim(),
+      sub:(sub?sub.textContent.trim():'')+(script?' — '+script.textContent.slice(0,80).trim():''),
+      el:card});
+  });
+  // Objection rows
+  document.querySelectorAll('.obj-row').forEach(function(row){
+    var q=row.querySelector('.obj-q'), a=row.querySelector('.obj-a');
+    if(q) slIndex.push({type:'obj',icon:'🛡️',color:'#fff3e6',tab:'objections',label:'Objection',
+      title:q.textContent.replace('❓ ','').trim(),
+      sub:a?a.textContent.slice(0,100).trim():'',el:row});
+  });
+  // KYC SOP sections
+  document.querySelectorAll('.kf-section').forEach(function(sec){
+    var h=sec.querySelector('.kf-h2');
+    if(h) slIndex.push({type:'kyc',icon:'📋',color:'#e0f2fe',tab:'kycflow',label:'KYC Workflow',
+      title:h.textContent.trim(),sub:'',el:sec});
+  });
+  // Playbook scenarios
+  document.querySelectorAll('#panel-playbook [data-pb]').forEach(function(pb){
+    var t=pb.querySelector('[data-pb-title]')||pb.querySelector('.pb-title')||pb.firstElementChild;
+    if(t) slIndex.push({type:'play',icon:'📖',color:'#fef6e6',tab:'playbook',label:'Playbook',
+      title:t.textContent.trim(),sub:'',el:pb});
+  });
+  // WhatsApp templates
+  document.querySelectorAll('.wa-block').forEach(function(wa){
+    var h=wa.querySelector('.wa-hdr'), b=wa.querySelector('.wa-body');
+    if(h) slIndex.push({type:'wa',icon:'💬',color:'#e6f9ee',tab:'whatsapp',label:'WhatsApp',
+      title:h.textContent.trim(),sub:b?b.textContent.slice(0,80).trim():'',el:wa});
+  });
+}
+
+function highlight(text, query){
+  if(!query) return text;
+  var re=new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return text.replace(re,'<mark>$1</mark>');
+}
+
+function slRender(query){
+  var q=query.toLowerCase().trim();
+  var results = q ? slIndex.filter(function(item){
+    return item.title.toLowerCase().includes(q)||item.sub.toLowerCase().includes(q);
+  }) : slIndex.slice(0,12);
+  slItems=results;
+  slActive=-1;
+  var html='';
+  if(!results.length){
+    html='<div style="padding:32px;text-align:center;color:#9ca3af;font-size:14px">No results found for "<strong>'+query+'</strong>"</div>';
+  } else {
+    var lastLabel='';
+    results.slice(0,20).forEach(function(item,i){
+      if(item.label!==lastLabel){
+        html+='<div class="sl-section">'+item.label+'</div>';
+        lastLabel=item.label;
+      }
+      html+='<div class="sl-item" data-idx="'+i+'" onclick="slGo('+i+')">'
+        +'<div class="sl-item-icon" style="background:'+item.color+'">'+item.icon+'</div>'
+        +'<div style="flex:1;min-width:0"><div class="sl-item-title">'+highlight(item.title,query)+'</div>'
+        +(item.sub?'<div class="sl-item-sub">'+highlight(item.sub,query)+'</div>':'')
+        +'</div>'
+        +'<span style="font-size:10.5px;background:#f3f4f6;border-radius:5px;padding:2px 8px;color:#6b7280;flex-shrink:0">'+item.label+'</span>'
+        +'</div>';
+    });
+  }
+  document.getElementById('sl-results').innerHTML=html;
+}
+
+window.slGo=function(idx){
+  var item=slItems[idx];
+  if(!item) return;
+  closeSpotlight();
+  // Switch to tab
+  if(typeof switchTab==='function') switchTab(item.tab);
+  setTimeout(function(){
+    if(item.el){
+      item.el.scrollIntoView({behavior:'smooth',block:'center'});
+      // Flash highlight
+      item.el.style.transition='box-shadow .3s';
+      item.el.style.boxShadow='0 0 0 3px rgba(99,102,241,.5)';
+      setTimeout(function(){item.el.style.boxShadow='';},1400);
+      // Open stage card if collapsed
+      if(item.el.classList.contains('stage-card')){
+        var body=item.el.querySelector('.stage-body');
+        if(body&&!body.classList.contains('open')){
+          body.classList.add('open');
+          var chev=item.el.querySelector('.chevron');
+          if(chev) chev.style.transform='rotate(90deg)';
+        }
+      }
+    }
+  },120);
+};
+
+document.getElementById('sl-input').addEventListener('input',function(){slRender(this.value);});
+document.getElementById('sl-input').addEventListener('keydown',function(e){
+  var items=document.querySelectorAll('.sl-item');
+  if(e.key==='ArrowDown'){
+    e.preventDefault();
+    slActive=Math.min(slActive+1,items.length-1);
+    items.forEach(function(el,i){el.classList.toggle('sl-active',i===slActive);});
+    if(items[slActive]) items[slActive].scrollIntoView({block:'nearest'});
+  } else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    slActive=Math.max(slActive-1,0);
+    items.forEach(function(el,i){el.classList.toggle('sl-active',i===slActive);});
+    if(items[slActive]) items[slActive].scrollIntoView({block:'nearest'});
+  } else if(e.key==='Enter'){
+    if(slActive>=0) slGo(slActive);
+    else if(slItems.length) slGo(0);
+  } else if(e.key==='Escape'){
+    closeSpotlight();
+  }
+});
+document.getElementById('spotlight').addEventListener('click',function(e){
+  if(e.target===this) closeSpotlight();
+});
+
+/* ─── 2. KEYBOARD SHORTCUTS ─── */
+document.addEventListener('keydown',function(e){
+  // Cmd/Ctrl+K → spotlight
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSpotlight();return;}
+  // Cmd+→/← → next/prev tab
+  if((e.metaKey||e.ctrlKey)&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){
+    e.preventDefault();
+    var tabs=Array.from(document.querySelectorAll('.tab'));
+    var active=document.querySelector('.tab.active');
+    var idx=tabs.indexOf(active);
+    var next=e.key==='ArrowRight'?Math.min(idx+1,tabs.length-1):Math.max(idx-1,0);
+    if(tabs[next]) tabs[next].click();
+  }
+});
+
+/* ─── 3. COPY BUTTONS on script views ─── */
+function injectCopyButtons(){
+  document.querySelectorAll('.script-view').forEach(function(el){
+    if(el.querySelector('.copy-btn')) return;
+    el.style.position='relative';
+    var btn=document.createElement('button');
+    btn.className='copy-btn';
+    btn.innerHTML='📋 Copy';
+    btn.onclick=function(e){
+      e.stopPropagation();
+      navigator.clipboard.writeText(el.innerText.trim()).then(function(){
+        btn.innerHTML='✓ Copied!';
+        btn.classList.add('copied');
+        setTimeout(function(){btn.innerHTML='📋 Copy';btn.classList.remove('copied');},2000);
+      });
+    };
+    el.appendChild(btn);
+  });
+}
+// Run after DOM ready and after each tab switch
+injectCopyButtons();
+var _origSwitchTab=typeof switchTab==='function'?switchTab:null;
+if(_origSwitchTab){
+  window.switchTab=function(id){
+    _origSwitchTab(id);
+    setTimeout(injectCopyButtons,80);
+  };
+}
+
+/* ─── 4. STAGE COMPLETION TRACKING ─── */
+var stagesDone=JSON.parse(localStorage.getItem('stages-done')||'{}');
+
+function initStageTracking(){
+  var cards=document.querySelectorAll('.stage-card');
+  var total=cards.length;
+  document.getElementById('progress-total').textContent=total;
+  updateProgressWidget();
+  cards.forEach(function(card){
+    var id=card.dataset.stageId||card.querySelector('.s-num')&&card.querySelector('.s-num').textContent.trim();
+    if(!id) return;
+    // Add done badge next to chevron
+    if(!card.querySelector('.stage-done-badge')){
+      var badge=document.createElement('span');
+      badge.className='stage-done-badge';
+      badge.innerHTML='✓ Done';
+      var hdr=card.querySelector('.stage-hdr');
+      if(hdr) hdr.insertBefore(badge,hdr.querySelector('.chevron'));
+    }
+    // Add mark-done button inside body
+    var body=card.querySelector('.stage-body');
+    if(body&&!body.querySelector('.mark-done-btn')){
+      var btn=document.createElement('button');
+      btn.className='mark-done-btn';
+      btn.style.cssText='margin-top:14px;padding:7px 18px;border-radius:100px;border:none;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(22,163,74,.3);transition:all .18s;display:flex;align-items:center;gap:6px';
+      btn.innerHTML='✓ Mark as done';
+      if(stagesDone[id]) { card.classList.add('done'); btn.innerHTML='↩ Mark as pending'; }
+      btn.onclick=function(){
+        var done=!card.classList.contains('done');
+        card.classList.toggle('done',done);
+        stagesDone[id]=done;
+        localStorage.setItem('stages-done',JSON.stringify(stagesDone));
+        btn.innerHTML=done?'↩ Mark as pending':'✓ Mark as done';
+        if(done) confettiBurst(btn);
+        updateProgressWidget();
+      };
+      body.appendChild(btn);
+    }
+    if(stagesDone[id]) card.classList.add('done');
+  });
+}
+
+function updateProgressWidget(){
+  var total=document.querySelectorAll('.stage-card').length;
+  var done=document.querySelectorAll('.stage-card.done').length;
+  var pct=total?Math.round(done/total*100):0;
+  var circumference=81.7;
+  var offset=circumference-(pct/100)*circumference;
+  var ring=document.getElementById('progress-ring');
+  if(ring) ring.style.strokeDashoffset=offset;
+  var pctEl=document.getElementById('progress-pct');
+  if(pctEl) pctEl.textContent=pct+'%';
+  var doneEl=document.getElementById('progress-done');
+  if(doneEl) doneEl.textContent=done;
+  var totalEl=document.getElementById('progress-total');
+  if(totalEl) totalEl.textContent=total;
+  var widget=document.getElementById('progress-widget');
+  if(widget) widget.style.display='flex';
+}
+
+// Inject progress widget into topbar
+(function(){
+  var topbar=document.querySelector('.topbar');
+  var widget=document.getElementById('progress-widget');
+  if(topbar&&widget){
+    var right=topbar.querySelector('.topbar-right')||topbar.lastElementChild;
+    if(right) right.parentNode.insertBefore(widget,right);
+    else topbar.appendChild(widget);
+    widget.style.display='flex';
+  }
+})();
+
+setTimeout(function(){
+  initStageTracking();
+  injectCopyButtons();
+  buildSlIndex();
+},300);
+
+/* ─── 5. RIPPLE EFFECT on buttons/tabs ─── */
+function addRipple(e){
+  var el=e.currentTarget;
+  el.classList.add('ripple-host');
+  var r=document.createElement('span');
+  r.className='ripple-el';
+  var rect=el.getBoundingClientRect();
+  var size=Math.max(rect.width,rect.height);
+  r.style.cssText='width:'+size+'px;height:'+size+'px;left:'+(e.clientX-rect.left-size/2)+'px;top:'+(e.clientY-rect.top-size/2)+'px';
+  el.appendChild(r);
+  setTimeout(function(){r.remove();},500);
+}
+document.querySelectorAll('.tab,.btn,.btn-blue,.btn-green').forEach(function(el){
+  el.addEventListener('click',addRipple);
+});
+
+/* ─── 6. CONFETTI burst ─── */
+function confettiBurst(anchor){
+  var colors=['#6366f1','#22c55e','#f59e0b','#ec4899','#0ea5e9','#a78bfa'];
+  var rect=anchor.getBoundingClientRect();
+  for(var i=0;i<16;i++){
+    var p=document.createElement('div');
+    p.style.cssText='position:fixed;left:'+(rect.left+rect.width/2)+'px;top:'+(rect.top)+'px;'
+      +'width:'+(6+Math.random()*6)+'px;height:'+(6+Math.random()*6)+'px;'
+      +'border-radius:'+(Math.random()>.5?'50%':'2px')+'px;'
+      +'background:'+colors[Math.floor(Math.random()*colors.length)]+';'
+      +'pointer-events:none;z-index:99999;'
+      +'animation:confetti-fall .7s ease forwards;'
+      +'animation-delay:'+(Math.random()*.2)+'s;'
+      +'transform-origin:center;'
+      +'--tx:'+(Math.random()*120-60)+'px';
+    // spread horizontally
+    p.style.transform='translateX('+( (Math.random()-0.5)*80 )+'px)';
+    document.body.appendChild(p);
+    setTimeout(function(){p.remove();},900);
+  }
+}
+
+/* ─── 7. SMOOTH COLLAPSE ANIMATION for stage cards ─── */
+document.querySelectorAll('.stage-hdr').forEach(function(hdr){
+  hdr.addEventListener('click',function(){
+    var body=hdr.nextElementSibling;
+    if(!body||!body.classList.contains('stage-body')) return;
+    if(body.classList.contains('open')){
+      // closing
+      body.style.maxHeight=body.scrollHeight+'px';
+      body.style.overflow='hidden';
+      body.style.transition='max-height .28s cubic-bezier(.4,0,.2,1),opacity .28s';
+      body.style.opacity='1';
+      requestAnimationFrame(function(){
+        body.style.maxHeight='0';
+        body.style.opacity='0';
+      });
+      setTimeout(function(){
+        body.classList.remove('open');
+        body.style.maxHeight='';
+        body.style.overflow='';
+        body.style.opacity='';
+        body.style.transition='';
+      },280);
+    } else {
+      // opening
+      body.classList.add('open');
+      body.style.overflow='hidden';
+      body.style.maxHeight='0';
+      body.style.opacity='0';
+      body.style.transition='max-height .32s cubic-bezier(.4,0,.2,1),opacity .25s';
+      requestAnimationFrame(function(){
+        body.style.maxHeight=body.scrollHeight+200+'px';
+        body.style.opacity='1';
+      });
+      setTimeout(function(){
+        body.style.maxHeight='';
+        body.style.overflow='';
+        body.style.transition='';
+      },340);
+    }
+  });
+});
+
+/* ─── 8. LIVE SEARCH FILTER in Stage Scripts ─── */
+(function(){
+  var searchInput=document.querySelector('#panel-stages .search-row input');
+  if(!searchInput) return;
+  searchInput.addEventListener('input',function(){
+    var q=this.value.toLowerCase().trim();
+    document.querySelectorAll('.stage-card').forEach(function(card){
+      var text=card.textContent.toLowerCase();
+      card.style.display=(!q||text.includes(q))?'':'none';
+    });
+  });
+})();
+
+/* ─── 9. READING TIME hint ─── */
+(function(){
+  document.querySelectorAll('.script-view').forEach(function(el){
+    var words=el.textContent.trim().split(/\s+/).length;
+    var secs=Math.round(words/2.5); // ~150wpm for reading aloud
+    var hint=document.createElement('span');
+    hint.style.cssText='font-size:10px;color:#9ca3af;display:block;margin-top:6px';
+    hint.textContent='🎙 ~'+secs+'s to read aloud';
+    el.parentNode.insertBefore(hint,el.nextSibling);
+  });
+})();
+
+})();
+</script>
 </body>
 </html>
