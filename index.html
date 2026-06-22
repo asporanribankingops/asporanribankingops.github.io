@@ -4933,9 +4933,18 @@ switchTab = function(id) {
 
   <div id="panel-obflow" class="panel" style="border-top:3px solid #f97316">
     <div class="panel-banner" style="background:#fff7ed;border-color:#f97316;color:#c2410c"><div class="panel-banner-icon" style="background:#f97316;color:#fff">📱</div><div><div class="panel-banner-title">App Onboarding Flow</div><div class="panel-banner-sub">Stage-by-stage screenshots from the Aspora onboarding journey — grouped by phase</div></div></div>
+
+    <!-- Edit toolbar -->
+    <div id="ob-edit-bar" style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button id="ob-edit-btn" onclick="obToggleEdit()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:#f97316;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">✏️ Edit Labels</button>
+      <button id="ob-save-btn" onclick="obSave()" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">💾 Save</button>
+      <button id="ob-cancel-btn" onclick="obCancelEdit()" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:#6b7280;color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer">✕ Cancel</button>
+      <span id="ob-edit-hint" style="font-size:11.5px;color:#9a3412;display:none">Click any label or description to edit it</span>
+    </div>
+
     <div style="padding:0">
 
-      <p class="kf-p kf-editable" contenteditable="false">Screenshots from each onboarding stage, grouped by phase. These correspond directly to the drop-off stages tracked in the CRM — each stage where a customer stopped is a potential queue entry point.</p>
+      <p class="ob-editable" contenteditable="false" style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6">Screenshots from each onboarding stage, grouped by phase. These correspond directly to the drop-off stages tracked in the CRM — each stage where a customer stopped is a potential queue entry point.</p>
 
       <style>
         .ob-phase{margin-bottom:24px}
@@ -4952,74 +4961,74 @@ switchTab = function(id) {
       <div id="ob-flow-container">
         <!-- Phase 1: Basic Details (Stages 0–11) -->
         <div class="ob-phase">
-          <div class="ob-phase-title">📋 Phase 1 — Basic Details &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 0–11</span></div>
+          <div class="ob-phase-title">📋 <span class="ob-editable">Phase 1 — Basic Details </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 0–11</span></div>
           <div class="ob-phase-body">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">0</span> Not started / App entry</div><div class="ob-imgs" id="ob-s0"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">1</span> Account type selection</div><div class="ob-imgs" id="ob-s1"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">2</span> What you need page</div><div class="ob-imgs" id="ob-s2"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">3</span> Email verification</div><div class="ob-imgs" id="ob-s3"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">4</span> User basics (name, DOB)</div><div class="ob-imgs" id="ob-s4"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">5</span> Journey stepper intro</div><div class="ob-imgs" id="ob-s5"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">6</span> Address page</div><div class="ob-imgs" id="ob-s6"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">7</span> Marital status</div><div class="ob-imgs" id="ob-s7"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">8</span> Occupation</div><div class="ob-imgs" id="ob-s8"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">9</span> Annual income</div><div class="ob-imgs" id="ob-s9"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">10</span> Education</div><div class="ob-imgs" id="ob-s10"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">11</span> Journey stepper after life</div><div class="ob-imgs" id="ob-s11"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">0</span> <span class="ob-editable">Not started / App entry</span></div><div class="ob-imgs" id="ob-s0"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">1</span> <span class="ob-editable">Account type selection</span></div><div class="ob-imgs" id="ob-s1"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">2</span> <span class="ob-editable">What you need page</span></div><div class="ob-imgs" id="ob-s2"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">3</span> <span class="ob-editable">Email verification</span></div><div class="ob-imgs" id="ob-s3"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">4</span> <span class="ob-editable">User basics (name, DOB)</span></div><div class="ob-imgs" id="ob-s4"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">5</span> <span class="ob-editable">Journey stepper intro</span></div><div class="ob-imgs" id="ob-s5"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">6</span> <span class="ob-editable">Address page</span></div><div class="ob-imgs" id="ob-s6"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">7</span> <span class="ob-editable">Marital status</span></div><div class="ob-imgs" id="ob-s7"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">8</span> <span class="ob-editable">Occupation</span></div><div class="ob-imgs" id="ob-s8"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">9</span> <span class="ob-editable">Annual income</span></div><div class="ob-imgs" id="ob-s9"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">10</span> <span class="ob-editable">Education</span></div><div class="ob-imgs" id="ob-s10"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num">11</span> <span class="ob-editable">Journey stepper after life</span></div><div class="ob-imgs" id="ob-s11"></div></div>
           </div>
         </div>
 
         <!-- Phase 2: KYC / Persona (Stages 12–16) -->
         <div class="ob-phase">
-          <div class="ob-phase-title" style="color:#7c3aed;background:#f5f3ff;border-color:#ddd6fe">🪪 Phase 2 — KYC / Persona &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 12–16</span></div>
+          <div class="ob-phase-title" style="color:#7c3aed;background:#f5f3ff;border-color:#ddd6fe">🪪 <span class="ob-editable">Phase 2 — KYC / Persona </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 12–16</span></div>
           <div class="ob-phase-body" style="border-color:#ddd6fe">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">12</span> Verification SDK (Video KYC)</div><div class="ob-imgs" id="ob-s12"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">13</span> Persona missing details</div><div class="ob-imgs" id="ob-s13"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">14</span> Tax residency (FATCA)</div><div class="ob-imgs" id="ob-s14"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">15</span> Terms &amp; conditions</div><div class="ob-imgs" id="ob-s15"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">16</span> RTL journey completed</div><div class="ob-imgs" id="ob-s16"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">12</span> <span class="ob-editable">Verification SDK (Video KYC)</span></div><div class="ob-imgs" id="ob-s12"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">13</span> <span class="ob-editable">Persona missing details</span></div><div class="ob-imgs" id="ob-s13"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">14</span> <span class="ob-editable">Tax residency (FATCA)</span></div><div class="ob-imgs" id="ob-s14"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">15</span> <span class="ob-editable">Terms &amp; conditions</span></div><div class="ob-imgs" id="ob-s15"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#7c3aed">16</span> <span class="ob-editable">RTL journey completed</span></div><div class="ob-imgs" id="ob-s16"></div></div>
           </div>
         </div>
 
         <!-- Phase 3: SIM Binding (Stages 17–19) -->
         <div class="ob-phase">
-          <div class="ob-phase-title" style="color:#b45309;background:#fef3c7;border-color:#fde68a">📱 Phase 3 — SIM Binding &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 17–19</span></div>
+          <div class="ob-phase-title" style="color:#b45309;background:#fef3c7;border-color:#fde68a">📱 <span class="ob-editable">Phase 3 — SIM Binding </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 17–19</span></div>
           <div class="ob-phase-body" style="border-color:#fde68a">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">17</span> SIM registration screen</div><div class="ob-imgs" id="ob-s17"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">18</span> SIM verification success</div><div class="ob-imgs" id="ob-s18"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">19</span> PAN screen</div><div class="ob-imgs" id="ob-s19"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">17</span> <span class="ob-editable">SIM registration screen</span></div><div class="ob-imgs" id="ob-s17"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">18</span> <span class="ob-editable">SIM verification success</span></div><div class="ob-imgs" id="ob-s18"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#d97706">19</span> <span class="ob-editable">PAN screen</span></div><div class="ob-imgs" id="ob-s19"></div></div>
           </div>
         </div>
 
         <!-- Phase 4: Digital Notary (Stages 20–23) -->
         <div class="ob-phase">
-          <div class="ob-phase-title" style="color:#0f766e;background:#ccfbf1;border-color:#99f6e4">🎥 Phase 4 — Digital Notary &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 20–23</span></div>
+          <div class="ob-phase-title" style="color:#0f766e;background:#ccfbf1;border-color:#99f6e4">🎥 <span class="ob-editable">Phase 4 — Digital Notary </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 20–23</span></div>
           <div class="ob-phase-body" style="border-color:#99f6e4">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">20</span> Notarization intro</div><div class="ob-imgs" id="ob-s20"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">21</span> Notary live SDK open</div><div class="ob-imgs" id="ob-s21"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">22</span> Notarization in progress</div><div class="ob-imgs" id="ob-s22"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">23</span> Notarization complete</div><div class="ob-imgs" id="ob-s23"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">20</span> <span class="ob-editable">Notarization intro</span></div><div class="ob-imgs" id="ob-s20"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">21</span> <span class="ob-editable">Notary live SDK open</span></div><div class="ob-imgs" id="ob-s21"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">22</span> <span class="ob-editable">Notarization in progress</span></div><div class="ob-imgs" id="ob-s22"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#0d9488">23</span> <span class="ob-editable">Notarization complete</span></div><div class="ob-imgs" id="ob-s23"></div></div>
           </div>
         </div>
 
         <!-- Phase 5: E-Signing (Stages 24–29) -->
         <div class="ob-phase">
-          <div class="ob-phase-title" style="color:#be185d;background:#fce7f3;border-color:#fbcfe8">✍️ Phase 5 — E-Signing &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 24–29</span></div>
+          <div class="ob-phase-title" style="color:#be185d;background:#fce7f3;border-color:#fbcfe8">✍️ <span class="ob-editable">Phase 5 — E-Signing </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stages 24–29</span></div>
           <div class="ob-phase-body" style="border-color:#fbcfe8">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">24</span> E-sign intro</div><div class="ob-imgs" id="ob-s24"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">25</span> E-sign in progress</div><div class="ob-imgs" id="ob-s25"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">26</span> E-sign complete</div><div class="ob-imgs" id="ob-s26"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">27</span> Account setup</div><div class="ob-imgs" id="ob-s27"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">28</span> MPIN setup</div><div class="ob-imgs" id="ob-s28"></div></div>
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">29</span> Final steps</div><div class="ob-imgs" id="ob-s29"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">24</span> <span class="ob-editable">E-sign intro</span></div><div class="ob-imgs" id="ob-s24"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">25</span> <span class="ob-editable">E-sign in progress</span></div><div class="ob-imgs" id="ob-s25"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">26</span> <span class="ob-editable">E-sign complete</span></div><div class="ob-imgs" id="ob-s26"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">27</span> <span class="ob-editable">Account setup</span></div><div class="ob-imgs" id="ob-s27"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">28</span> <span class="ob-editable">MPIN setup</span></div><div class="ob-imgs" id="ob-s28"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#db2777">29</span> <span class="ob-editable">Final steps</span></div><div class="ob-imgs" id="ob-s29"></div></div>
           </div>
         </div>
 
         <!-- Phase 6: Account Opened (Stage 30) -->
         <div class="ob-phase">
-          <div class="ob-phase-title" style="color:#166534;background:#dcfce7;border-color:#86efac">✅ Phase 6 — Account Opened &nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stage 30</span></div>
+          <div class="ob-phase-title" style="color:#166534;background:#dcfce7;border-color:#86efac">✅ <span class="ob-editable">Phase 6 — Account Opened </span>&nbsp;<span style="font-weight:400;font-size:11px;opacity:.7">Stage 30</span></div>
           <div class="ob-phase-body" style="border-color:#86efac">
-            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#16a34a">30</span> Account active</div><div class="ob-imgs" id="ob-s30"></div></div>
+            <div class="ob-stage-row"><div class="ob-stage-label"><span class="ob-stage-num" style="background:#16a34a">30</span> <span class="ob-editable">Account active</span></div><div class="ob-imgs" id="ob-s30"></div></div>
           </div>
         </div>
       </div>
@@ -5071,6 +5080,42 @@ switchTab = function(id) {
             el.appendChild(img);
           });
         });
+      })();
+
+      // Edit / Save / Cancel for Onboarding Flow panel
+      var obEditing=false, obSnapshot='';
+      function obToggleEdit(){
+        obEditing=true;
+        obSnapshot=document.getElementById('panel-obflow').innerHTML;
+        document.querySelectorAll('#panel-obflow .ob-editable').forEach(function(el){el.contentEditable='true';el.style.outline='2px dashed #f97316';el.style.borderRadius='4px';el.style.padding='2px 4px';});
+        document.getElementById('ob-edit-btn').style.display='none';
+        document.getElementById('ob-save-btn').style.display='flex';
+        document.getElementById('ob-cancel-btn').style.display='flex';
+        document.getElementById('ob-edit-hint').style.display='inline';
+      }
+      function obSave(){
+        document.querySelectorAll('#panel-obflow .ob-editable').forEach(function(el){el.contentEditable='false';el.style.outline='';el.style.borderRadius='';el.style.padding='';});
+        document.getElementById('ob-edit-btn').style.display='flex';
+        document.getElementById('ob-save-btn').style.display='none';
+        document.getElementById('ob-cancel-btn').style.display='none';
+        document.getElementById('ob-edit-hint').style.display='none';
+        localStorage.setItem('obflow-content',document.getElementById('ob-flow-container').innerHTML);
+        localStorage.setItem('obflow-desc',document.querySelector('#panel-obflow .ob-editable').innerText||'');
+        obEditing=false;
+        var t=document.createElement('div');
+        t.textContent='✓ Saved';
+        t.style.cssText='position:fixed;bottom:24px;right:24px;background:#16a34a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2)';
+        document.body.appendChild(t);setTimeout(function(){t.remove();},2200);
+      }
+      function obCancelEdit(){
+        document.getElementById('panel-obflow').innerHTML=obSnapshot;
+        obEditing=false;
+      }
+      // Restore saved labels
+      (function(){
+        var saved=localStorage.getItem('obflow-content');
+        if(saved){document.getElementById('ob-flow-container').innerHTML=saved;}
+      })();
       })();
       </script>
 
