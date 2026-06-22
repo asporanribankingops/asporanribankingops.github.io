@@ -49,6 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .tab[data-tab="kycsop"]      ::before{background:#e06060}
 .tab[data-tab="pbmframework"]::before{background:#70b840}
 .tab[data-tab="auditlog"]    ::before{background:#8888aa}
+.tab[data-tab="kycflow"]     ::before{background:#0ea5e9}
 
 .tab[data-tab="stages"].active      {background:#e6f1fb;color:#185fa5;border-color:#378add}
 .tab[data-tab="objections"].active  {background:#fff3e6;color:#a05a00;border-color:#f0a050}
@@ -59,6 +60,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .tab[data-tab="kycsop"].active      {background:#fdecea;color:#a52020;border-color:#e06060}
 .tab[data-tab="pbmframework"].active{background:#eef6e6;color:#2a6a10;border-color:#70b840}
 .tab[data-tab="auditlog"].active    {background:#f0f0f8;color:#44447a;border-color:#8888aa}
+.tab[data-tab="kycflow"].active     {background:#e0f2fe;color:#0369a1;border-color:#0ea5e9}
 
 /* ── Panel colour headers ── */
 .panel-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:16px;border-left:4px solid}
@@ -75,6 +77,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .panel-kycsop      {border-top:3px solid #e06060}
 .panel-pbmframework{border-top:3px solid #70b840}
 .panel-auditlog    {border-top:3px solid #8888aa}
+.panel-kycflow     {border-top:3px solid #0ea5e9}
+/* KYC flow styles */
+.kf-meta{font-size:11px;color:var(--text2);background:var(--bg2);border:.5px solid var(--border);border-radius:6px;padding:8px 14px;margin-bottom:18px;line-height:1.8}
+.kf-section{margin-bottom:22px}
+.kf-h2{font-size:15px;font-weight:700;color:var(--text1);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0ea5e9;display:flex;align-items:center;gap:8px}
+.kf-h3{font-size:13px;font-weight:700;color:#0369a1;margin:14px 0 7px}
+.kf-p{font-size:13px;line-height:1.7;color:var(--text1);margin-bottom:8px}
+.kf-ol{padding-left:18px;margin-bottom:8px}
+.kf-ol li{font-size:13px;line-height:1.7;color:var(--text1);margin-bottom:3px}
+.kf-ul{list-style:disc;padding-left:18px;margin-bottom:8px}
+.kf-ul li{font-size:13px;line-height:1.7;color:var(--text1);margin-bottom:3px}
+.kf-tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:12px}
+.kf-tbl th{background:#e0f2fe;padding:7px 10px;text-align:left;font-weight:700;color:#0369a1;border:1px solid #bae6fd}
+.kf-tbl td{padding:7px 10px;border:1px solid var(--border);color:var(--text1);vertical-align:top;line-height:1.5}
+.kf-tbl tr:nth-child(even) td{background:var(--bg2)}
+.kf-note{background:#fff7ed;border-left:4px solid #f97316;border-radius:0 6px 6px 0;padding:10px 14px;font-size:12.5px;color:#9a3412;margin-bottom:10px;line-height:1.6}
+.kf-note.blue{background:#eff6ff;border-color:#3b82f6;color:#1e40af}
+.kf-note.red{background:#fef2f2;border-color:#dc2626;color:#991b1b}
+.kf-note.green{background:#f0fdf4;border-color:#16a34a;color:#166534}
+.kf-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700;margin-right:4px}
+.kf-badge.draft{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.kf-badge.product{background:#e0f2fe;color:#0369a1;border:1px solid #7dd3fc}
+.kf-badge.eng{background:#f3e8ff;color:#7e22ce;border:1px solid #d8b4fe}
+.kf-code{background:var(--bg2);border:.5px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;font-family:monospace;overflow-x:auto;margin-bottom:12px;white-space:pre;line-height:1.5}
+.kf-diagram-wrap{background:var(--bg2);border:.5px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;overflow-x:auto}
+/* edit toolbar */
+.kf-edit-bar{display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;background:#e0f2fe;border-radius:8px;margin-bottom:12px;border:.5px solid #7dd3fc}
+.kf-edit-bar.show{display:flex}
+.kf-edit-bar span{font-size:11.5px;font-weight:600;color:#0369a1}
+.kf-edit-bar button{padding:4px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid #7dd3fc;background:#fff;color:#0369a1;transition:background .1s}
+.kf-edit-bar button:hover{background:#bae6fd}
+.kf-edit-bar button.save{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+.kf-edit-bar button.save:hover{background:#0284c7}
+.kf-editable{border-radius:3px;transition:outline .1s}
+.kf-editing .kf-editable{outline:1.5px dashed #7dd3fc;cursor:text;padding:1px 3px}
+.kf-editing .kf-editable:focus{outline:2px solid #0ea5e9;background:#f0f9ff}
+.kf-editing .kf-tbl td.kf-editable{display:block}
+.kf-add-row-btn{font-size:11px;color:#0369a1;background:none;border:1px dashed #7dd3fc;border-radius:5px;padding:3px 10px;cursor:pointer;margin-top:4px;display:none}
+.kf-editing .kf-add-row-btn{display:inline-block}
+.kf-del-row{font-size:10px;color:#dc2626;background:none;border:none;cursor:pointer;padding:0 4px;display:none;float:right}
+.kf-editing .kf-del-row{display:inline}
 .audit-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:.5px solid var(--border)}
 .audit-row:last-child{border-bottom:none}
 .audit-avatar{width:34px;height:34px;border-radius:50%;background:var(--info-bg);color:var(--info-text);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
@@ -254,15 +297,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </button>
 
 <!-- Baked defaults: replaced by ghBakeAndPush() to seed localStorage for all visitors -->
-<!--BD-START--><script id="baked-defaults">
-(function(){
-  var _baked = {"_bv":1782131066045,"custom_pages_v1":"[]","st_obj":"\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"I'll do it later\"</td><td style=\"\">\"Absolutely - when would be a good time? I'll set a reminder and call you back at that time.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"The app keeps crashing\"</td><td style=\"\">\"I'll raise a tech ticket right away from my end. Alternatively, clearing the app cache or switching devices often resolves it quickly.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"I changed my mind about the NRI account\"</td><td style=\"\">\"I understand - may I ask what changed? Often there's a specific concern I can address. We offer highest interest rates for NRE accounts which can go upto 7%, which is very competitve in the industry\".</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"I don't trust the digital process\"</td><td style=\"\">\"That's a completely valid concern. The process is RBI-regulated, uses bank-grade encryption, and your KYC is handled by a licensed notary. I'll personally walk you through each step so you're comfortable throughout.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"I'm not in UK right now\"</td><td style=\"\">\"To open our NRE/NRO account it is important you initate the onboarding process from UK, can you let me know when you be back to UK so we can call you back to assist you with the onboarding process.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"It's too complicated\"</td><td style=\"\">\"I hear you - let me simplify it. You're at step [X] out of 30. I'll personally guide you through each remaining step right now so it stays straightforward.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\">\"Is it safe to do this online?\"</td><td style=\"\">\"Absolutely - same bank-grade encryption as your net banking, RBI-regulated, KYC verified by a licensed digital notary.\"</td></tr>\n          <tr><td style=\"font-style: italic; color: var(--text2);\"><br></td><td style=\"\"><br></td></tr>\n        ","pb_sec_pb-s2":"\n            <div class=\"pb-msgs\"><span class=\"pb-msg-chip\">\"My KYC was flagged / rejected\"</span><span class=\"pb-msg-chip\">\"I got an email saying there's a discrepancy\"</span><span class=\"pb-msg-chip\">\"What document should I re-upload?\"</span><span class=\"pb-msg-chip\">\"How many attempts do I get?\"</span></div>\n            <div class=\"pb-h3\">Handling steps</div>\n            <ol class=\"pb-steps\">\n              <li data-n=\"1\">Look up application ID using registered phone/email</li>\n              <li data-n=\"2\">Check discrepancy type (information issue vs. document issue)</li>\n              <li data-n=\"3\">Explain specifically what needs fixing</li>\n              <li data-n=\"4\">Guide through the correction process</li>\n              <li data-n=\"5\">Remind: <strong>30 days window, max 3 attempts</strong></li>\n            </ol>\n            <div class=\"pb-h3\">Common discrepancy types</div>\n            <table class=\"pb-table\">\n              <tbody><tr><th>Discrepancy</th><th>What to tell the customer</th></tr>\n              <tr><td>Name mismatch</td><td>\"Your name on [doc A] doesn't match [doc B]. Please upload a document where the name matches exactly, or share a government-issued name change certificate.\"</td></tr>\n              <tr><td>Address mismatch</td><td>\"The address on your form doesn't match the document. Please verify and provide the correct document.\"</td></tr>\n              <tr><td>Blurry/unclear upload</td><td>\"The image of your [document] is not clear enough. Please retake in good lighting and re-upload.\"</td></tr>\n              <tr><td>Expired document</td><td>\"Your [document] has expired. Please upload a current, valid version.\"</td></tr>\n              <tr><td>Address proof too old</td><td>\"Your address proof must be dated within the last 2 months (utility bill) or 3 months (bank statement).\"</td></tr>\n              <tr><td>Invalid TIN format</td><td>\"The TIN you entered doesn't match the expected format for [country]. Please double-check and re-enter.\"</td></tr>\n            </tbody></table>\n            <div class=\"pb-h3\">Escalation triggers</div>\n            <div class=\"pb-warning\"><strong>All 3 attempts used, issue persists</strong>Escalate to Ops team.</div>\n            <div class=\"pb-warning\"><strong>30-day window about to expire</strong>Flag urgently to Ops team.</div>\n            <div class=\"pb-warning\"><strong>Application REJECTED (not just flagged)</strong>Usually AML/sanctions related. Do NOT attempt to resolve. Escalate to Ops immediately.</div>\n            <div class=\"pb-h3\">Response template — Discrepancy</div>\n            <div class=\"pb-template\" id=\"pbt-s2a\"><span class=\"pb-tpl-text\">Hi [Name], I can see that your application has been flagged for a discrepancy. Here's what needs attention:\n\nIssue: [Specific issue, e.g., \"The name on your PAN card doesn't match the name on your passport\"]\n\nHow to fix it: [Specific action, e.g., \"Please re-upload your passport ensuring the name page is clearly visible, or provide a name change certificate if applicable\"]\n\nYou can submit your correction through the app or by replying to the email you received. You have up to 3 attempts to resolve this, and the application stays open for 30 days from the first flag.\n\nLet me know if you need help with anything else!</span><div class=\"pb-tpl-actions\"><button class=\"pb-copy-btn\" onclick=\"pbCopyTpl('pbt-s2a',this)\">Copy</button><button class=\"pb-edit-btn\" onclick=\"pbEditTpl('pbt-s2a')\">Edit</button></div></div>\n            <div class=\"pb-h3\">Response template — Rejection</div>\n            <div class=\"pb-template\" id=\"pbt-s2b\"><span class=\"pb-tpl-text\">Hi [Name], I'm sorry to inform you that your account application could not be approved after review by our banking partner's compliance team. Unfortunately, I'm unable to share the specific reason due to regulatory requirements.\n\nIf you believe this is an error, I can escalate this to our compliance team for a second review. Would you like me to do that?</span><div class=\"pb-tpl-actions\"><button class=\"pb-copy-btn\" onclick=\"pbCopyTpl('pbt-s2b',this)\">Copy</button><button class=\"pb-edit-btn\" onclick=\"pbEditTpl('pbt-s2b')\">Edit</button></div></div>\n          ","pb_tpl_pbt-s2b":"> Hi [Name], I'm sorry to inform you that your account application could not be approved after review by our banking partner's compliance team. Unfortunately, I'm unable to share the specific reason due to regulatory requirements.\n\n> If you believe this is an error, I can escalate this to our compliance team for a second review. Would you like me to do that?\n","pb_tpl_pbt-s2a":"> Hi [Name], I can see that your application has been flagged for a discrepancy. Here's what needs attention:\n\n> **Issue:** [Specific issue, e.g., \"The name on your PAN card doesn't match the name on your passport\"]\n\n> **How to fix it:** [Specific action, e.g., \"Please re-upload your passport ensuring the name page is clearly visible, or provide a name change certificate if applicable\"]\n\n> You can submit your correction through the app or by replying to the email you received. You have up to 3 attempts to resolve this, and the application stays open for 30 days from the first flag.\n\n> Let me know if you need help with anything else!\n","nri_pbm_edits_v3":"{\"0\":{\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'll be assisting you with your NRI account opening process. I just wanted 2 minutes to walk you through how this works and help get your application moving from my end.\\n\\nThe entire process is digital - no branch visit needed, and it typically takes around 10-15 minutes from your phone. You'll just need your passport, an overseas address proof, and your PAN card handy.\\n\\nI'll personally coordinate each step with you so it stays straightforward. I can send you the application link right now - shall I do that?\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-0-1781281356237-55207.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-0-1781281400328-60784.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-0-1781281418193-41009.png\",\"caption\":\"\"}],\"reasons\":\"Forgot, unsure which documents to keep ready, or did not trust the digital process.\",\"means\":\"Customer created a lead or expressed interest or received communication about NRE/NRO launch but never opened the app.\"},\"1\":{\"means\":\"Customer opened the app but did not select an account type (NRE / NRO / FCNR).\\n\\nNote: User will be able to NRO/NRE accounts together in the same process, incase user doesn't want NRO account, info the user that we will be able to freeze NRO account if required. \",\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up regarding your NRI account opening application - I'll just take 2 minutes to help move this forward from my side.\\n\\nI can see the process paused at the account type selection. This is one of the most common points of confusion, so I'll simplify it quickly.\\n\\nIf you want to park your foreign earnings and repatriate funds freely - NRE is the right fit. If you have income sources in India like rent or investments - NRO is more suitable. FCNR is for keeping savings in a foreign currency like GBP.\\n\\nBased on your profile, I'd recommend [NRE/NRO]. I'll personally assist you through the selection right now - shall we proceed?\",\"objs\":[{\"q\":\"Can I have both NRE and NRO?\",\"a\":\"Yes, the same account opening journey allows you to open NRE/NRO account at the same time.\"}],\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-1-1781283357684-82941.png\",\"caption\":\"\"}]},\"2\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-2-1781281811906-39948.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm reaching out to help move your account opening process forward - I'll just take 2 minutes.\\n\\nI can see the process paused at the document checklist. I want to quickly simplify that for you - you only need three things: your passport, a proof of your overseas address such as a utility bill or bank statement, and your PAN card. No physical copies are needed - clear photos from your phone work perfectly.\\n\\nI'll personally guide you through each upload so there are no hiccups. Do you have those documents accessible right now?\",\"objs\":[{\"q\":\"My overseas address proof is in a foreign language.\",\"a\":\"That's completely fine - we accept translated documents, and I can guide you on which alternative proofs are accepted if needed.\"},{\"q\":\"I don't have a PAN card.\",\"a\":\"No problem at all - all you need is your PAN Number, in case you do not have a original, you can download the e-pan from the NSDL website.\"}]},\"3\":{\"objs\":[{\"q\":\"I didn't receive the OTP.\",\"a\":\"Let's get that resent right away. Also worth checking your spam folder. If it still doesn't come through, let me raise a ticket with our tech team and get back to you to with an update.\"}],\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-3-1781281927538-49126.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-3-1781281958817-99253.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up on your NRI account opening application - I'll just take 2 minutes to help resolve a quick step from my end.\\n\\nI can see the process stalled at the email verification stage. This is usually a straightforward fix - the OTP sometimes lands in the spam or promotions folder, or there's a brief delay.\\n\\nIf you can open the application now, I'll stay on the line and help you clear this step in under a minute.\"},\"4\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-4-1781283059315-37147.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your NRI account opening forward - just a quick 2-minute update from my side.\\n\\nI can see the process paused at the personal details section. A quick clarification that helps here: please enter your name exactly as it appears on your passport - including your middle name if it's listed there. This avoids any mismatch during KYC verification.\\n\\n\",\"means\":\"Customer dropped off while filling in basic personal details (Name and DOB).\",\"reasons\":\"Unsure which name to use (full name and DOB s per passport)\"},\"5\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-5-1781283810378-40700.png\",\"caption\":\"\"}],\"objs\":[{\"q\":\"Why are there so mant steps?\",\"a\":\"These are general KYC verifications steps for creating a NRE/NRO account. This helps us establish your identify as an NRI to ensure all the services and benefits can be provided to you without any restrictions on the account. Your details are safe and encrypted as per regulatory guidelines.\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the next steps on your NRI account opening - I'll just take 2 minutes.\\n\\nI can see the process paused after the journey overview screen. I completely understand - seeing all the steps at once can feel like a lot. In reality, most customers complete the full process in under 20 minutes, and your progress is saved automatically at every stage, so you can always pause and resume.\\n\\nYou've already cleared the first part. I'll personally walk you through what's remaining so it stays simple. Shall we continue from where you left off?\"},\"6\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-6-1781282342908-81256.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-6-1781282358257-4910.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-6-1781282369705-58001.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up on your account opening application - quick 2-minute update from my end.\\n\\nI can see the process stalled at the address section. A common point of confusion here is formatting - your overseas residential address should be entered exactly as it appears on your address proof document which is your utility bill or bank statement, including the postal code format used in that country.\\n\\nFor the Indian address, use your permanent address as per your existing records. If you're unsure about any field, I'll personally guide you through it right now - shall we complete the application process together?\",\"objs\":[{\"q\":\"I recently moved to a new place?\",\"a\":\"The utility bill or bank statement should not be older than 3 months as of the date of account opening. Incase of bank statement, the statement should contain transaction history for the last 90 days.\"}]},\"7\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-7-1781282600139-53568.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete your NRI account opening - just a 2-minute check-in from my side.\\n\\nI can see the process paused at the marital status field. I just want to clarify - this is a standard regulatory KYC requirement across all bank accounts. It has absolutely no bearing on your account features, eligibility, or any other aspect of your banking. The information is completely confidential.\\n\\nThis is a single selection - it'll hardly take 10 minutes of your time to open your NRE/NRO account. I'm here if you'd like to continue now.\"},\"8\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-8-1781279606567-48780.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your account opening forward - just a couple of minutes from my side.\\n\\nI can see the process paused at the occupation details. This is a standard KYC and source-of-funds compliance field - it doesn't affect your account in any way. Let me help you pick the right option quickly.\\n\\nIf you're employed by a company, select Salaried. If you run your own business or freelance, Self-employed is the right fit. If you're between roles, retired, or a homemaker, there are relevant options for those too. What's your current situation? I'll point you to the right selection.\"},\"9\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-9-1781279978183-49560.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Just a quick follow-up to help complete your account opening - I'll take 2 minutes.\\n\\nI can see the process paused at the annual income step. I want to clarify - this is a range-based declaration required for RBI KYC compliance. It is not an exact figure, it's fully confidential, and it has no impact on your account limits or any features.\\n\\nYou simply select the bracket that broadly reflects your total annual income - this can be a combined figure of your overseas and Indian earnings. I'm here if you'd like to continue now.\"},\"10\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-10-1781280013506-43302.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Just a quick check-in to help move your account opening forward - 2 minutes from my side.\\n\\nI can see the process paused at the education qualification field. This is a standard SEBI and RBI KYC requirement applicable to all bank accounts - it's a single dropdown selection and takes about 10 seconds.\\n\\nYou're right at the end of the personal details section - one tap away from completing it. I can stay on the line while you do this right now if that helps.\"},\"11\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-11-1781280377641-66415.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-11-1781280387411-86560.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-11-1781280397947-79684.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help coordinate the next steps on your account opening - just a 2-minute update.\\n\\nYou've successfully completed your personal details - which is the most detailed section of the entire process. The next phase is identity verification, which typically takes about 5 minutes. You'll just need your passport nearby and a well-lit space.\\n\\nI'll personally assist you through the verification process so it goes smoothly. Are you in a position to continue now, or would a specific time later today work better? I'll schedule accordingly from my end.\"},\"12\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280533921-99417.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280553671-5461.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280566774-65149.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280598441-65308.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280610455-49215.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-12-1781280622724-28708.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the verification step on your account opening - quick update from my side.\\n\\nYour application is at the identity verification stage. This is a secure, 3-5 minute process that confirms your identity - your passport and a brief camera-based check are all that's needed.\\n\\nFor this to go smoothly, you'll want to be in a well-lit, quiet space with your passport in hand. A WiFi connection is preferred. If now is a good time, I can stay on the line and assist you through it. If a specific time today works better, I'll set that up from my end.\"},\"14\":{\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help progress your account opening - just a 2-minute update from my end.\\n\\nYour application paused at the tax residency declaration. This is a global regulatory requirement - FATCA and CRS compliance - that applies to all international bank accounts. It simply requires you to declare which country you are a tax resident of.\\n\\nThis declaration does not create any new tax liability whatsoever. It is purely a reporting requirement for the bank. I'll personally walk you through the section right now if you'd like to continue.\",\"means\":\"Customer dropped off at the tax residency declaration step.\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-14-1781271642850-85613.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-14-1781271906306-41209.png\",\"caption\":\"\"}]},\"15\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-15-1781271811383-45499.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-15-1781271844163-62425.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-15-1781271855641-84346.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-15-1781271863344-18078.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with a quick update on your account opening - your application is at the final step of the KYC phase.\\n\\nThe only remaining action is reviewing and accepting the terms and conditions. The key points cover standard account operation terms, NRE/NRO repatriation guidelines, and your digital consent for KYC.\\n\\nIf there is any specific clause you'd like me to explain in plain language before you proceed, I'm happy to do that right now. I'll personally ensure there are no surprises.\"},\"16\":{\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your KYC has been successfully verified. Well done on completing that section.\\n\\nYour application is now in the final phase. The next step is SIM binding, which links your registered mobile number to your account for secure two-factor authentication. It's a 2-minute step and is required to activate your mobile banking access.\\n\\nEnsure your sim with International number is present in the device from which you are creating the account. I'll coordinate the remaining steps with you personally - shall we proceed now?\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-16-1781272090119-15003.png\",\"caption\":\"\"}]},\"17\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-17-1781272217545-80267.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete the SIM binding step on your account opening - just a quick update from my side.\\n\\nThis step requires your registered Indian mobile number to be active on your phone at the time of binding. If you're currently abroad and that SIM isn't accessible, there's no need to worry - your application remains active and I'll help you schedule this step for when you have the number available.\\n\\nJust let me know what works best and I'll coordinate accordingly.\"},\"18\":{\"means\":\"SIM was verified successfully, but the customer dropped off right after without proceeding to add pan stage\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-18-1781272807674-3427.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your SIM has been successfully verified. The next step is PAN verification, which takes about a minute.\\n\\nIf you can open the application now and tap Continue, I'll stay on the line and help you through to the end. You are very close to completing the process.\"},\"19\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-19-1781272834423-9936.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-19-1781272844079-7314.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help move your account opening forward - just a 2-minute assist from my side.\\n\\nYour application paused at the PAN verification step. This is usually a quick one - you enter your PAN number and it gets auto-verified. One thing to check is that the name on your PAN matches exactly what you entered earlier in the form. If there's a discrepancy, I can help you correct it.\\n\\nIf you don't have your PAN card immediately accessible, DigiLocker or the Income Tax portal will show it in under a minute. Shall we try that together now?\"},\"20\":{\"reasons\":\"Did not understand what a digital notary is, concerned about the video call, or not prepared, notary agent not available or had to wait for long.\",\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling to help coordinate the notarization step on your account opening - quick update from my side.\\n\\nYour application has progressed to digital notarization. This is a short video call - typically 5 to 7 minutes - with a licensed notary who verifies your passport and confirms your identity. The notary is professional, speaks English, and the session is completely guided.\\n\\nYou'll need your original passport, good lighting, and a quiet space. Slots are available today and can you please when you will be able to complete the notary. \",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273223751-83548.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273234820-52554.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273252236-3329.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273269129-50982.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273276036-9516.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-20-1781273285621-91047.png\",\"caption\":\"\"}]},\"21\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-21-1781273377599-93090.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up regarding your notarization session - I can see it was interrupted, and I wanted check what was the issue you faced before dropping off. \\n\\nThis happens occasionally and is easy to sort. To ensure the rescheduled session goes smoothly: a stable WiFi connection is preferred, your passport should be open to the photo page before the session begins, and you'll want to be in a well-lit space.\\n\\nCan you please confirm when you will be able to do the notary?\"},\"22\":{\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your notarization session has been recorded and is being processed. Thank you for completing that.\\n\\nYou almost close to creating your account, the next step is the review and declaration screen - it's simply a summary of everything you've submitted, and the final confirmation before your application moves to processing. If you can open the application and tap Continue, I'll assist you through the remaining steps right now.\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-22-1781273527475-20756.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-22-1781273536001-11592.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-22-1781273544334-70457.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-22-1781273554357-32897.png\",\"caption\":\"\"}]},\"23\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-23-1781273636215-5846.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-23-1781273643480-63296.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-23-1781273651148-69516.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-23-1781273732444-45600.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your application is at the final review screen, which is the last step before submission.\\n\\nAll you need to do here is confirm your details are correct and submit. Once submitted, your application enters final processing and your account is typically activated within 24 to 48 hours.\\n\\nIf there's anything on the review screen you'd like to verify or correct before submitting, I can personally assist with that right now. Shall we go through it together?\"},\"24\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-24-1781273856073-75303.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-24-1781273867357-79390.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-24-1781273879659-61868.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-24-1781273895939-87557.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-24-1781273905470-82828.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update on your account opening - your application has reached the e-signature step.\\n\\nThis is where you digitally sign the account opening agreement. The digital signature is legally equivalent to a physical signature and the process is fully secure. The document will be displayed on your screen - you scroll through it and sign with your finger or stylus. It takes about 2 minutes.\\n\\nYou are very close to completing the process. I can stay on the line and assist you through this right now if you're available.\"},\"25\":{\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Quick update - your account opening documents have been successfully signed. Just one final step remaining: setting up your MPIN and biometric login for mobile banking access.\\n\\nThis takes about 2 minutes and is what activates secure access to your account. I'll personally assist you through this last step right now if you can open the application.\",\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-25-1781273964695-481.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-25-1781273977377-61089.png\",\"caption\":\"\"}]},\"26\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-26-1781274067517-11104.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-26-1781274078207-5087.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-26-1781274089033-78530.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm calling with an update - your account opening is at the final setup step.\\n\\nYou just need to create your MPIN, which is a 6-digit security PIN used to access your mobile banking application. Think of it as setting up the PIN for a new card - it takes under 2 minutes.\\n\\nI'll stay on the line and walk you through it right now if you'd like to complete this.\"},\"27\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-27-1781274125962-40663.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-27-1781274135845-74335.png\",\"caption\":\"\"},{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-27-1781274148833-90818.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to help complete the MPIN setup on your account - just a 2-minute step from my side.\\n\\nYour MPIN is simply a 6-digit PIN of your choice - avoid sequential numbers like 123456 or your year of birth, and keep it something you'll remember as it's required each time you log in.\\n\\nIf you received an error previously, it was likely a mismatch during confirmation. I'll stay on the line while you try again now.\"},\"28\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-28-1781274206057-73305.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. You're at the very last step of your account setup - just the MPIN confirmation remaining.\\n\\nAll you need to do is re-enter the same 6-digit PIN you just created to confirm it. If you've forgotten the PIN you set, you can reset it and create a new one - the process takes 30 seconds.\\n\\nI'll stay on the line to help you complete this right now.\"},\"29\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-29-1781274237296-46692.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. I'm following up to let you know your account setup is essentially complete - just the biometric setup screen remaining.\\n\\nThis step is entirely optional. It allows you to log into your mobile banking using your fingerprint or Face ID instead of entering your MPIN each time. Most customers find it more convenient, but it's completely your preference.\\n\\nRegardless of whether you enable it or skip it, your account will be fully activated. I can assist you either way - what would you prefer?\"},\"30\":{\"images\":[{\"url\":\"https://raw.githubusercontent.com/asporanribankingops/asporanribankingops.github.io/main/images/stage-30-1781274437225-62619.png\",\"caption\":\"\"}],\"script\":\"Hi [Name], this is [PBM Name] from Aspora NRI Banking. Thank you for completing your onboarding journey - your NRI account is now fully set up.\\n\\nI'm calling to assist you with the initial funding of your account. To enable transactions, you'll need to make a first deposit - you're welcome to fund any amount you're comfortable with, and I can assist you through the transfer process right now if you'd like.\\n\\nA quick note on interest rates - the more you save, the higher the rate you earn. We offer up to 7% interest, and depositing 2,000 GBP or above unlocks our maximum rate of 6.5%. We're also launching Fixed Deposit options very soon with competitive industry rates, which will enable even higher returns.\\n\\nOn top of that, your account comes with one year of free remittance, a virtual debit card, and UPI access via your international number - all available as soon as your account is funded.\\n\\nThere's no minimum amount required - the right starting point is entirely up to you. Shall I walk you through the transfer process now?\"}}"};
-  var _curV = +localStorage.getItem("_bv") || 0;
-  if (_baked._bv > _curV) {
-    Object.keys(_baked).forEach(function(k){ localStorage.setItem(k,_baked[k]); });
-  }
-})();
-</script><!--BD-END-->
+<!--BD-START--><script id="baked-defaults">/* no baked data yet */</script><!--BD-END-->
 
 <div class="topbar">
   <div class="topbar-left">
@@ -286,6 +321,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" data-tab="playbook" onclick="switchTab('playbook')"><i class="ti ti-book" style="font-size:14px"></i> Support Playbook</button>
     <button class="tab" data-tab="kycsop" onclick="switchTab('kycsop')"><i class="ti ti-file-check" style="font-size:14px"></i> KYC Ops SOP</button>
     <button class="tab" data-tab="pbmframework" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
+    <button class="tab" data-tab="kycflow" onclick="switchTab('kycflow')"><i class="ti ti-git-branch" style="font-size:14px"></i> KYC Case Mgmt</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
@@ -2832,6 +2868,88 @@ function updateCap(num, idx, val) {
   }
 }
 
+// ── KYC Case Management Workflow edit functions ──
+var kfEditing = false;
+var kfSnapshot = '';
+
+function kfToggleEdit() {
+  kfEditing = !kfEditing;
+  var body = document.getElementById('kf-body');
+  var bar  = document.getElementById('kf-edit-bar');
+  var btn  = document.getElementById('kf-edit-toggle');
+  if (kfEditing) {
+    kfSnapshot = body.innerHTML;
+    body.classList.add('kf-editing');
+    bar.classList.add('show');
+    btn.innerHTML = '<i class="ti ti-eye" style="font-size:13px"></i> Viewing';
+    body.querySelectorAll('.kf-editable').forEach(function(el) { el.setAttribute('contenteditable','true'); });
+  } else {
+    body.classList.remove('kf-editing');
+    bar.classList.remove('show');
+    btn.innerHTML = '<i class="ti ti-pencil" style="font-size:13px"></i> Edit';
+    body.querySelectorAll('.kf-editable').forEach(function(el) { el.setAttribute('contenteditable','false'); });
+  }
+}
+
+function kfSave() {
+  var body = document.getElementById('kf-body');
+  body.querySelectorAll('.kf-editable').forEach(function(el) { el.setAttribute('contenteditable','false'); });
+  body.classList.remove('kf-editing');
+  document.getElementById('kf-edit-bar').classList.remove('show');
+  document.getElementById('kf-edit-toggle').innerHTML = '<i class="ti ti-pencil" style="font-size:13px"></i> Edit';
+  kfEditing = false;
+  kfSnapshot = '';
+  // persist to localStorage
+  try { localStorage.setItem('kycflow-content', document.getElementById('kf-body').innerHTML); } catch(e){}
+  // show toast
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#16a34a;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.15)';
+  t.textContent = '✅ Changes saved';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2500);
+}
+
+function kfAddTableRow(e) {
+  var btn = e.target;
+  var tblId = btn.getAttribute('data-table');
+  var cols  = parseInt(btn.getAttribute('data-cols') || '2', 10);
+  var tbl   = document.getElementById(tblId);
+  if (!tbl) return;
+  var tr = document.createElement('tr');
+  for (var i = 0; i < cols; i++) {
+    var td = document.createElement('td');
+    td.className = 'kf-editable';
+    td.setAttribute('contenteditable', kfEditing ? 'true' : 'false');
+    td.innerHTML = '<button class="kf-del-row" onclick="this.closest(\'tr\').remove()" title="Delete row">✕</button>Click to edit';
+    tr.appendChild(td);
+  }
+  tbl.querySelector('tbody').appendChild(tr);
+}
+
+function kfAddListItem(e) {
+  var btn    = e.target;
+  var listId = btn.getAttribute('data-list');
+  var type   = btn.getAttribute('data-type') || 'ul';
+  var list   = document.getElementById(listId);
+  if (!list) return;
+  var li = document.createElement('li');
+  li.className = 'kf-editable';
+  li.setAttribute('contenteditable', kfEditing ? 'true' : 'false');
+  li.innerHTML = '<button class="kf-del-row" onclick="this.closest(\'li\').remove()" title="Delete">✕</button>Click to edit';
+  list.appendChild(li);
+}
+
+// restore saved content on load
+(function(){
+  try {
+    var saved = localStorage.getItem('kycflow-content');
+    if (saved) {
+      var el = document.getElementById('kf-body');
+      if (el) el.innerHTML = saved;
+    }
+  } catch(e){}
+})();
+
 function switchTab(id) {
   // Deactivate all tabs and panels
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
@@ -4433,6 +4551,329 @@ switchTab = function(id) {
     <div id="vp-pitch-view"><!-- rendered by vpRender() --></div>
     <div id="vp-pitch-edit" style="display:none"></div>
   </div>
+
+  <!-- ══════════════ KYC CASE MANAGEMENT WORKFLOW ══════════════ -->
+  <div id="panel-kycflow" class="panel panel-kycflow">
+    <div class="panel-banner" style="background:#e0f2fe;border-color:#0ea5e9;color:#0369a1">
+      <div class="panel-banner-icon" style="background:#0ea5e9;color:#fff">🔀</div>
+      <div style="flex:1">
+        <div class="panel-banner-title">KYC Case Management Workflow</div>
+        <div class="panel-banner-sub">Owner: Product · Audience: Product Managers + Engineering · Status: Draft</div>
+      </div>
+      <button onclick="kfToggleEdit()" id="kf-edit-toggle" style="padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #0ea5e9;background:#fff;color:#0369a1;display:flex;align-items:center;gap:5px"><i class="ti ti-pencil" style="font-size:13px"></i> Edit</button>
+    </div>
+
+    <!-- edit toolbar -->
+    <div class="kf-edit-bar" id="kf-edit-bar">
+      <span>✏️ Editing mode — click any text to edit</span>
+      <button onclick="kfAddTableRow(event)">+ Add table row</button>
+      <button onclick="kfAddListItem(event)">+ Add list item</button>
+      <button class="save" onclick="kfSave()">💾 Save changes</button>
+      <button onclick="kfToggleEdit()" style="color:#dc2626;border-color:#fca5a5">✕ Cancel</button>
+    </div>
+
+    <div id="kf-body">
+
+    <!-- §1 Overview -->
+    <div class="kf-section" id="kfs-1">
+      <div class="kf-h2">📋 <span class="kf-editable" contenteditable="false">1. Overview</span></div>
+      <p class="kf-p kf-editable" contenteditable="false">This document describes how a customer's KYC case moves through our CRM after they finish digital onboarding on the app. It covers what the bank's KYC agents see, the queues a case can sit in, and what makes a case move from one queue to the next — all the way from a frozen new account to an active, fully usable one.</p>
+      <p class="kf-p kf-editable" contenteditable="false">It is written for two audiences. Product managers should be able to read it end-to-end and understand the flow. Developers should be able to build the queue routing, tagging, status changes, and agent actions from it without needing a separate spec.</p>
+      <p class="kf-p kf-editable" contenteditable="false">This document deliberately avoids API contracts, data models, schemas, and rollout plans. Those will be handled separately by engineering.</p>
+    </div>
+
+    <!-- §2 Glossary -->
+    <div class="kf-section" id="kfs-2">
+      <div class="kf-h2">📖 <span class="kf-editable" contenteditable="false">2. Glossary</span></div>
+      <p class="kf-p" style="color:var(--text2);font-size:12px;margin-bottom:8px">A quick reference for the terms used throughout this doc.</p>
+      <table class="kf-tbl" id="kf-glossary-tbl">
+        <thead><tr><th>Term</th><th>Plain-English meaning</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false"><strong>CIF</strong></td><td class="kf-editable" contenteditable="false">Customer Information File. The unique customer ID the bank creates when onboarding starts. One CIF can hold multiple accounts (e.g., NRE + NRO).</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>NRE / NRO accounts</strong></td><td class="kf-editable" contenteditable="false">The two account types we offer to NRI customers. The KYC workflow treats both the same.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Total freeze</strong></td><td class="kf-editable" contenteditable="false">The account exists but cannot receive money or send money. The starting state for every new account.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Credit freeze</strong></td><td class="kf-editable" contenteditable="false">The account cannot <strong>receive</strong> money. Lifted when KYC is approved so the user can fund the account.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Debit freeze</strong></td><td class="kf-editable" contenteditable="false">The account cannot <strong>send</strong> money out. Stays on after KYC approval and is lifted only after both initial funding and address are verified.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>KYC agent</strong></td><td class="kf-editable" contenteditable="false">A bank employee who reviews onboarding cases inside the CRM and takes the approve / reject / discrepant decision.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Initial funding</strong></td><td class="kf-editable" contenteditable="false">The first deposit the customer makes into their new account after KYC is approved.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Welcome letter</strong></td><td class="kf-editable" contenteditable="false">A physical letter sent to the customer's communication address. Its successful delivery verifies the address.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Queue</strong></td><td class="kf-editable" contenteditable="false">A view inside the CRM that groups cases needing the same kind of attention. Cases move between queues as their state changes.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Case</strong></td><td class="kf-editable" contenteditable="false">The unit of work in the CRM. One case = one customer's KYC journey from submission to final state.</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-glossary-tbl" data-cols="2" onclick="kfAddTableRow(event)">+ Add row</button>
+    </div>
+
+    <!-- §3 End-to-end flow -->
+    <div class="kf-section" id="kfs-3">
+      <div class="kf-h2">🗺 <span class="kf-editable" contenteditable="false">3. How a case moves end-to-end</span></div>
+
+      <div class="kf-h3">3.1 The starting point</div>
+      <ol class="kf-ol" id="kf-start-ol">
+        <li class="kf-editable" contenteditable="false">The customer finishes onboarding on the app and submits all required information and documents.</li>
+        <li class="kf-editable" contenteditable="false">The system allocates a <strong>CIF</strong> and <strong>account numbers</strong> for the customer.</li>
+        <li class="kf-editable" contenteditable="false">Both accounts open in <strong>total freeze</strong> — money cannot move in or out.</li>
+        <li class="kf-editable" contenteditable="false">The submitted information flows to the bank, a case is created in the CRM, and the case lands in the <strong>KYC Open Queue</strong>.</li>
+      </ol>
+      <button class="kf-add-row-btn" data-list="kf-start-ol" data-type="ol" onclick="kfAddListItem(event)">+ Add step</button>
+
+      <div class="kf-h3">3.2 The agent's decision</div>
+      <p class="kf-p kf-editable" contenteditable="false">A KYC agent picks the case from the KYC Open Queue, reviews the customer's information and documents, and chooses one of three outcomes:</p>
+      <ul class="kf-ul" id="kf-decision-ul">
+        <li class="kf-editable" contenteditable="false"><strong>Approve</strong> — KYC looks good.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Mark Discrepant</strong> — there is an issue and the customer needs to fix or supply more information.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Reject</strong> — the case fails AML, has a serious KYC lapse, or breaks a bank rule. The customer cannot have an account.</li>
+      </ul>
+      <button class="kf-add-row-btn" data-list="kf-decision-ul" data-type="ul" onclick="kfAddListItem(event)">+ Add item</button>
+
+      <div class="kf-h3">3.3 Branch A — Approved</div>
+      <p class="kf-p kf-editable" contenteditable="false">When the agent approves a case, three things happen in parallel:</p>
+      <ol class="kf-ol" id="kf-approved-ol">
+        <li class="kf-editable" contenteditable="false">The accounts move from <strong>total freeze</strong> to <strong>debit freeze</strong>. The credit freeze is lifted, so the customer can now fund the account.</li>
+        <li class="kf-editable" contenteditable="false">A <strong>welcome letter</strong> is triggered to the customer's communication address to verify the address is real.</li>
+        <li class="kf-editable" contenteditable="false">The case moves from <strong>KYC Open Queue</strong> to <strong>Debit Freeze Queue</strong>.</li>
+      </ol>
+      <button class="kf-add-row-btn" data-list="kf-approved-ol" data-type="ol" onclick="kfAddListItem(event)">+ Add step</button>
+      <p class="kf-p kf-editable" contenteditable="false">From here, two things still need to happen before the account is fully usable: <strong>initial funding</strong> and <strong>address verification</strong> via letter delivery. These can happen in either order.</p>
+      <div class="kf-note blue"><strong>Sub-flows inside the Debit Freeze Queue</strong><br>
+        • If <strong>initial funding lands first</strong> → case moves to <strong>Address Verification Pending Queue</strong><br>
+        • If <strong>address is verified first</strong> (via letter delivery callback) → case moves to <strong>Initial Funding Queue</strong>
+      </div>
+      <div class="kf-note"><strong>Address verification is callback-driven</strong><br>When the welcome letter is delivered, the courier sends a delivery callback to the CRM and the address-verification status updates automatically. No agent action needed for this step.</div>
+      <div class="kf-note green"><strong>Final approval (manual)</strong><br>Once both initial funding and address verification are complete, the agent picks the case manually, performs <strong>two separate verifications</strong> (funding + address), then <strong>manually removes the debit freeze</strong>. The case moves to <strong>Active Users Queue</strong>.<br><br>⚠️ The agent only removes the debit freeze after <strong>both</strong> verifications are done. If only one is done, the case waits.</div>
+
+      <div class="kf-h3">3.4 Branch B — Discrepant</div>
+      <p class="kf-p kf-editable" contenteditable="false">If the agent finds an issue with the KYC (missing doc, mismatched info, unclear photo, etc.), they mark the case as <strong>Discrepant</strong>. The case moves to the <strong>Discrepant Queue</strong> and the customer is asked to submit additional information.</p>
+      <table class="kf-tbl" id="kf-disc-tbl">
+        <thead><tr><th>What the customer does</th><th>Outcome</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false">Resubmits in time — info is satisfactory</td><td class="kf-editable" contenteditable="false">Case re-enters KYC Open Queue with <code>Re-submission</code> tag → follows normal Approved flow (§3.3)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false">Resubmits in time — info is still unsatisfactory</td><td class="kf-editable" contenteditable="false">Case stays in Discrepant Queue. Agent can request more info again.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false">Does not submit within X days (configurable)</td><td class="kf-editable" contenteditable="false">Case moves to Lapsed Queue → CIF + accounts closed, KYC marked invalid, customer notified. Fresh onboarding required.</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-disc-tbl" data-cols="2" onclick="kfAddTableRow(event)">+ Add row</button>
+      <div class="kf-note blue"><strong>Why the Re-submission tag matters</strong><br>It tells the reviewing agent that this case has history. They can pull up previous discrepancy notes and decide faster, instead of treating it like a brand-new submission.</div>
+
+      <div class="kf-h3">3.5 Branch C — Rejected</div>
+      <p class="kf-p kf-editable" contenteditable="false">If the customer's KYC fails AML, has a serious KYC lapse, or breaks a bank rule, the agent <strong>rejects</strong> the case.</p>
+      <ul class="kf-ul" id="kf-rejected-ul">
+        <li class="kf-editable" contenteditable="false">The case moves to the <strong>Rejected Queue</strong> and stays there permanently.</li>
+        <li class="kf-editable" contenteditable="false">The customer cannot open an account with us, ever, on this profile.</li>
+        <li class="kf-editable" contenteditable="false">Rejected is final — there is no path back to Open or Approved.</li>
+      </ul>
+      <button class="kf-add-row-btn" data-list="kf-rejected-ul" data-type="ul" onclick="kfAddListItem(event)">+ Add item</button>
+    </div>
+
+    <!-- §4 Diagram -->
+    <div class="kf-section" id="kfs-4">
+      <div class="kf-h2">📊 <span class="kf-editable" contenteditable="false">4. Workflow diagram</span></div>
+      <div class="kf-diagram-wrap">
+        <div style="font-size:11.5px;color:var(--text2);margin-bottom:10px;font-weight:600">Case state machine — left to right</div>
+        <div style="overflow-x:auto">
+          <svg viewBox="0 0 920 420" xmlns="http://www.w3.org/2000/svg" style="min-width:760px;width:100%;font-family:-apple-system,sans-serif">
+            <!-- START -->
+            <rect x="10" y="180" width="130" height="56" rx="10" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="75" y="202" text-anchor="middle" font-size="10" font-weight="700" fill="#0369a1">Customer finishes</text>
+            <text x="75" y="216" text-anchor="middle" font-size="10" fill="#0369a1">onboarding</text>
+            <text x="75" y="229" text-anchor="middle" font-size="9" fill="#0369a1">CIF + Accounts → Total Freeze</text>
+            <!-- START → OPEN -->
+            <line x1="140" y1="208" x2="168" y2="208" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+            <!-- KYC OPEN -->
+            <rect x="168" y="180" width="110" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="223" y="202" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">KYC Open</text>
+            <text x="223" y="216" text-anchor="middle" font-size="9" fill="#92400e">Queue</text>
+            <text x="223" y="229" text-anchor="middle" font-size="9" fill="#92400e">Agent reviews</text>
+            <!-- OPEN → DEBIT FREEZE (approve) -->
+            <line x1="278" y1="208" x2="306" y2="208" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arr-g)"/>
+            <text x="292" y="202" text-anchor="middle" font-size="8.5" fill="#16a34a">Approve</text>
+            <!-- OPEN → DISCREPANT -->
+            <line x1="223" y1="236" x2="223" y2="300" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arr-o)"/>
+            <text x="236" y="275" font-size="8.5" fill="#92400e">Discrepant</text>
+            <!-- OPEN → REJECTED -->
+            <line x1="168" y1="208" x2="168" y2="358" stroke="#dc2626" stroke-width="1.5"/>
+            <line x1="168" y1="358" x2="788" y2="358" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arr-r)"/>
+            <text x="400" y="372" text-anchor="middle" font-size="8.5" fill="#dc2626">Reject</text>
+            <!-- DEBIT FREEZE QUEUE -->
+            <rect x="306" y="180" width="110" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="361" y="200" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">Debit Freeze</text>
+            <text x="361" y="214" text-anchor="middle" font-size="9" fill="#166534">Queue</text>
+            <text x="361" y="228" text-anchor="middle" font-size="8.5" fill="#166534">Credit lift ✓ · Letter sent</text>
+            <!-- DEBIT FREEZE → AVPQ (funding first) -->
+            <line x1="416" y1="196" x2="464" y2="140" stroke="#16a34a" stroke-width="1.3" stroke-dasharray="4,2" marker-end="url(#arr-g)"/>
+            <text x="440" y="157" text-anchor="middle" font-size="8" fill="#166534">Funding first</text>
+            <!-- DEBIT FREEZE → IFQ (address first) -->
+            <line x1="416" y1="222" x2="464" y2="272" stroke="#7c3aed" stroke-width="1.3" stroke-dasharray="4,2" marker-end="url(#arr-p)"/>
+            <text x="440" y="260" text-anchor="middle" font-size="8" fill="#7c3aed">Address first</text>
+            <!-- AVPQ -->
+            <rect x="464" y="108" width="120" height="52" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="524" y="128" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1e40af">Address Verification</text>
+            <text x="524" y="141" text-anchor="middle" font-size="9" fill="#1e40af">Pending Queue</text>
+            <text x="524" y="154" text-anchor="middle" font-size="8.5" fill="#1e40af">Funded · awaiting letter</text>
+            <!-- IFQ -->
+            <rect x="464" y="260" width="120" height="52" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="524" y="280" text-anchor="middle" font-size="9.5" font-weight="700" fill="#5b21b6">Initial Funding</text>
+            <text x="524" y="293" text-anchor="middle" font-size="9" fill="#5b21b6">Queue</text>
+            <text x="524" y="306" text-anchor="middle" font-size="8.5" fill="#5b21b6">Address ✓ · awaiting funds</text>
+            <!-- AVPQ → MANUAL -->
+            <line x1="584" y1="134" x2="632" y2="195" stroke="#0ea5e9" stroke-width="1.3" marker-end="url(#arr-b)"/>
+            <text x="618" y="163" text-anchor="middle" font-size="8" fill="#0369a1">Letter delivered</text>
+            <!-- IFQ → MANUAL -->
+            <line x1="584" y1="283" x2="632" y2="225" stroke="#0ea5e9" stroke-width="1.3" marker-end="url(#arr-b)"/>
+            <text x="624" y="262" text-anchor="middle" font-size="8" fill="#0369a1">Funded</text>
+            <!-- MANUAL VERIFY -->
+            <rect x="632" y="178" width="120" height="60" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+            <text x="692" y="198" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9a3412">Agent: 2 manual</text>
+            <text x="692" y="211" text-anchor="middle" font-size="9" fill="#9a3412">verifications</text>
+            <text x="692" y="224" text-anchor="middle" font-size="8.5" fill="#9a3412">Funding + Address</text>
+            <text x="692" y="236" text-anchor="middle" font-size="8" fill="#9a3412">Remove debit freeze</text>
+            <!-- MANUAL → ACTIVE -->
+            <line x1="752" y1="208" x2="788" y2="208" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arr-g)"/>
+            <!-- ACTIVE -->
+            <rect x="788" y="180" width="118" height="56" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+            <text x="847" y="202" text-anchor="middle" font-size="10" font-weight="700" fill="#166534">Active Users</text>
+            <text x="847" y="216" text-anchor="middle" font-size="9" fill="#166534">Queue ✓</text>
+            <text x="847" y="229" text-anchor="middle" font-size="8.5" fill="#166534">Final state</text>
+            <!-- DISCREPANT -->
+            <rect x="168" y="300" width="110" height="52" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+            <text x="223" y="320" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9a3412">Discrepant</text>
+            <text x="223" y="333" text-anchor="middle" font-size="9" fill="#9a3412">Queue</text>
+            <text x="223" y="346" text-anchor="middle" font-size="8.5" fill="#9a3412">Awaiting resubmission</text>
+            <!-- DISC → OPEN (resubmit) -->
+            <path d="M278 316 Q330 290 278 220" fill="none" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4,2" marker-end="url(#arr-o)"/>
+            <text x="318" y="268" font-size="8" fill="#92400e">Re-submit</text>
+            <!-- DISC → LAPSED -->
+            <line x1="278" y1="326" x2="464" y2="326" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arr-s)"/>
+            <text x="370" y="316" text-anchor="middle" font-size="8" fill="#64748b">X days — no reply</text>
+            <!-- LAPSED -->
+            <rect x="464" y="300" width="110" height="52" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="519" y="320" text-anchor="middle" font-size="9.5" font-weight="700" fill="#475569">Lapsed</text>
+            <text x="519" y="333" text-anchor="middle" font-size="9" fill="#475569">Queue</text>
+            <text x="519" y="346" text-anchor="middle" font-size="8.5" fill="#475569">CIF + accounts closed</text>
+            <!-- REJECTED -->
+            <rect x="788" y="330" width="118" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="847" y="350" text-anchor="middle" font-size="9.5" font-weight="700" fill="#991b1b">Rejected</text>
+            <text x="847" y="363" text-anchor="middle" font-size="9" fill="#991b1b">Queue</text>
+            <text x="847" y="376" text-anchor="middle" font-size="8.5" fill="#991b1b">Permanent · Final state</text>
+            <!-- arrowhead markers -->
+            <defs>
+              <marker id="arr"   markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#64748b"/></marker>
+              <marker id="arr-g" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#16a34a"/></marker>
+              <marker id="arr-o" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#f59e0b"/></marker>
+              <marker id="arr-r" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#dc2626"/></marker>
+              <marker id="arr-p" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#7c3aed"/></marker>
+              <marker id="arr-b" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#0ea5e9"/></marker>
+              <marker id="arr-s" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#94a3b8"/></marker>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- §5 Queue reference -->
+    <div class="kf-section" id="kfs-5">
+      <div class="kf-h2">📋 <span class="kf-editable" contenteditable="false">5. Queue-by-queue reference</span></div>
+      <table class="kf-tbl" id="kf-queue-tbl">
+        <thead><tr><th>Queue</th><th>Purpose</th><th>How a case enters</th><th>How a case exits</th><th>Who acts</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false"><strong>KYC Open Queue</strong></td><td class="kf-editable" contenteditable="false">Fresh and re-submitted KYC cases waiting for agent review</td><td class="kf-editable" contenteditable="false">(a) New onboarding submission (b) Customer resubmits a discrepant case (carries Re-submission tag)</td><td class="kf-editable" contenteditable="false">Agent picks Approve / Discrepant / Reject</td><td class="kf-editable" contenteditable="false">Bank KYC agent</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Debit Freeze Queue</strong></td><td class="kf-editable" contenteditable="false">Approved cases waiting for initial funding and address verification</td><td class="kf-editable" contenteditable="false">Agent approves the KYC</td><td class="kf-editable" contenteditable="false">Initial funding lands → Address Verification Pending Queue. Address verified first → Initial Funding Queue.</td><td class="kf-editable" contenteditable="false">System (auto-routing)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Address Verification Pending Queue</strong></td><td class="kf-editable" contenteditable="false">Funded but address not yet verified</td><td class="kf-editable" contenteditable="false">Initial funding lands while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Letter delivery callback received → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">System (until callback), then agent</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Initial Funding Queue</strong></td><td class="kf-editable" contenteditable="false">Address verified but customer has not funded yet</td><td class="kf-editable" contenteditable="false">Letter delivery callback arrives while in Debit Freeze Queue</td><td class="kf-editable" contenteditable="false">Customer completes initial funding → eligible for manual final verification</td><td class="kf-editable" contenteditable="false">Customer (action) + agent (verification)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Discrepant Queue</strong></td><td class="kf-editable" contenteditable="false">Cases with issues, awaiting customer resubmission or lapse</td><td class="kf-editable" contenteditable="false">Agent marks Discrepant</td><td class="kf-editable" contenteditable="false">Customer resubmits → KYC Open Queue with Re-submission tag. No submission in X days → Lapsed Queue.</td><td class="kf-editable" contenteditable="false">Customer (action), agent (re-review)</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Lapsed Queue</strong></td><td class="kf-editable" contenteditable="false">Cases where customer never resubmitted in time</td><td class="kf-editable" contenteditable="false">Auto-routed when X days pass without resubmission</td><td class="kf-editable" contenteditable="false">Final state. Customer must start fresh onboarding.</td><td class="kf-editable" contenteditable="false">System</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Active Users Queue</strong></td><td class="kf-editable" contenteditable="false">Live, fully verified customers</td><td class="kf-editable" contenteditable="false">Agent manually verifies funding + address and removes debit freeze</td><td class="kf-editable" contenteditable="false">Final state</td><td class="kf-editable" contenteditable="false">—</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Rejected Queue</strong></td><td class="kf-editable" contenteditable="false">Cases rejected for AML / serious KYC issues</td><td class="kf-editable" contenteditable="false">Agent rejects</td><td class="kf-editable" contenteditable="false">Final state. Permanent.</td><td class="kf-editable" contenteditable="false">—</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-queue-tbl" data-cols="5" onclick="kfAddTableRow(event)">+ Add queue row</button>
+    </div>
+
+    <!-- §6 Agent actions -->
+    <div class="kf-section" id="kfs-6">
+      <div class="kf-h2">⚡ <span class="kf-editable" contenteditable="false">6. Agent actions</span></div>
+      <p class="kf-p kf-editable" contenteditable="false">Full set of actions a bank KYC agent can take inside the CRM. Anything not on this list is out of scope.</p>
+      <table class="kf-tbl" id="kf-agent-tbl">
+        <thead><tr><th>Action</th><th>Where it lives</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Approve KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Lifts credit freeze, triggers welcome letter, moves case to Debit Freeze Queue.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Mark Discrepant</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Discrepant Queue and notifies customer to resubmit. Agent can attach a reason / note explaining the discrepancy.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Reject KYC</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue</td><td class="kf-editable" contenteditable="false">Moves case to Rejected Queue. Permanent.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Re-review on resubmission</strong></td><td class="kf-editable" contenteditable="false">KYC Open Queue (Re-submission tag)</td><td class="kf-editable" contenteditable="false">Same three options as a fresh case, with full visibility of past discrepancy history.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Verify initial funding</strong></td><td class="kf-editable" contenteditable="false">Address Verification Pending / Initial Funding / Debit Freeze Queues</td><td class="kf-editable" contenteditable="false">Manual confirmation that funding details look correct. One of two checks needed before debit freeze can be lifted.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Verify address</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Manual confirmation of address. CRM shows auto-updated delivery status from the letter callback; agent confirms and ticks off.</td></tr>
+          <tr><td class="kf-editable" contenteditable="false"><strong>Remove debit freeze</strong></td><td class="kf-editable" contenteditable="false">Same queues as above</td><td class="kf-editable" contenteditable="false">Available only when both verifications are complete. Moves case to Active Users Queue.</td></tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-agent-tbl" data-cols="3" onclick="kfAddTableRow(event)">+ Add action row</button>
+    </div>
+
+    <!-- §7 Edge cases -->
+    <div class="kf-section" id="kfs-7">
+      <div class="kf-h2">⚠️ <span class="kf-editable" contenteditable="false">7. Edge cases &amp; rules to build for</span></div>
+      <ul class="kf-ul" id="kf-edge-ul">
+        <li class="kf-editable" contenteditable="false"><strong>Re-submission tag.</strong> When a discrepant case re-enters KYC Open Queue, it must carry a visible Re-submission tag. The agent UI should make this clearly distinct from brand-new cases.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Configurable lapse window.</strong> The number of days (X) before a discrepant case lapses must be a backend configuration an authorised non-engineer can change. No code release needed to update it.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Either-order completion.</strong> Initial funding and address verification can complete in any order. Routing must handle both paths cleanly without forcing a sequence.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Address verification is callback-driven.</strong> The CRM listens for a delivery callback from the courier and updates address-verification status automatically. The agent only verifies it as part of the final 2-step check.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Two separate manual verification steps.</strong> "Verify funding" and "Verify address" are two distinct actions with two distinct audit trails — not collapsed into a single click.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Debit freeze removal is gated.</strong> The "Remove debit freeze" action must only be enabled once both verifications are marked complete. If only one is done, the action stays disabled.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Final states are sticky.</strong> Active, Rejected, and Lapsed are all final-state queues. No transitions out of them.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Lapsed = full reset.</strong> When a case lapses, the CIF and accounts close and the KYC is marked invalid. The customer is notified. The only path back is fresh digital onboarding — new CIF, new accounts, new KYC.</li>
+        <li class="kf-editable" contenteditable="false"><strong>Welcome letter is fire-and-watch.</strong> Triggered the moment KYC is approved; the system then waits for the delivery callback. See Open Questions for the undeliverable scenario.</li>
+      </ul>
+      <button class="kf-add-row-btn" data-list="kf-edge-ul" data-type="ul" onclick="kfAddListItem(event)">+ Add rule</button>
+    </div>
+
+    <!-- §8 Open questions -->
+    <div class="kf-section" id="kfs-8">
+      <div class="kf-h2">❓ <span class="kf-editable" contenteditable="false">8. Open questions / decisions needed</span></div>
+      <table class="kf-tbl" id="kf-oq-tbl">
+        <thead><tr><th>#</th><th>Question</th><th>Notes / Decision</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="kf-editable" contenteditable="false">1</td>
+            <td class="kf-editable" contenteditable="false"><strong>Welcome letter undelivered</strong> — what happens if the courier reports the letter as undeliverable (returned / address not found)?</td>
+            <td class="kf-editable" contenteditable="false">Retry mechanism agreed: if first delivery fails, re-trigger automatically. After 3 failed attempts, notify the customer on the app and via comms that the letter was returned and could not be delivered.</td>
+            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">2</td>
+            <td class="kf-editable" contenteditable="false"><strong>Customer-facing visibility</strong> — what does the customer see in the app while their case is in each queue?</td>
+            <td class="kf-editable" contenteditable="false">Already handled.</td>
+            <td class="kf-editable" contenteditable="false">✅ Resolved</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">3</td>
+            <td class="kf-editable" contenteditable="false"><strong>Default value for X (lapse window)</strong> — what should the initial value be (7, 14, 30 days)? Does it differ between UK and UAE customers?</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">4</td>
+            <td class="kf-editable" contenteditable="false"><strong>Re-submission count limit</strong> — is there a maximum number of times a customer can be marked discrepant before soft-rejection? Currently allows infinite back-and-forth.</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">5</td>
+            <td class="kf-editable" contenteditable="false"><strong>Multiple accounts on one CIF</strong> — most customers have both NRE and NRO. Are we treating them as one case or two? Current doc assumes one case per CIF.</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+          <tr>
+            <td class="kf-editable" contenteditable="false">6</td>
+            <td class="kf-editable" contenteditable="false"><strong>SLAs on each queue</strong> — should an agent be expected to clear KYC Open Queue within N hours? Should there be alerting on aged cases?</td>
+            <td class="kf-editable" contenteditable="false">—</td>
+            <td class="kf-editable" contenteditable="false">🔴 Open</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="kf-add-row-btn" data-table="kf-oq-tbl" data-cols="4" onclick="kfAddTableRow(event)">+ Add question</button>
+    </div>
+
+    </div><!-- /kf-body -->
+  </div><!-- /panel-kycflow -->
 
   <div id="panel-auditlog" class="panel panel-auditlog">
     <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
