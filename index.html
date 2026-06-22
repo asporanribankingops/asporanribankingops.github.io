@@ -3405,6 +3405,16 @@ function lbNav(dir) {
   _lbShow();
 }
 
+// Global helper for onboarding flow multi-image lightbox
+var _obStageSrcs = {};
+function openObLb(stageKey, idx) {
+  var srcs = _obStageSrcs[stageKey] || [];
+  if (!srcs.length) return;
+  _lbImgs = srcs.map(function(s) { return { src: s, cap: 'Stage ' + stageKey }; });
+  _lbIdx = idx;
+  _lbShow();
+}
+
 function closeLb() { document.getElementById('lb').classList.remove('open'); }
 document.getElementById('lb').addEventListener('click', function(e) {
   if (e.target === this) closeLb();
@@ -5071,20 +5081,17 @@ switchTab = function(id) {
         Object.keys(IMGS).forEach(function(n){
           var el=document.getElementById('ob-s'+n);
           if(!el)return;
-          var allSrcs=IMGS[n].map(function(f){return BASE+f;});
+          // Register srcs in global map so openObLb can find them
+          _obStageSrcs[n]=IMGS[n].map(function(f){return BASE+f;});
           IMGS[n].forEach(function(fn,i){
             var img=document.createElement('img');
             img.src=BASE+fn;
             img.alt='Stage '+n+' ('+(i+1)+'/'+IMGS[n].length+')';
             img.loading='lazy';
             img.title='Click to expand · '+IMGS[n].length+' image'+(IMGS[n].length>1?'s':'');
-            img.onclick=(function(srcs,idx,stageN){return function(){
-              _lbImgs=srcs.map(function(s){return {src:s,cap:'Stage '+stageN};});
-              _lbIdx=idx;_lbShow();
-            };})(allSrcs,i,n);
+            img.setAttribute('onclick','openObLb("'+n+'",'+i+')');
             el.appendChild(img);
           });
-          // Show image count badge on the container
           if(IMGS[n].length>1){
             var badge=document.createElement('span');
             badge.textContent=IMGS[n].length+' images';
