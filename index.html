@@ -245,8 +245,70 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 @keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .gh-sync-status:hover{opacity:.8}
 </style>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<style>
+#auth-gate{position:fixed;inset:0;z-index:99999;background:#f8fafc;display:flex;align-items:center;justify-content:center}
+#auth-gate.hidden{display:none}
+.auth-card{background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.12);padding:48px 40px 40px;max-width:400px;width:90%;text-align:center}
+.auth-logo{width:52px;height:52px;background:linear-gradient(135deg,#6c47ff,#a78bfa);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 20px}
+.auth-title{font-size:20px;font-weight:700;color:#111;margin-bottom:6px}
+.auth-sub{font-size:13.5px;color:#6b7280;margin-bottom:32px;line-height:1.5}
+.auth-divider{font-size:11px;color:#9ca3af;margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase}
+#auth-error{display:none;margin-top:16px;background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:8px;padding:10px 14px;font-size:13px}
+.auth-footer{margin-top:24px;font-size:11.5px;color:#9ca3af}
+</style>
 </head>
 <body>
+
+<!-- Auth Gate -->
+<div id="auth-gate">
+  <div class="auth-card">
+    <div class="auth-logo">🏦</div>
+    <div class="auth-title">NRI Onboarding SOP</div>
+    <div class="auth-sub">This tool is for Aspora staff only.<br>Sign in with your <strong>@aspora.com</strong> Google account to continue.</div>
+    <div class="auth-divider">Secure access</div>
+    <div id="g_id_onload"
+         data-client_id="652116516193-u0n8t9m2telmrv24a9no1c4of3latvf4.apps.googleusercontent.com"
+         data-callback="handleGoogleSignIn"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left"
+         data-width="320">
+    </div>
+    <div id="auth-error">⚠️ Access denied — only <strong>@aspora.com</strong> accounts are allowed.</div>
+    <div class="auth-footer">🔒 Your sign-in is not stored — session only</div>
+  </div>
+</div>
+
+<script>
+function handleGoogleSignIn(response) {
+  try {
+    var payload = JSON.parse(atob(response.credential.split('.')[1]));
+    var email = payload.email || '';
+    if (email.endsWith('@aspora.com')) {
+      sessionStorage.setItem('aspora-auth', email);
+      document.getElementById('auth-gate').classList.add('hidden');
+    } else {
+      document.getElementById('auth-error').style.display = 'block';
+      google.accounts.id.disableAutoSelect();
+    }
+  } catch(e) {
+    document.getElementById('auth-error').style.display = 'block';
+  }
+}
+// Check if already authenticated this session
+(function() {
+  if (sessionStorage.getItem('aspora-auth')) {
+    document.getElementById('auth-gate').classList.add('hidden');
+  }
+})();
+</script>
 
 <!-- Settings modal -->
 <!-- New Page creation modal -->
