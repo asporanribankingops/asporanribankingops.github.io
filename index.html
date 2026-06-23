@@ -65,6 +65,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .tab[data-tab="obflow"].active     {background:#fff7ed;color:#c2410c;border-color:#f97316}
 .tab[data-tab="quiz"]::before{background:#f43f5e}
 .tab[data-tab="quiz"].active{background:#fff1f2;color:#be123c;border-color:#f43f5e}
+.tab[data-tab="sharecode"]::before{background:#0369a1}
+.tab[data-tab="sharecode"].active{background:#e0f2fe;color:#0369a1;border-color:#0ea5e9}
 
 /* ── Panel colour headers ── */
 .panel-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);margin-bottom:16px;border-left:4px solid}
@@ -754,6 +756,7 @@ function handleGoogleSignIn(response) {
     <button class="tab" data-tab="obflow" onclick="switchTab('obflow')"><i class="ti ti-device-mobile" style="font-size:14px"></i> Onboarding Flow</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
     <button class="tab" data-tab="quiz" onclick="switchTab('quiz')"><i class="ti ti-brain" style="font-size:14px"></i> Knowledge Quiz</button>
+    <button class="tab" data-tab="sharecode" onclick="switchTab('sharecode')"><i class="ti ti-shield-check" style="font-size:14px"></i> Share Code Check</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
     <button class="tab" id="add-page-btn" onclick="cpAddPage()" style="border-style:dashed;opacity:.7"><i class="ti ti-plus" style="font-size:13px"></i> New page</button>
@@ -2200,116 +2203,8 @@ After 24 hours, your full transfer limits will automatically apply. In the meant
 
     </div><!-- #kyc-all -->
 
-    <!-- ── Share Code Validation ── -->
-    <div style="margin-top:28px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-        <div style="width:38px;height:38px;background:linear-gradient(135deg,#0369a1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🇬🇧</div>
-        <div>
-          <div style="font-size:16px;font-weight:800;color:#0c4a6e;letter-spacing:-.02em">Share Code Validation</div>
-          <div style="font-size:12px;color:#64748b;margin-top:1px">Verify UK immigration status for customers using the UKVI online service</div>
-        </div>
-      </div>
 
-      <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #bae6fd;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;display:flex;align-items:flex-start;gap:10px">
-        <span style="font-size:16px;flex-shrink:0">ℹ️</span>
-        <span>Use this process to verify the UK immigration status of customers who provide a share code. Visit <a href="https://www.gov.uk/check-immigration-status" target="_blank" style="font-weight:700;color:#0369a1">gov.uk/check-immigration-status</a> to complete the check.</span>
-      </div>
-
-      <!-- Steps -->
-      <div style="display:flex;flex-direction:column;gap:16px">
-
-        <!-- Step 1 -->
-        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">1</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Visit gov.uk/check-immigration-status and click <em>Start now</em></span>
-          </div>
-          <div style="padding:14px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step1.png" alt="Step 1 — Start Now button on gov.uk" loading="lazy" onclick="openLb(this.src,'Step 1 — Visit gov.uk and click Start now')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">2</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Enter the customer's Share Code</span>
-          </div>
-          <div style="padding:14px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step2.png" alt="Step 2 — Enter share code" loading="lazy" onclick="openLb(this.src,'Step 2 — Enter Share Code')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">3</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Enter the customer's Date of Birth</span>
-          </div>
-          <div style="padding:14px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step3.png" alt="Step 3 — Enter date of birth" loading="lazy" onclick="openLb(this.src,'Step 3 — Enter Date of Birth')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-          </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">4</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Who is doing this check? — Job title: <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">KYC</strong> &nbsp;·&nbsp; Organisation: <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">Aspora</strong></span>
-          </div>
-          <div style="padding:14px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step4.png" alt="Step 4 — Who is doing this check" loading="lazy" onclick="openLb(this.src,'Step 4 — Job title: KYC · Organisation: Aspora')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-          </div>
-        </div>
-
-        <!-- Step 5 -->
-        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
-          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">5</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Why are you checking? → Select <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">Personal finance</strong></span>
-          </div>
-          <div style="padding:14px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step5.png" alt="Step 5 — Select Personal finance" loading="lazy" onclick="openLb(this.src,'Step 5 — Select: Personal finance')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-          </div>
-        </div>
-
-        <!-- Step 6 — Result -->
-        <div style="background:#fff;border:2px solid #86efac;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(22,163,74,.08)">
-          <div style="background:linear-gradient(120deg,#15803d,#16a34a);padding:12px 18px;display:flex;align-items:center;gap:10px">
-            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">6</span>
-            <span style="font-size:13.5px;font-weight:700;color:#fff">Immigration Status Result — verify all 4 fields</span>
-          </div>
-          <div style="padding:16px 18px">
-            <img src="https://asporanribankingops.github.io/images/sharecode-step6.png" alt="Step 6 — Immigration status result" loading="lazy" onclick="openLb(this.src,'Step 6 — Immigration Status Result')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px;transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:20px">👤</span>
-                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 1</div><div style="font-size:13px;font-weight:600;color:#14532d">Full Name matches</div></div>
-              </div>
-              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:20px">🎂</span>
-                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 2</div><div style="font-size:13px;font-weight:600;color:#14532d">Date of Birth matches</div></div>
-              </div>
-              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:20px">📅</span>
-                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 3</div><div style="font-size:13px;font-weight:600;color:#14532d">Valid From date confirmed</div></div>
-              </div>
-              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:20px">⏳</span>
-                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 4</div><div style="font-size:13px;font-weight:600;color:#14532d">Valid Until — not expired</div></div>
-              </div>
-            </div>
-            <div style="margin-top:12px;background:#fef3c7;border:1.5px solid #fcd34d;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#92400e;display:flex;gap:8px;align-items:flex-start">
-              <span style="flex-shrink:0">⚠️</span>
-              <span>If <strong>any of the 4 checks fail</strong> — do not proceed. Escalate to your team lead immediately and do not activate the account.</span>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /steps -->
-    </div><!-- /share code section -->
-
-  </div><!-- #panel-kycsop -->
+    </div><!-- #panel-kycsop -->
 
   <!-- ── PBM Opening Framework Panel ──────────────────────── -->
   <div id="panel-pbmframework" class="panel panel-pbmframework">
@@ -5713,6 +5608,125 @@ switchTab = function(id) {
       <button id="quiz-retry-btn" onclick="quizStart()" style="display:none;padding:11px 28px;background:#f3f4f6;color:#374151;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer">↺ Try Again</button>
     </div>
   </div>
+
+
+  <!-- ── Share Code Validation Panel ── -->
+  <div id="panel-sharecode" class="panel" style="border-top:3px solid #0ea5e9">
+    <div class="panel-banner" style="background:linear-gradient(135deg,#e0f2fe,#f0f9ff);border-color:#0ea5e9;color:#0c4a6e">
+      <div class="panel-banner-icon" style="background:linear-gradient(135deg,#0369a1,#0ea5e9);color:#fff">🇬🇧</div>
+      <div>
+        <div class="panel-banner-title">Share Code Validation</div>
+        <div class="panel-banner-sub">Step-by-step guide to verify UK immigration status via gov.uk</div>
+      </div>
+    </div>
+<div style="margin-top:28px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <div style="width:38px;height:38px;background:linear-gradient(135deg,#0369a1,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🇬🇧</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#0c4a6e;letter-spacing:-.02em">Share Code Validation</div>
+          <div style="font-size:12px;color:#64748b;margin-top:1px">Verify UK immigration status for customers using the UKVI online service</div>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #bae6fd;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:16px;flex-shrink:0">ℹ️</span>
+        <span>Use this process to verify the UK immigration status of customers who provide a share code. Visit <a href="https://www.gov.uk/check-immigration-status" target="_blank" style="font-weight:700;color:#0369a1">gov.uk/check-immigration-status</a> to complete the check.</span>
+      </div>
+
+      <!-- Steps -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Step 1 -->
+        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">1</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Visit gov.uk/check-immigration-status and click <em>Start now</em></span>
+          </div>
+          <div style="padding:14px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step1.png" alt="Step 1 — Start Now button on gov.uk" loading="lazy" onclick="openLb(this.src,'Step 1 — Visit gov.uk and click Start now')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">2</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Enter the customer's Share Code</span>
+          </div>
+          <div style="padding:14px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step2.png" alt="Step 2 — Enter share code" loading="lazy" onclick="openLb(this.src,'Step 2 — Enter Share Code')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">3</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Enter the customer's Date of Birth</span>
+          </div>
+          <div style="padding:14px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step3.png" alt="Step 3 — Enter date of birth" loading="lazy" onclick="openLb(this.src,'Step 3 — Enter Date of Birth')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">4</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Who is doing this check? — Job title: <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">KYC</strong> &nbsp;·&nbsp; Organisation: <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">Aspora</strong></span>
+          </div>
+          <div style="padding:14px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step4.png" alt="Step 4 — Who is doing this check" loading="lazy" onclick="openLb(this.src,'Step 4 — Job title: KYC · Organisation: Aspora')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div style="background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+          <div style="background:linear-gradient(120deg,#0c4a6e,#0369a1);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">5</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Why are you checking? → Select <strong style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:4px">Personal finance</strong></span>
+          </div>
+          <div style="padding:14px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step5.png" alt="Step 5 — Select Personal finance" loading="lazy" onclick="openLb(this.src,'Step 5 — Select: Personal finance')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+          </div>
+        </div>
+
+        <!-- Step 6 — Result -->
+        <div style="background:#fff;border:2px solid #86efac;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(22,163,74,.08)">
+          <div style="background:linear-gradient(120deg,#15803d,#16a34a);padding:12px 18px;display:flex;align-items:center;gap:10px">
+            <span style="width:26px;height:26px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">6</span>
+            <span style="font-size:13.5px;font-weight:700;color:#fff">Immigration Status Result — verify all 4 fields</span>
+          </div>
+          <div style="padding:16px 18px">
+            <img src="https://asporanribankingops.github.io/images/sharecode-step6.png" alt="Step 6 — Immigration status result" loading="lazy" onclick="openLb(this.src,'Step 6 — Immigration Status Result')" style="max-width:100%;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px;transition:transform .18s,box-shadow .18s" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px">👤</span>
+                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 1</div><div style="font-size:13px;font-weight:600;color:#14532d">Full Name matches</div></div>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px">🎂</span>
+                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 2</div><div style="font-size:13px;font-weight:600;color:#14532d">Date of Birth matches</div></div>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px">📅</span>
+                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 3</div><div style="font-size:13px;font-weight:600;color:#14532d">Valid From date confirmed</div></div>
+              </div>
+              <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px">⏳</span>
+                <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#15803d;margin-bottom:2px">Check 4</div><div style="font-size:13px;font-weight:600;color:#14532d">Valid Until — not expired</div></div>
+              </div>
+            </div>
+            <div style="margin-top:12px;background:#fef3c7;border:1.5px solid #fcd34d;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#92400e;display:flex;gap:8px;align-items:flex-start">
+              <span style="flex-shrink:0">⚠️</span>
+              <span>If <strong>any of the 4 checks fail</strong> — do not proceed. Escalate to your team lead immediately and do not activate the account.</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /steps -->
+    </div><!-- /share code section -->
+  </div><!-- /panel-sharecode -->
 
   <div id="panel-auditlog" class="panel panel-auditlog">
     <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
