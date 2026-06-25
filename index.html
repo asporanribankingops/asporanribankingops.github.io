@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -755,6 +755,7 @@ function handleGoogleSignIn(response) {
     <button class="tab" data-tab="pbmframework" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
     <button class="tab" data-tab="kycflow" onclick="switchTab('kycflow')"><i class="ti ti-git-branch" style="font-size:14px"></i> KYC Case Mgmt</button>
     <button class="tab" data-tab="obflow" onclick="switchTab('obflow')"><i class="ti ti-device-mobile" style="font-size:14px"></i> Onboarding Flow</button>
+    <button class="tab" data-tab="uaeonboarding" onclick="switchTab('uaeonboarding')" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#f59e0b;color:#92400e;font-weight:700"><i class="ti ti-building" style="font-size:14px"></i> 🇦🇪 UAE Onboarding</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
@@ -5727,6 +5728,27 @@ switchTab = function(id) {
     </div><!-- /share code section -->
   </div><!-- /panel-sharecode -->
 
+  <!-- ── UAE Onboarding Panel ── -->
+  <div id="panel-uaeonboarding" class="panel" style="border-top:3px solid #f59e0b">
+    <div class="panel-banner" style="background:linear-gradient(135deg,#fef3c7,#fef9ee);border-color:#f59e0b;color:#78350f">
+      <div class="panel-banner-icon" style="background:linear-gradient(135deg,#b45309,#f59e0b);color:#fff">🇦🇪</div>
+      <div>
+        <div class="panel-banner-title">UAE Onboarding Flow</div>
+        <div class="panel-banner-sub">24 screens · Emirates ID · KYC · Digital Notarisation · E-Signature</div>
+      </div>
+    </div>
+
+    <!-- Add screen button -->
+    <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
+      <button onclick="uaeAddScreen()" style="display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#b45309,#f59e0b);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(180,83,9,.25)">
+        <i class="ti ti-plus" style="font-size:14px"></i> Add new screen
+      </button>
+    </div>
+
+    <!-- Screens grid -->
+    <div id="uae-screens-list" style="display:flex;flex-direction:column;gap:20px"></div>
+  </div><!-- /panel-uaeonboarding -->
+
   <div id="panel-auditlog" class="panel panel-auditlog">
     <div class="panel-banner" style="background:#f0f0f8;border-color:#8888aa;color:#44447a"><div class="panel-banner-icon" style="background:#8888aa;color:#fff">🕑</div><div><div class="panel-banner-title">Audit Log</div><div class="panel-banner-sub">Every change · author · section · timestamp · GitHub commit</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
@@ -7254,6 +7276,188 @@ window.quizSubmit = function(){
   }
 };
 
+})();
+</script>
+
+<!-- ── UAE Onboarding Script ── -->
+<script>
+(function(){
+  var BASE = 'https://asporanribankingops.github.io/images/';
+
+  // Screen definitions from PDF — label, description, images array
+  var UAE_SCREENS = [
+    { id:1,  label:'Screen 1',  title:'NR UAE Onboarding — Welcome',          desc:'Landing / welcome screen for the UAE onboarding journey.',                         imgs:['uae-screen-01.png'] },
+    { id:2,  label:'Screen 3',  title:'Journey Stepper + Interest Rates',      desc:'Shows the onboarding journey stepper and applicable interest rates.',              imgs:['uae-screen-02.png'] },
+    { id:3,  label:'Screen 4',  title:'Emirates ID',                           desc:'Prompt for the customer to have their Emirates ID ready.',                         imgs:['uae-screen-03.png'] },
+    { id:4,  label:'Screen 5',  title:'Verifying Identity',                    desc:'Identity verification in progress — Emirates ID being validated.',                 imgs:['uae-screen-04.png'] },
+    { id:5,  label:'Screen 6',  title:'Emirates ID Upload',                    desc:'Customer uploads a photo of their Emirates ID.',                                   imgs:['uae-screen-05.png'] },
+    { id:6,  label:'Screen 7',  title:'Emirates ID Scan — Front and Back',     desc:'Customer scans both front and back of their Emirates ID.',                         imgs:['uae-screen-06.png'] },
+    { id:7,  label:'Screen 8',  title:'Selfie Capture',                        desc:'Customer takes a live selfie for biometric matching.',                             imgs:['uae-screen-07.png'] },
+    { id:8,  label:'Screen 9',  title:'Emirates ID + Selfie Verification',     desc:'System verifies selfie against Emirates ID photo.',                               imgs:['uae-screen-08.png'] },
+    { id:9,  label:'Screen 10', title:'Emirates ID Details Fetch',             desc:'Details auto-fetched from scanned Emirates ID for review.',                        imgs:['uae-screen-09.png'] },
+    { id:10, label:'Screen 11', title:'Verify Your Identity',                  desc:'Customer confirms their identity details are correct.',                            imgs:['uae-screen-10.png'] },
+    { id:11, label:'Screen 12', title:'Select Country and ID Type',            desc:'Customer selects country of origin and government ID type.',                       imgs:['uae-screen-11.png'] },
+    { id:12, label:'Screen 13', title:'Front of Government ID',                desc:'Customer uploads the front of their selected government ID (e.g. passport).',     imgs:['uae-screen-12.png'] },
+    { id:13, label:'Screen 14', title:'Back of Passport',                      desc:'Customer uploads the back page of their passport.',                                imgs:['uae-screen-13.png'] },
+    { id:14, label:'Screen 15', title:'Selfie Capture (Passport flow)',         desc:'Second selfie capture for passport-based identity verification.',                  imgs:['uae-screen-14.png'] },
+    { id:15, label:'Screen 16', title:'Proof of Residential Address',          desc:'Customer uploads proof of residential address document.',                          imgs:['uae-screen-15.png','uae-screen-16.png','uae-screen-17.png','uae-screen-18.png'] },
+    { id:16, label:'Screen 17', title:'Review & Agree — Terms and Conditions', desc:'Customer reviews and accepts the terms and conditions.',                           imgs:['uae-screen-19.png'] },
+    { id:17, label:'Screen 18', title:'SIM Binding',                           desc:'Customer binds their SIM / mobile number to the account.',                        imgs:['uae-screen-20.png'] },
+    { id:18, label:'Screen 19', title:'Device Registration',                   desc:'Customer registers their device for secure app access.',                           imgs:['uae-screen-21.png'] },
+    { id:19, label:'Screen 20', title:'PAN Screen',                            desc:'Customer enters their PAN (Permanent Account Number) details.',                   imgs:['uae-screen-22.png'] },
+    { id:20, label:'Screen 21', title:'Nominee Set Up',                        desc:'Customer sets up a nominee for their account.',                                    imgs:['uae-screen-23.png'] },
+    { id:21, label:'Step 22',   title:'Digital Notarisation',                  desc:'Customer completes digital notarisation of documents.',                            imgs:['uae-screen-24.png','uae-screen-25.png','uae-screen-26.png','uae-screen-27.png','uae-screen-28.png','uae-screen-29.png'] },
+    { id:22, label:'Step 23',   title:'All Details Review Screen',             desc:'Customer reviews all submitted details before final submission.',                  imgs:['uae-screen-33.png','uae-screen-34.png','uae-screen-35.png'] },
+    { id:23, label:'Step 24',   title:'E-Signature',                           desc:'Customer provides electronic signature to complete the application.',              imgs:['uae-screen-36.png'] },
+    { id:24, label:'Step 25',   title:'Onboarding Complete',                   desc:'Application submitted successfully — customer journey complete.',                  imgs:['uae-screen-37.png'] }
+  ];
+
+  var _uaeData = null;
+  function uaeLoad() {
+    try { _uaeData = JSON.parse(localStorage.getItem('uae-screens') || 'null'); } catch(e) {}
+    if (!_uaeData) _uaeData = UAE_SCREENS.map(function(s){ return JSON.parse(JSON.stringify(s)); });
+    return _uaeData;
+  }
+  function uaeSave() {
+    try { localStorage.setItem('uae-screens', JSON.stringify(_uaeData)); } catch(e) {}
+  }
+
+  function uaeRender() {
+    var data = uaeLoad();
+    var list = document.getElementById('uae-screens-list');
+    if (!list) return;
+    list.innerHTML = '';
+    data.forEach(function(scr, idx) {
+      var card = document.createElement('div');
+      card.id = 'uae-card-' + idx;
+      card.style.cssText = 'background:#fff;border:1.5px solid rgba(0,0,0,.07);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)';
+
+      // Header
+      var hdr = document.createElement('div');
+      hdr.style.cssText = 'background:linear-gradient(120deg,#92400e,#b45309,#d97706);padding:13px 18px;display:flex;align-items:center;gap:10px';
+      hdr.innerHTML =
+        '<span style="width:30px;height:30px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">' + scr.id + '</span>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div id="uae-label-' + idx + '" style="font-size:11px;font-weight:600;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.06em" contenteditable="true" spellcheck="false" data-uae-field="label" data-uae-idx="' + idx + '">' + escHtml(scr.label) + '</div>' +
+          '<div id="uae-title-' + idx + '" style="font-size:14px;font-weight:700;color:#fff;margin-top:2px" contenteditable="true" spellcheck="false" data-uae-field="title" data-uae-idx="' + idx + '">' + escHtml(scr.title) + '</div>' +
+        '</div>' +
+        '<button onclick="uaeDeleteScreen(' + idx + ')" title="Delete this screen" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;padding:6px 10px;color:#fff;cursor:pointer;font-size:13px;flex-shrink:0">🗑</button>';
+      card.appendChild(hdr);
+
+      // Body
+      var body = document.createElement('div');
+      body.style.cssText = 'padding:16px 18px';
+
+      // Description editable
+      var descEl = document.createElement('div');
+      descEl.id = 'uae-desc-' + idx;
+      descEl.setAttribute('contenteditable','true');
+      descEl.setAttribute('spellcheck','false');
+      descEl.setAttribute('data-uae-field','desc');
+      descEl.setAttribute('data-uae-idx', idx);
+      descEl.style.cssText = 'font-size:13px;color:#64748b;margin-bottom:14px;padding:8px 12px;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;min-height:32px;outline:none;line-height:1.5';
+      descEl.textContent = scr.desc;
+      body.appendChild(descEl);
+
+      // Images
+      if (scr.imgs && scr.imgs.length) {
+        var imgWrap = document.createElement('div');
+        imgWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start';
+        scr.imgs.forEach(function(fname, iIdx) {
+          var imgEl = document.createElement('img');
+          imgEl.src = BASE + fname;
+          imgEl.alt = scr.title + ' — image ' + (iIdx+1);
+          imgEl.loading = 'lazy';
+          imgEl.style.cssText = 'max-width:220px;max-height:400px;object-fit:contain;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .18s,box-shadow .18s';
+          imgEl.onmouseover = function(){ this.style.transform='scale(1.02)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.15)'; };
+          imgEl.onmouseout  = function(){ this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.08)'; };
+          (function(capturedIdx, capturedIIdx){
+            imgEl.onclick = function(){ uaeOpenLb(capturedIdx, capturedIIdx); };
+          })(idx, iIdx);
+          imgWrap.appendChild(imgEl);
+        });
+
+        // Add image URL button
+        var addImgBtn = document.createElement('button');
+        addImgBtn.title = 'Add image to this screen';
+        addImgBtn.style.cssText = 'width:80px;height:80px;border:2px dashed #d1d5db;border-radius:10px;background:#f9fafb;color:#9ca3af;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .15s';
+        addImgBtn.innerHTML = '<i class="ti ti-photo-plus"></i>';
+        addImgBtn.onmouseover = function(){ this.style.borderColor='#f59e0b'; };
+        addImgBtn.onmouseout  = function(){ this.style.borderColor='#d1d5db'; };
+        (function(capturedIdx){ addImgBtn.onclick = function(){ uaeAddImage(capturedIdx); }; })(idx);
+        imgWrap.appendChild(addImgBtn);
+
+        body.appendChild(imgWrap);
+      }
+
+      // Save indicator
+      var saveHint = document.createElement('div');
+      saveHint.style.cssText = 'margin-top:10px;font-size:11px;color:#94a3b8;text-align:right';
+      saveHint.textContent = 'Click any text above to edit — changes save automatically';
+      body.appendChild(saveHint);
+
+      card.appendChild(body);
+      list.appendChild(card);
+    });
+
+    // Bind contenteditable save
+    list.querySelectorAll('[data-uae-field]').forEach(function(el){
+      el.addEventListener('blur', function(){
+        var i = parseInt(this.getAttribute('data-uae-idx'));
+        var field = this.getAttribute('data-uae-field');
+        _uaeData[i][field] = this.textContent.trim();
+        uaeSave();
+      });
+    });
+  }
+
+  function uaeOpenLb(screenIdx, imgIdx) {
+    var scr = _uaeData[screenIdx];
+    if (!scr || !scr.imgs.length) return;
+    _lbImgs = scr.imgs.map(function(f){ return { src: BASE+f, cap: scr.title }; });
+    _lbIdx = imgIdx;
+    _lbShow();
+  }
+
+  window.uaeAddScreen = function() {
+    var data = uaeLoad();
+    var label = prompt('Screen label (e.g. Screen 25):');
+    if (!label) return;
+    var title = prompt('Screen title:');
+    if (!title) return;
+    data.push({ id: data.length+1, label: label.trim(), title: title.trim(), desc: 'Add description here.', imgs: [] });
+    _uaeData = data;
+    uaeSave();
+    uaeRender();
+    document.getElementById('uae-card-' + (data.length-1)).scrollIntoView({behavior:'smooth',block:'start'});
+  };
+
+  window.uaeDeleteScreen = function(idx) {
+    if (!confirm('Delete this screen? This cannot be undone.')) return;
+    _uaeData.splice(idx, 1);
+    uaeSave();
+    uaeRender();
+  };
+
+  window.uaeAddImage = function(screenIdx) {
+    var url = prompt('Enter the image filename (e.g. uae-screen-38.png) or full URL:');
+    if (!url) return;
+    var fname = url.indexOf('http') === 0 ? url : url.trim();
+    _uaeData[screenIdx].imgs.push(fname);
+    uaeSave();
+    uaeRender();
+  };
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Hook into switchTab
+  var _origSwitchTab = window.switchTab;
+  window.switchTab = function(id) {
+    _origSwitchTab(id);
+    if (id === 'uaeonboarding') uaeRender();
+  };
 })();
 </script>
 </body>
