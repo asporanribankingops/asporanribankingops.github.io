@@ -755,7 +755,7 @@ function handleGoogleSignIn(response) {
     <button class="tab" data-tab="pbmframework" onclick="switchTab('pbmframework')"><i class="ti ti-phone-incoming" style="font-size:14px"></i> Opening Framework</button>
     <button class="tab" data-tab="kycflow" onclick="switchTab('kycflow')"><i class="ti ti-git-branch" style="font-size:14px"></i> KYC Case Mgmt</button>
     <button class="tab" data-tab="obflow" onclick="switchTab('obflow')"><i class="ti ti-device-mobile" style="font-size:14px"></i> Onboarding Flow</button>
-    <button class="tab" data-tab="uaeonboarding" onclick="switchTab('uaeonboarding')" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#f59e0b;color:#92400e;font-weight:700"><i class="ti ti-building" style="font-size:14px"></i> 🇦🇪 UAE Onboarding</button>
+    <button class="tab" data-tab="uaeonboarding" onclick="switchTab('uaeonboarding');if(window.uaeRender)uaeRender();" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#f59e0b;color:#92400e;font-weight:700"><i class="ti ti-building" style="font-size:14px"></i> 🇦🇪 UAE Onboarding</button>
     <button class="tab" data-tab="auditlog" onclick="switchTab('auditlog')"><i class="ti ti-history" style="font-size:14px"></i> Audit Log</button>
     <div id="custom-tabs-btns"></div>
     <button class="tab" data-tab="valueprop" onclick="switchTab('valueprop')"><i class="ti ti-star" style="font-size:14px"></i> Value Prop</button>
@@ -7452,12 +7452,8 @@ window.quizSubmit = function(){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // Hook into switchTab
-  var _origSwitchTab = window.switchTab;
-  window.switchTab = function(id) {
-    _origSwitchTab(id);
-    if (id === 'uaeonboarding') uaeRender();
-  };
+  // Expose globally so tab onclick can call it
+  window.uaeRender = uaeRender;
 })();
 </script>
 </body>
